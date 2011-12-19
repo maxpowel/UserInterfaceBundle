@@ -1,0 +1,15 @@
+{namespace template.agendaView}
+
+/**
+ * Nearby task
+ * @param type
+ * @param endUrl 
+ * @param text
+ * @param date
+ */
+{template .nearbyTask}
+<li><span class="label {$type}"><a href="#{$endUrl}">{$text}</a></span> {$date}</li>
+{/template}
+
+
+

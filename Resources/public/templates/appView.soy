@@ -1,0 +1,129 @@
+{namespace template.appView}
+
+/**
+ * Main app skeleton
+ */
+{template .app}
+<div class="topbar" id="topbar">
+      <div class="topbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li id="menu-start"><a href="#start">{msg desc="Start"}Start{/msg}</a></li>
+
+            <li id="menu-profile"><a href="#profile">{msg desc="Profile"}Profile{/msg}</a></li>
+            <li id="menu-search"><a href="#search">{msg desc="Search"}Search{/msg}</a></li>
+            <li id="menu-multimedia"><a href="#multimedia">{msg desc="Multimedia"}Multimedia{/msg}</a></li>
+            <li id="menu-messages"><a href="#messages">{msg desc="Messages"}Messages{/msg}</a></li>
+            <li id="menu-agenda"><a href="#agenda">{msg desc="Agenda"}Agenda{/msg}</a></li>
+            <li id="menu-settings"><a href="#preferences">{msg desc="Preferences"}Preferences{/msg}</a></li>
+
+          </ul>
+          <form action="" id="quick-search-form" class="pull-left">
+            <ul class="nav secondary-nav">
+            <li class="dropdown" id="quick-search-result">
+             <input id="quick-search-input" class="quick-search" class="dropdown-toggle" type="text" placeholder="{msg desc="Quick search"}Quick search{/msg}">
+             
+             <button id="uploadPhotos-but" style="margin-left:15px" class="btn success small"><span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span><span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}<span id="totalPercent"></span>%</span></button>
+              <ul class="dropdown-menu" style="	max-width: 230px; top: 35px;">
+                <li><a href="#">Nosequien - Estado de mierda</a></li>
+                <li><a href="#">Otra persona con un nick super super super largo</a></li>
+
+                <li class="divider"></li>
+                <li><a href="#">{msg desc="Settings"}Settings{/msg}</a></li>
+              </ul>
+            </li>
+          </ul>
+          </form>
+          <ul class="nav secondary-nav">
+            <li class="dropdown">
+
+              <a class="dropdown-toggle" href="#">Amigos</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Nosequien - Estado de mierda</a></li>
+                <li><a href="#">Otra persona con un nick super super super largo</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Configuración</a></li>
+              </ul>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="content">
+      
+      
+     
+    </div>
+{/template}
+
+
+/**
+ * Multimenu
+ * @param subsections
+ */
+{template .multimenu}
+	<div id="original"></div>
+	{foreach $subsection in $subsections}
+	  <div style="display:none" id="{$subsection.subSectionId}" class="submenu">
+	  	<button class="btn wlarge-btn {$subsection.buttonClass} back-but">{msg desc="Back"}Back{/msg}</button>
+	  	<div class="subSection-content"></div>
+	  </div>
+	  
+	{/foreach}
+{/template}
+
+
+/**
+ * Upload entry
+ * @param filename
+ * @param size
+ */
+{template .uploadEntry}
+          <tr>
+            <td>{$filename}</td>
+            <td>{$size}</td>
+          </tr>
+{/template}
+
+/**
+ * Upload window
+ */
+{template .uploadPhoto}
+            <div class="modal-header">
+              <h3>{msg desc="Upload photos window title"}Upload photos{/msg}</h3>
+            </div>
+            <div class="modal-body" align="center">
+            <h4>{msg desc="Select your photos"}Select your photos{/msg}</h4>
+            <div>{msg desc="Upload photo note"}You can select multiple files{/msg}</div>
+            <form id="photoForm" enctype="multipart/form-data" method="post" action="/upload">
+	                    <input type="file" id="files" multiple="multiple"/>
+						<div id="fileInfo" style="display:none; overflow: auto; max-height:500px">
+						<table class="bordered-table zebra-striped">
+					        <thead>
+					          <tr>
+					            <th>{msg desc="Filename"}Filename{/msg}</th>
+					            <th>{msg desc="Size"}Size{/msg}</th>
+					          </tr>
+					        </thead>
+					        <tbody>
+					
+					        </tbody>
+					     </table>
+						</div>
+            </form>
+            </div>
+            <div class="modal-footer">
+			  <button class="btn upload secondary disabled">{msg desc="Upload"}Upload{/msg}</button>
+              <button class="btn cancel primary">{msg desc="Cancel"}Cancel{/msg}</button>
+            </div>
+{/template}
+
+/**
+ * Upload resume
+ */
+{template .uploadResume}
+<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >{msg desc="Check uploaded photos"}Check uploaded photos{/msg}</button><a href="#" class="close">×</a></h3><div class="content"><p>hola</p></div></div>
+{/template}

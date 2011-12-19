@@ -1,0 +1,67 @@
+{namespace template.meetingView}
+
+/**
+ * Meeting menu entry
+ * @param endUrl
+ * @param text
+ */
+{template .meeting}
+<li><a href="#{$endUrl}">{$text}</a></li>
+{/template}
+
+/**
+ * New meeting
+ */
+{template .doMeeting}
+	<h3>{msg desc="Meeting main information"}Main information{/msg}</h3>
+	<table>
+	  <tbody id="meetingInformation">
+		<tr>
+			<td>{msg desc="Meeting title"}Title{/msg}</td><td><input type="text" class="xlarge"/></td>
+	 	</tr>
+		<tr>
+			<td>{msg desc="Meeting date"}Date{/msg}</td><td><input type="text" class="xlarge" /></td>
+	 	</tr>
+		<tr>
+			<td>{msg desc="Meeting description"}Description{/msg}</td><td><textarea class="xlarge" ></textarea></td>
+	 	</tr>
+       <tbody>
+	</table>
+	<button class="btn" id="addField-but">{msg desc="Meeting add field"}Add field{/msg}</button>
+
+	<h3 style="margin-top:17px">{msg desc="Participants of the meeting"}Participants{/msg}</h3>
+	<div>{msg desc="Invite people to a meeting"}Invite people to your meeting{/msg}</div>
+	<br>
+	<div><input type="text" placeholder="{msg desc="Specify name of the person or group to invite to the meeting"}Name of the person or group{/msg}"></div>
+	
+{/template}
+
+/**
+ * Custom row in meeting creation
+ * @param text
+ */
+{template .doMeetingRow}
+<td>{$text}</td><td><input type="text" class="xlarge"/><a href="javascript:void(0)" class="close">×</a></td>
+{/template}
+
+
+
+/**
+ * Create a custom row in meeting creation
+ */
+{template .doMeetingAddField}
+<div class="modal hide fade" style="display: none;">
+            <div class="modal-header">
+              <a class="close" href="#">×</a>
+              <h3>{msg desc="Creating new field"}New field{/msg}</h3>
+            </div>
+            <div class="modal-body">
+              {msg desc="Field name"}Field name{/msg}:&nbsp;&nbsp;<input type="text">
+            </div>
+            <div class="modal-footer">
+			  <button class="btn secondary">{msg desc="Cancel"}Cancel{/msg}</button>
+              <button class="btn primary">{msg desc="Accept"}Accept{/msg}</button>
+            </div>
+</div>
+{/template} 
+

@@ -1,0 +1,50 @@
+{namespace template.profileView}
+
+/**
+ * Personal information
+ * @param name
+ * @param city
+ * @param age
+ * @param gender
+ * @param country
+ */
+{template .personalInformation}
+    <ul class="unstyled">
+          {if $name != null}
+          	<li>{msg desc="Name"}Name{/msg}: <b>{$name}</b></li>
+		  {/if}
+		  
+		  {if $city != null}
+          	<li>{msg desc="City"}City{/msg}: <b>{$city}</b></li>
+		  {/if}
+		  
+		  {if $age != null}
+          	<li>{msg desc="Age"}Age{/msg}: <b>{$age} years</b></li>
+		  {/if}
+		  
+		  {if $gender != null}
+          	<li>{msg desc="Gender"}Gender{/msg}: <b>{$gender}</b></li>
+		  {/if}
+		  
+		  {if $country != null}
+          	<li>{msg desc="Country"}Country{/msg}: <b>{$country}</b></li>
+		  {/if}
+          
+		  
+    </ul>
+{/template}
+
+
+/**
+ * Favourites
+ * @param favourites
+ */
+{template .favourites}
+            
+	      <h5>{msg desc="Favourites"}Favourites{/msg}</h5>
+          <ul>
+          {foreach $favourite in $favourites}
+          	<li><a href="#{$favourite.url}">{$favourite.title}</li>
+		  {/foreach}
+          </ul>
+{/template}

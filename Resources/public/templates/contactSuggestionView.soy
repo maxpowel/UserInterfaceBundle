@@ -1,0 +1,26 @@
+{namespace template.contactSuggestionView}
+
+/**
+ * Contact suggestion
+ * @param name
+ * @param id
+ * @param thumbnail
+ */
+{template .contactSuggestion}
+	<br>
+            <div>
+	          	<div style="float:left">  	
+					<a href="#profile/<%= id %>">
+							<img alt="" src="{$thumbnail}" class="thumbnail">
+					</a>
+				</div>
+				
+				<div style="margin-left: 52px">
+					<div><a href="#profile/{$id}">{$name}</a></div>
+					<div style="font-size:10px"><button class="btn add" style="padding:3px 6px; font-size:10px">{msg desc="Invite to be friends"}Invite{/msg}</button>&nbsp;&nbsp;<a href="javascript:void(0)" class="reject">{msg desc="Omit the suggestion"}Omit{/msg}</a></div>
+				</div>
+	        </div>
+{/template}
+
+
+

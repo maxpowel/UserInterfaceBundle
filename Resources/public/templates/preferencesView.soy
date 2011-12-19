@@ -1,0 +1,153 @@
+{namespace template.preferencesView}
+
+/**
+ * Personal
+ * @param name
+ * @param lastName
+ * @param email 
+ */
+{template .personalInformation}
+			<div><h3>{msg desc="Personal information"}Personal information{/msg}</h3></div>
+        	<div>
+				<table>
+					<tr>
+						<td>First name</td><td><input type="text" class="span5" value="{$name}"></td>
+					</tr>
+					<tr>
+						<td>Last name</td><td><input type="text" class="span5" value="{$lastName}"></td>
+					</tr>
+					<tr>
+						<td>Email name</td><td><input type="text" class="span5" value="{$email}"></td>
+					</tr>
+				</table>
+        	</div>
+        	<div>
+        		<button class="btn primary">{msg desc="Save changes"}Save changes{/msg}</button>
+        	</div>
+{/template}
+
+/**
+ * About me entry
+ * @param title
+ * @param body
+ */
+{template .aboutMeEntry}
+	<div align="center">
+		<table>
+			<tr>
+				<td><input type="text" class="span7" placeholder="{msg desc="Title"}Title{/msg}" value="{$title}"></td>
+			</tr>
+			<tr>
+				<td><textarea type="text" class="span12" rows="12" placeholder="{msg desc="Description"}Description{/msg}">{$body}</textarea></td>
+			</tr>
+		</table>
+    </div>
+        		
+{/template}
+
+/**
+ * About me
+ * @param elements 
+ */
+{template .aboutMe}
+			<div><h3>{msg desc="About me"}About me{/msg}</h3></div>
+			{foreach $element in $elements}
+				{call .aboutMeEntry data="$element" /}
+			{/foreach}
+
+        	<div class="row show-grid">
+    			<div class="span2"><button class="btn">{msg desc="Add new"}Add new{/msg}</button></button></div>
+    			<div class="span3"><button class="btn primary">{msg desc="Save changes"}Save changes{/msg}</button></div>
+  			</div>
+        		
+{/template}
+
+/**
+ * Security
+ */
+{template .security}
+			<div><h3>{msg desc="Security"}Security{/msg}</h3></div>
+			<div align="center">
+    			<div><button class="btn" id="manageGroups-btn">{msg desc="Manage groups"}Manage groups{/msg}</button></button></div>
+    			<br>
+    			<div><button class="btn" id="profilePermissions-btn">{msg desc="Profile permssions"}Profile permissions{/msg}</button></div>
+    		</div>
+        		
+{/template}
+
+/**
+ * Group list entry
+ * @param name
+ */
+{template .groupListEntry}
+	<label><span style="margin-left: 4px"><a href="javascript:void(0)" class="load">{$name}</a></span></label>
+{/template}
+
+
+/**
+ * Edit group
+ * @param name
+ */
+{template .editGroup}
+	<div><h4>{msg desc="Group name"}Group name{/msg}<h4></div>
+	<div><input type="text" class="span4" value="{$name}"></div>
+	<br>
+	<div><h4>{msg desc="Group members"}Group members{/msg}<h4></div>
+	<div>
+	<select id="memberList" multiple="multiple" size="15" class="span7">
+    </select>
+	</div>
+	<div>
+		<button id="removeSelected-btn" class="btn danger disabled">{msg desc="Remove selectede users"}Remove selected from the group{/msg}</button>
+	</div>
+	<br>
+	<div><h4>{msg desc="Add member"}Add members to the group{/msg}<h4></div>
+	<div>{msg desc="Person name"}Person name{/msg}:{sp}<input type="text" id="personName-txt" class="span4"></div>
+	<div>
+		<button style="margin-top:4px" id="addMember-btn" class="btn success">{msg desc="Add member"}Add member to the group{/msg}</button>
+	</div>
+{/template}
+
+
+/**
+ * Manage groups
+ */
+{template .manageGroups}
+			<div><h3>{msg desc="Manage groups"}Manage groups{/msg}</h3></div>
+			<table>
+				<tr>
+					<td>
+						<h4>{msg desc="Group list"}Group list{/msg}</h4>
+					</td>
+				</tr>
+    			<tr>
+    				<td>
+						<ul id="groupList" class="inputs-list">
+						</ul>
+    				</td>
+    			</tr>
+    		</table>
+			<br>
+			<table>
+				<tr>
+					<td colspan="2">
+						<h4>{msg desc="New group"}New group{/msg}</h4>
+					</td>
+				</tr>
+			
+    			<tr>
+    				<td colspan>
+    					<div>{msg desc="Group name"}Name{/msg}
+    				</td>
+    				<td>
+    					<input type="text" class="span3" id="newGroupName"></div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td colspan="2">
+    					<div><button class="btn primary" id="createGroup-btn">{msg desc="Create group"}Create{/msg}</button></div>
+    				</td>
+    			</tr>
+    		</table>
+        		
+{/template}

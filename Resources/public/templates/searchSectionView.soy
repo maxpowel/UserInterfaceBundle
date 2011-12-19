@@ -1,0 +1,55 @@
+{namespace template.section}
+
+/**
+ * Search section
+ */
+{template .search}
+<div class="sidebar">
+        <div class="well">
+        <input type="text" id="query" class="span3" placeholder="Search..."/>
+        <br><br>
+        <button class="btn primary" id="but-search">Search</button>
+        <br><br>
+         
+			
+	      <h5>{msg desc="Search section city"}City{/msg}</h5>
+          <input type="text" id="city" class="span3" placeholder="{msg desc="Suggestion in search box"}City, town or villate{/msg}"/>
+          <div id="city-container" style="margin:10px" />  
+          <br><br>
+          <h5>{msg desc="Start section agenda"}Things in common{/msg}</h5>
+          <span class="help-block">
+                Study places, hobbies, etc
+          </span>
+          <input type="text" id="thing" class="span3"/>
+           <div id="thing-container" style="margin:10px" />
+           <br><br>
+		  <h5>{msg desc="Start section age"}Aproximately age{/msg}</h5>
+          
+          <input type="text" style="width:23px" maxlength="3" id="years"/> years 
+        </div>
+      </div>
+      
+       <div class="sidebar-right">
+        <div class="well">
+          <h5>{msg desc="Search section city"}Is friend of...{/msg}</h5>
+          <input type="text" class="span3" id="friend" placeholder="Friend name"/>
+          <div id="friend-container" style="margin:10px" />  
+          <br><br>
+          
+          <h5>{msg desc="Search section city"}About me{/msg}</h5>
+          <span class="help-block">
+                Some extra information about what are you looking for
+          </span>
+          <textarea id="other" class="span3" rows="7">
+          </textarea>  
+          <br><br>
+          
+        </div>
+      </div>
+      
+      <div class="content" id="search-result">
+		<table class="hero-unit-simple">
+        <tr><td><h3>{msg desc="Search explain"}Please fill any field{/msg}</h3></td></tr>
+        </table>
+      </div>
+{/template}

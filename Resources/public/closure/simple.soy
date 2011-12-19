@@ -1,0 +1,27 @@
+{namespace templates.newnessView}
+
+/**
+ * Newness in the start sectin
+ * @param authorName
+ * @param date 
+ * @param body
+ * @param thumbnail
+ */
+{template .newness}
+<div style="min-height: 48px">
+			<div style="float:left; position:relative">
+				<a href="#as">
+						<img alt="" src="{$thumbnail}http://placehold.it/48x48" class="thumbnail">
+				</a>
+			</div>
+			<div style="margin-left:60px">
+				<div><a href="#">{$authorName}</a> - {$date}</div>
+				<div>{$body}</div>
+				<div style="padding:10px"><a href="#">{msg}Comment{/msg}</a> - <a href="#">{msg}I like it{/msg}</a> - <a href="#">{msg}I don't like it{/msg}</a></div>
+			</div>
+</div>
+<hr>
+{/template}
+
+
+

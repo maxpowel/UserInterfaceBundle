@@ -1,0 +1,118 @@
+{namespace template.loginApp}
+
+/**
+ * Login form
+ */
+{template .login}
+<table style="width:150px" class="hero-unit-simple">
+				<tbody>
+					<tr>
+						<td colspan="2"><div align="center"><b>{msg desc="Login title"}Access to my account{/msg}</b></div></td>
+					</tr>
+		
+					<tr>
+						<td>{msg desc="Username"}Username{/msg}</td>
+						<td><input type="text" id="username"></td>
+					</tr>
+					<tr>
+						<td>{msg desc="Pass"}Password{/msg}</td>
+						<td><input type="password" id="password"></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+						<div align="center" class="alert-message block-message error" style="display:none">
+							<a href="javascript:void(0)" class="close">×</a>
+							{msg desc="Login fail"}The data entered are incorrect{/msg}
+						</div>
+						<div align="center"><button class="btn success" id="login-btn">{msg desc="Login"}Login{/msg}</button></div></td>
+					</tr>
+							
+				  </tbody>
+				</table>
+				
+				<a href="#newAccount" id="newAccount-btn">
+					<span class="label warning">{msg desc="New account"}New account{/msg}</span>
+				</a>
+				&nbsp;&nbsp;
+				<a href="#recoverPassword" id="recoverPassword-btn">
+					<span class="label important">{msg desc="Recover password"}Recover password{/msg}</span>
+				</a>
+{/template}
+
+/**
+ * New account form
+ */
+{template .newAccount}
+<table style="width:150px" class="hero-unit-simple">
+				<tbody>
+					<tr>
+						<td colspan="2"><div align="center"><b>{msg desc="Complete the form"}Please complete the form{/msg}</b></div></td>
+					</tr>
+		
+					<tr>
+						<td>{msg desc="Name"}Name{/msg}</td>
+						<td><input type="text" id="name"></td>
+					</tr>
+					<tr>
+						<td>{msg desc="Email"}Email{/msg}</td>
+						<td><input type="text" id="email"></td>
+					</tr>
+					<tr>
+						<td>{msg desc="Pass"}Password{/msg}</td>
+						<td><input type="text" id="password"></td>
+					</tr>
+					<tr>
+						<td>{msg desc="Repeat Pass"}Repeat password{/msg}</td>
+						<td><input type="text" id="rpassword"></td>
+					</tr>
+					<tr>
+						<td>{msg desc="Birthdate"}Birthdate{/msg}</td>
+						<td>
+							<select id="day" class="tinySelect">
+				                <option>Day</option>
+				                {for $i in range(1,32)}
+  									<option value="{$i}">{$i}</option>
+								{/for}
+				              </select>
+				              
+				            <select id="mediumSelect" name="tinySelect" class="tinySelect">
+				                <option>Month</option>
+				                <option value="1">{msg desc="Jaunary"}Jaunary{/msg}</option>
+				                <option value="2">{msg desc="February"}February{/msg}</option>
+				                <option value="3">{msg desc="March"}March{/msg}</option>
+				                <option value="4">{msg desc="April"}April{/msg}</option>
+				                <option value="5">{msg desc="May"}May{/msg}</option>
+				                <option value="6">{msg desc="June"}June{/msg}</option>
+				                <option value="7">{msg desc="July"}July{/msg}</option>
+				                <option value="8">{msg desc="August"}August{/msg}</option>
+				                <option value="9">{msg desc="September"}September{/msg}</option>
+				                <option value="10">{msg desc="October"}October{/msg}</option>
+				                <option value="11">{msg desc="November"}November{/msg}</option>
+				                <option value="12">{msg desc="December"}December{/msg}</option>
+				              </select>
+				              
+				            <select id="mediumSelect" name="tinySelect" class="tinySelect">
+				                <option>Year</option>
+				                {for $year in range(-2010,-1900)}
+  <option>{-$year}</option>
+{/for}
+				                
+
+
+				              </select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><div align="center"><button class="btn primary" id="createAccount-btn">{msg desc="Create account"}Create account{/msg}</button></div></td>
+					</tr>
+				  </tbody>
+				</table>
+				
+				<a href="#" id="goLogin-btn">
+					<span class="label success">{msg desc="Login"}Login{/msg}</span>
+				</a>
+				&nbsp;&nbsp;
+				<a href="#recoverPassword" id="recoverPassword-btn">
+					<span class="label important">{msg desc="Recover password"}Recover password{/msg}</span>
+				</a>
+{/template}

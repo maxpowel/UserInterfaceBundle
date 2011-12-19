@@ -1,0 +1,56 @@
+{namespace template.section}
+
+/**
+ * Start section
+ */
+{template .agenda}
+<div class="sidebar">
+        <div class="well">
+		  <div align="center">
+		  <input type="text" placeholder="{msg desc="Search box"}Search{/msg}..." class="span3">
+		  </div>
+		  <br>
+		  <br>
+	      <h5>{msg desc="Type of elements to show in the calendar"}Show{/msg}</h5>
+	      <ul class="inputs-list">
+                <li>
+                  <label>
+                    <input type="checkbox" value="option1" name="optionsCheckboxes">
+                    <span style="margin-left: 4px">{msg desc="Agenda section"}Meetings{/msg}</span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" value="option2" name="optionsCheckboxes">
+                    <span style="margin-left: 4px">{msg desc="Agenda section"}Tasks{/msg}</span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" value="option2" name="optionsCheckboxes">
+                    <span style="margin-left: 4px">{msg desc="Agenda section"}Birthdays{/msg}</span>
+                  </label>
+                </li>
+                <li>
+                  <label class="disabled">
+                    <input type="checkbox" value="option2" name="optionsCheckboxes">
+                    <span style="margin-left: 4px">{msg desc="Agenda section"}Other{/msg}</span>
+                  </label>
+                </li>
+         </ul>
+              
+<br><br>
+		<button class="btn primary">{msg desc="New task button"}New task{/msg}</button>
+		
+        </div>
+      </div>
+      
+      <div class="content-big">
+		<div id="calendar" />
+
+		</div>
+      </div>
+{/template}
+
+
+

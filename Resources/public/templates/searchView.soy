@@ -1,0 +1,99 @@
+{namespace template.searchView}
+/**
+ * City row
+ * @param name
+ */
+{template .cityRow}
+	<div>{msg desc="Search by a City"}Search by{/msg}: {$name}<a class="close" href="javascript:void(0)">×</a></div>
+{/template}
+
+/**
+ * Common thing row
+ * @param name
+ */
+{template .commonThingRow}
+	<div>{$name}<a class="close" href="javascript:void(0)">×</a></div>
+{/template}
+
+/**
+ * Friend row
+ * @param name
+ */
+{template .friendRow}
+	<div>{$name}<a class="close" href="javascript:void(0)">×</a></div>
+{/template}
+
+/**
+ * Result list body
+ */
+{template .resultList}
+	<div id="original">
+        
+        <div>
+        <ul class="tabs">
+        <li class="active"><a href="#">{msg desc="All"}All{/msg}</a></li>
+        <li><a href="#">{msg desc="People"}People{/msg}</a></li>
+        <li><a href="#">{msg desc="Places"}Places{/msg}</a></li>
+        <li><a href="#">{msg desc="Groups"}Groups{/msg}</a></li>
+      </ul>
+        </div>
+    	<div id="result-container">
+    
+    	</div>
+		<button class="btn wlarge-btn" id="more-results">{msg desc="Start section more updates"}More{/msg}</button>
+
+
+	</div>
+{/template}
+
+
+
+/**
+ * Search result entry
+ * @param name 
+ * @param thumbnail
+ * @param city
+ * @param things
+ * @param friends
+ * @param other
+ */
+{template .searchResult}
+<div style="min-height: 48px">
+			<div style="float:left; position:relative">
+				<a href="#as">
+						<img alt="" src="{$thumbnail}" class="thumbnail">
+				</a>
+			</div>
+			<div style="margin-left:60px">
+				<div><a href="#">{$name}</a></div>
+				
+				{if $city != null}
+				 	<div>{msg desc="City"}City{/msg}: {$city.name}</div>
+				{/if}
+				
+				{if $things != null}
+				  <div><strong>{msg desc="Things in common"}Things in common{/msg}</strong></div>
+				  <ul>
+				  {foreach $thing in $things}
+				  	<li>{$thing.name}</li>
+				  {/foreach}
+				  </ul>
+				{/if}
+				
+				{if $friends != null}
+				  <div><strong>{msg desc="Friends in common"}Friends in common{/msg}</strong></div>
+				  <ul>
+				  {foreach $friend in $friends}
+				  <li>{$friend.name}</li>
+				  {/foreach}
+				  </ul>
+				{/if}
+				{if $other != null}
+					<div><pre><div style="padding:10px">{$other}</div></pre></div>
+				{/if}
+			</div>
+			
+</div>
+
+<hr>
+{/template}

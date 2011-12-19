@@ -1,0 +1,48 @@
+{namespace template.newnessView}
+
+/**
+ * Newness in the start section
+ * @param authorName
+ * @param date 
+ * @param body
+ * @param thumbnail
+ */
+{template .newness}
+<div style="min-height: 48px">
+			<div style="float:left; position:relative">
+				<a href="#as">
+						<img alt="" src="{$thumbnail}" class="thumbnail">
+				</a>
+			</div>
+			<div style="margin-left:60px">
+				<div><a href="#">{$authorName}</a> - {$date}</div>
+				<div>{$body}</div>
+				<div style="padding:10px"><a href="#">{msg desc="Newness comment"}Comment{/msg}</a> - <a href="#">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="#">{msg desc="User dislikes the newness"}I don't like it{/msg}</a></div>
+			</div>
+</div>
+<hr>
+{/template}
+
+/**
+ * Newness list
+ * @param isOwner
+ * @param friendName
+ */
+{template .newnessList}
+        	<div class="hero-unit">
+        		{if $isOwner == true}
+		  			<h3>{msg desc="Share something update in my profile"}Share something{/msg}</h3>
+		  		{else}
+		  			<h3>{msg desc="Share something in other profile"}Share something with {$friendName}{/msg}</h3>
+		  		{/if}
+		  		<input type="text" class="wlarge" id="new-share" placeholder="{msg desc="Profile section share note"}Write here{/msg}">
+        	</div>
+        
+        
+        
+        
+        	<div id="newness-container">
+        
+        	</div>
+			<button class="btn wlarge-btn" id="more-newness">{msg desc="Start section more updates"}More{/msg}</button>
+{/template}

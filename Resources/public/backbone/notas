@@ -1,0 +1,79 @@
+NovedadesView
+	Texto central:
+		Comparte algo
+		Lista novedades
+
+NovedadesCollection		
+
+NovedadModel
+	Tiene listeners de la collection
+	
+	Insertar nueva comparticion
+	cargar novedades
+	
+window.NewsView = Backbone.View.extend({
+
+    el: $("#news"),
+    
+    newsTemplate: _.template($('#news-template').html()), //Este news template tiene también lo de insertar novedades
+    
+    events: {
+      "keypress #new-share":  "createOnEnter",
+    },
+    
+    initialize: function() {
+      this.input    = this.$("#new-share");
+
+      News.bind('add',   this.addOne, this);
+      News.bind('reset', this.addAll, this);
+      //News.bind('all',   this.render, this);
+
+      News.fetch();
+    },
+    
+    createOnEnter: function(e) {
+      var text = this.input.val();
+      if (!text || e.keyCode != 13) return;
+      News.create({text: text});
+      this.input.val('');
+    },
+    
+    addAll: function() {
+      Todos.each(this.addOne);
+    },
+    
+    addOne: function(new) {
+      var view = new NewView({model: new});
+      this.$("#new-list").append(view.render().el);
+    },
+});
+    
+    
+
+NotificationView
+	Lista de notificaciones
+
+AgendaView
+	Lista de cosas
+
+SugerenciasView
+	Lista de sugerencias
+
+ReunionView
+	Crear reunion:
+		parte central para crearlo
+	lista de reuniones
+	Mostrar todas:
+		parte central con la lista
+		
+	
+ReunionModel
+	Guardar, extraer y elminar reuniones
+
+EncontrarAmigosView
+	Botones
+	Parte central con los formularios
+EncontrarAmigosModel
+	Recoger lista de amigos
+	Enviar peticiones de amistad
+	
