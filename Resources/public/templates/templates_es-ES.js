@@ -62,14 +62,28 @@ template.appView.uploadEntry = function(opt_data, opt_sb) {
 
 template.appView.uploadPhoto = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="modal-header"><h3>Upload photos</h3></div><div class="modal-body" align="center"><h4>Select your photos</h4><div>You can select multiple files</div><form id="photoForm" enctype="multipart/form-data" method="post" action="/upload"><input type="file" id="files" multiple="multiple"/><div id="fileInfo" style="display:none; overflow: auto; max-height:500px"><table class="bordered-table zebra-striped"><thead><tr><th>Filename</th><th>Size</th></tr></thead><tbody></tbody></table></div></form></div><div class="modal-footer"><button class="btn upload secondary disabled">Upload</button><button class="btn cancel primary">Cancel</button></div>');
+  output.append('<div class="modal-header"><h3>Upload photos</h3></div><div class="modal-body" align="center"><h4>Save photos in the album</h4><select id="albumDes" name="mediumSelect" class="medium">');
+  var albumList98 = opt_data.albumList;
+  var albumListLen98 = albumList98.length;
+  for (var albumIndex98 = 0; albumIndex98 < albumListLen98; albumIndex98++) {
+    var albumData98 = albumList98[albumIndex98];
+    output.append('<option value="', soy.$$escapeHtml(albumData98.id), '">', soy.$$escapeHtml(albumData98.name), '</option>');
+  }
+  output.append('</select><h4>Select your photos</h4><div>You can select multiple files</div><form id="photoForm" enctype="multipart/form-data" method="post" action="/upload"><input type="file" id="files" multiple="multiple"/><div id="fileInfo" style="display:none; overflow: auto; max-height:400px"><table class="bordered-table zebra-striped"><thead><tr><th>Filename</th><th>Size</th></tr></thead><tbody></tbody></table></div></form></div><div class="modal-footer"><button class="btn upload secondary disabled">Upload</button><button class="btn cancel primary">Cancel</button></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.appView.uploadResume = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >Check uploaded photos</button><a href="#" class="close">×</a></h3><div class="content"><p>hola</p></div></div>');
+  output.append('<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >Check uploaded photos</button><a href="javascript:void(0)" class="close">×</a></h3><div style="display:none" class="content"><p><ul class="media-grid"></ul></p></div></div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.appView.resumeEntry = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<a href="#"><img alt="" src="/thumbnail/profile?id=', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -105,12 +119,12 @@ template.loginApp.login = function(opt_data, opt_sb) {
 template.loginApp.newAccount = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<table style="width:150px" class="hero-unit-simple"><tbody><tr><td colspan="2"><div align="center"><b>Please complete the form</b></div></td></tr><tr><td>Name</td><td><input type="text" id="name"></td></tr><tr><td>Email</td><td><input type="text" id="email"></td></tr><tr><td>Password</td><td><input type="text" id="password"></td></tr><tr><td>Repeat password</td><td><input type="text" id="rpassword"></td></tr><tr><td>Birthdate</td><td><select id="day" class="tinySelect"><option>Day</option>');
-  for (var i177 = 1; i177 < 32; i177++) {
-    output.append('<option value="', soy.$$escapeHtml(i177), '">', soy.$$escapeHtml(i177), '</option>');
+  for (var i192 = 1; i192 < 32; i192++) {
+    output.append('<option value="', soy.$$escapeHtml(i192), '">', soy.$$escapeHtml(i192), '</option>');
   }
   output.append('</select><select id="mediumSelect" name="tinySelect" class="tinySelect"><option>Month</option><option value="1">Jaunary</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><select id="mediumSelect" name="tinySelect" class="tinySelect"><option>Year</option>');
-  for (var year220 = -2010; year220 < -1900; year220++) {
-    output.append('<option>', soy.$$escapeHtml(-year220), '</option>');
+  for (var year235 = -2010; year235 < -1900; year235++) {
+    output.append('<option>', soy.$$escapeHtml(-year235), '</option>');
   }
   output.append('</select></td></tr><tr><td colspan="2"><div align="center"><button class="btn primary" id="createAccount-btn">Create account</button></div></td></tr></tbody></table><a href="#" id="goLogin-btn"><span class="label success">Login</span></a>&nbsp;&nbsp;<a href="#recoverPassword" id="recoverPassword-btn"><span class="label important">Recover password</span></a>');
   return opt_sb ? '' : output.toString();
@@ -273,7 +287,7 @@ template.multimediaView.photoList = function(opt_data, opt_sb) {
 
 template.multimediaView.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<a href="#"><img alt="" src="http://placehold.it/97x97" class="thumbnail"></a><span class="span" style="margin-left:-20px; margin-top: 5px"><input type="checkbox" class="ckbox"></span>');
+  output.append('<a href="#"><img alt="" src="/thumbnail/profile?id=', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a><span class="span" style="margin-left:-20px; margin-top: 5px"><input type="checkbox" class="ckbox"></span>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -407,11 +421,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList660 = opt_data.elements;
-  var elementListLen660 = elementList660.length;
-  for (var elementIndex660 = 0; elementIndex660 < elementListLen660; elementIndex660++) {
-    var elementData660 = elementList660[elementIndex660];
-    template.preferencesView.aboutMeEntry(elementData660, output);
+  var elementList677 = opt_data.elements;
+  var elementListLen677 = elementList677.length;
+  for (var elementIndex677 = 0; elementIndex677 < elementListLen677; elementIndex677++) {
+    var elementData677 = elementList677[elementIndex677];
+    template.preferencesView.aboutMeEntry(elementData677, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -477,11 +491,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList801 = opt_data.favourites;
-  var favouriteListLen801 = favouriteList801.length;
-  for (var favouriteIndex801 = 0; favouriteIndex801 < favouriteListLen801; favouriteIndex801++) {
-    var favouriteData801 = favouriteList801[favouriteIndex801];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData801.url), '">', soy.$$escapeHtml(favouriteData801.title), '</li>');
+  var favouriteList818 = opt_data.favourites;
+  var favouriteListLen818 = favouriteList818.length;
+  for (var favouriteIndex818 = 0; favouriteIndex818 < favouriteListLen818; favouriteIndex818++) {
+    var favouriteData818 = favouriteList818[favouriteIndex818];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData818.url), '">', soy.$$escapeHtml(favouriteData818.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -542,21 +556,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList886 = opt_data.things;
-    var thingListLen886 = thingList886.length;
-    for (var thingIndex886 = 0; thingIndex886 < thingListLen886; thingIndex886++) {
-      var thingData886 = thingList886[thingIndex886];
-      output.append('<li>', soy.$$escapeHtml(thingData886.name), '</li>');
+    var thingList903 = opt_data.things;
+    var thingListLen903 = thingList903.length;
+    for (var thingIndex903 = 0; thingIndex903 < thingListLen903; thingIndex903++) {
+      var thingData903 = thingList903[thingIndex903];
+      output.append('<li>', soy.$$escapeHtml(thingData903.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList898 = opt_data.friends;
-    var friendListLen898 = friendList898.length;
-    for (var friendIndex898 = 0; friendIndex898 < friendListLen898; friendIndex898++) {
-      var friendData898 = friendList898[friendIndex898];
-      output.append('<li>', soy.$$escapeHtml(friendData898.name), '</li>');
+    var friendList915 = opt_data.friends;
+    var friendListLen915 = friendList915.length;
+    for (var friendIndex915 = 0; friendIndex915 < friendListLen915; friendIndex915++) {
+      var friendData915 = friendList915[friendIndex915];
+      output.append('<li>', soy.$$escapeHtml(friendData915.name), '</li>');
     }
     output.append('</ul>');
   }

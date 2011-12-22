@@ -90,17 +90,26 @@
 
 /**
  * Upload window
+ * @param albumList
  */
 {template .uploadPhoto}
             <div class="modal-header">
-              <h3>{msg desc="Upload photos window title"}Upload photos{/msg}</h3>
+            	<h3>{msg desc="Upload photos"}Upload photos{/msg}</h3>
             </div>
             <div class="modal-body" align="center">
+            <h4>{msg desc="Save photos in the album"}Save photos in the album{/msg}</h4>
+    		<select id="albumDes" name="mediumSelect" class="medium">
+    		{foreach $album in $albumList}
+    			<option value="{$album.id}">{$album.name}</option>
+    		{/foreach}
+      		</select>
+              		
+            
             <h4>{msg desc="Select your photos"}Select your photos{/msg}</h4>
             <div>{msg desc="Upload photo note"}You can select multiple files{/msg}</div>
             <form id="photoForm" enctype="multipart/form-data" method="post" action="/upload">
 	                    <input type="file" id="files" multiple="multiple"/>
-						<div id="fileInfo" style="display:none; overflow: auto; max-height:500px">
+						<div id="fileInfo" style="display:none; overflow: auto; max-height:400px">
 						<table class="bordered-table zebra-striped">
 					        <thead>
 					          <tr>
@@ -125,5 +134,15 @@
  * Upload resume
  */
 {template .uploadResume}
-<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >{msg desc="Check uploaded photos"}Check uploaded photos{/msg}</button><a href="#" class="close">×</a></h3><div class="content"><p>hola</p></div></div>
+<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >{msg desc="Check uploaded photos"}Check uploaded photos{/msg}</button><a href="javascript:void(0)" class="close">×</a></h3><div style="display:none" class="content"><p><ul class="media-grid"></ul></p></div></div>
+{/template}
+
+/**
+ * Resume entry
+ * @param id
+ */
+{template .resumeEntry}
+          <a href="#">
+            <img alt="" src="/thumbnail/profile?id={$id}" class="thumbnail">
+          </a>
 {/template}

@@ -1,6 +1,11 @@
 <?php
 
 namespace Wixet\UserInterfaceBundle\Controller;
+
+use Symfony\Component\BrowserKit\Response;
+
+use Wixet\WixetBundle\Entity\MediaItem;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -277,7 +282,7 @@ class MainController extends Controller
     	foreach ($pmc as $collection){
     		$data[] = array("id"=>$collection->getId(), "name"=> $collection->getTitle());
     	}
-    	$data[]=array("id"=>0);
+    	$data[]=array("id"=>0, "name"=>"MAIN");
     	
     	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
@@ -318,31 +323,24 @@ class MainController extends Controller
     	$data = array();
     	
     	
-		$data['total'] = 100;		
+		
 		$data['psize'] = $pageSize;
     	
 
     	
     	
     	$models = array();
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
-    		$models[] = array("id"=>1);
-    		$models[] = array("id"=>2);
-    		$models[] = array("id"=>3);
+    	
+    	$fetcher = $this->get('wixet.fetcher');
+    	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_GET['folder']);
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$collection = $fetcher->getCollection($album,$profile);
+    	
+    	$data['total'] =$collection->getSize();
+    	foreach($collection->getRaw($offset,$pageSize) as $item){
+    		$models[] = array("id"=>$item['id']);
+    	}
+
     		
     	
     	$data['models'] = $models;
@@ -376,9 +374,62 @@ class MainController extends Controller
     */
     public function postUploadAction()
     {
-    	$data = array();
+
+    	//Create the mediaItem
+    	$mediaItem = new MediaItem();
+    	$mimeType =$this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\MimeType')->findOneByName($_FILES['file']['type']);
+    	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_POST['albumId']);
+    	$uploader = $this->get('security.context')->getToken()->getUser()->getProfile(); 
+    	if($album->getProfile()->getId() == $uploader->getId() ){
+    		
+    		$mediaItem->setAlbum($album);
+	    	$mediaItem->setMimeType($mimeType);
+	    	$mediaItem->setViews(0);
+	    	$mediaItem->setDisabled(false);
+	    	$mediaItem->setPublic(false);
+	    	$mediaItem->setProfile($uploader);
+	    	
+	 		$mediaItem->setFileSize($_FILES['file']['size']);
+	    	
+	    	$em = $this->get('doctrine')->getEntityManager();
+	    	$em->persist($mediaItem);
+	    	$em->flush();
+	    	//
+	    	//echo $album->getId();
+	    	//echo $mediaItem->getAlbum()->getId();
+	    	//Add permissions
+	    	$ws = $this->get('wixet.permission_manager');
+	    	$ws->setPermission($mediaItem,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
+	    	//Save file
+	    	$mim = $this->get('wixet.media_item_manager');
+	    	$mim->saveFile($_FILES['file']['tmp_name'], $mediaItem);
+    	}
     	
+    	
+    	$data = array("id"=>$mediaItem->getId());
+ 
 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
+    
+    /**
+    * @Route("/thumbnail/profile", name="_thumbnail_profile_get")
+    * @Method({"GET"})
+    */
+    public function getThumbnailProfileAction()
+    {
+    
+    	$fetcher = $this->get('wixet.fetcher');
+    	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+    	if($mediaItem != null){
+    		$mim = $this->get('wixet.media_item_manager');
+    		$mim->printProfileThumbnail($mediaItem);
+    	}
+    	
+    		 
+    
+    
+        	return new \Symfony\Component\HttpFoundation\Response();
+     }
 }

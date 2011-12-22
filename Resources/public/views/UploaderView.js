@@ -10,6 +10,10 @@ var UploaderView = Backbone.View.extend({
     initialize: function() {
     	//this.model.bind('destroy', this.remove, this);
     	this.reset();
+    	
+    	this.albumList = new AlbumList();
+    	this.albumList.bind('reset', this.render, this);
+    	
     },
     
     remove: function() {
@@ -21,10 +25,14 @@ var UploaderView = Backbone.View.extend({
      },
       
     render: function() {
-    	//TODO hacer que esto cambie
-    	$(this.el).css({display: "none"});
     	
-    	$(this.el).html(template.appView.uploadPhoto());
+    	if(this.albumList.isEmpty()){
+    		this.albumList.fetch();
+    	}else{
+	    	//TODO hacer que esto cambie
+	    	$(this.el).css({display: "none"});
+	    	$(this.el).html(template.appView.uploadPhoto({albumList: this.albumList.toJSON()}));
+    	}
     	
 
       return this;
