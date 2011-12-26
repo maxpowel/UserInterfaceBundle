@@ -2,6 +2,8 @@
 
 namespace Wixet\UserInterfaceBundle\Controller;
 
+use Wixet\WixetBundle\Entity\ProfileUpdate;
+
 use Symfony\Component\BrowserKit\Response;
 
 use Wixet\WixetBundle\Entity\MediaItem;
@@ -66,7 +68,33 @@ class MainController extends Controller
     public function getNewnessAction()
     {
     	$data = array();
-    	$data[] = array("id"=>"1", "authorName"=> "hola", "date"=>"34", "body"=>"ddd"); 
+    	
+    	$ws = $this->get('wixet.fetcher');
+    	$pageSize = 20;
+    	$offset = ($_GET['page']-1)*$pageSize;
+    		
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+
+    	$id = isset($_GET['id'])?$_GET['id']:$profile->getId(); 
+
+    		
+    	$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile);
+    	//If the user are not granted to view the profile, $friend is null
+    	if($friend != null){
+    		//Extralazy association
+    		$updates = $friend->getUpdates();
+    		$updateList = $updates->slice($offset, $pageSize);
+
+    		foreach ($updateList as $update){
+    			$author = $update->getAuthor();
+    			
+    			$data[] = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+    		}
+    		
+    		
+    	}
+    	
+    	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
 
@@ -76,7 +104,39 @@ class MainController extends Controller
     */
     public function createNewnessAction()
     {
-    	$data = array("error"=>"false");
+    	
+    	
+    	
+    	
+    	$data = array();
+    	$ws = $this->get('wixet.fetcher');
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	/*
+    	 * TODO: Add this permission on account creation
+    	$ws = $this->get('wixet.permission_manager');
+    	$ws->setPermission($profile,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
+    	*/
+    	
+    	$id = isset($_GET['id'])?$_GET['id']:$profile->getId();
+    	
+    	$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile);
+    	//If the user are not granted to view the profile, $friend is null
+    	if($friend != null){
+    		 $data = json_decode(file_get_contents('php://input'),true);
+    		 $update = new ProfileUpdate();
+    		 $update->setAuthor($profile);
+    		 $update->setProfile($friend);
+    		 $update->setBody($data['body']);
+    		 $em = $this->get('doctrine')->getEntityManager();
+    		 $em->persist($update);
+    		 $em->flush();
+    		 
+    		 $author = $update->getAuthor();
+    		 $data = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+
+    	}
+    	
+    	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     
@@ -266,86 +326,7 @@ class MainController extends Controller
     }
     
     
-	/**
-    * @Route("/album", name="_album_get")
-    * @Method({"GET"})
-    */
-    public function getAlbumAction()
-    {
-
-    	/*$pmc = $this->get('security.context')->getToken()->getUser()->getProfile()->getAlbums();*/
-    	$ws = $this->get('wixet.fetcher');
-    	$lista = $ws->getCollection(null,$this->get('security.context')->getToken()->getUser()->getProfile(),"Wixet\WixetBundle\Entity\Album");
-    	
-    	$pmc = $lista->get(0,100);
-    	$data = array();
-    	foreach ($pmc as $collection){
-    		$data[] = array("id"=>$collection->getId(), "name"=> $collection->getTitle());
-    	}
-    	$data[]=array("id"=>0, "name"=>"MAIN");
-    	
-    	
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
-    }
-    
-	/**
-     * @Route("/album", name="_album_post")
-     * @Method({"POST"})
-     */
-    public function createAlbumAction()
-    {
-    	$data = json_decode(file_get_contents('php://input'),true);
-    	$md = new \Wixet\WixetBundle\Entity\Album();
-    	$md->setTitle($data['name']);
-    	$md->setProfile($this->get('security.context')->getToken()->getUser()->getProfile());
-    	$md->setPublic(false);
-    	
-    	$em = $this->get('doctrine')->getEntityManager();
-    	$em->persist($md);
-    	$em->flush();
-    	
-    	$ws = $this->get('wixet.permission_manager');
-    	$ws->setPermission($md,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
-    	
-    	$data['id'] = $md->getId();
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
-    }
-    
-    
-	/**
-    * @Route("/photo", name="_photo_get")
-    * @Method({"GET"})
-    */
-    public function getPhotoAction()
-    {
-    	$pageSize = 10;
-    	$offset = isset($_GET['page'])? ($_GET['page']-1)*$pageSize: 0;
-    	$data = array();
-    	
-    	
-		
-		$data['psize'] = $pageSize;
-    	
-
-    	
-    	
-    	$models = array();
-    	
-    	$fetcher = $this->get('wixet.fetcher');
-    	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_GET['folder']);
-    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	$collection = $fetcher->getCollection($album,$profile);
-    	
-    	$data['total'] =$collection->getSize();
-    	foreach($collection->getRaw($offset,$pageSize) as $item){
-    		$models[] = array("id"=>$item['id']);
-    	}
-
-    		
-    	
-    	$data['models'] = $models;
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
-    }
+	
     
 	/**
     * @Route("/group", name="_group_get")
@@ -367,69 +348,6 @@ class MainController extends Controller
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     
-    
-	/**
-    * @Route("/upload", name="_upload_post")
-    * @Method({"POST"})
-    */
-    public function postUploadAction()
-    {
 
-    	//Create the mediaItem
-    	$mediaItem = new MediaItem();
-    	$mimeType =$this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\MimeType')->findOneByName($_FILES['file']['type']);
-    	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_POST['albumId']);
-    	$uploader = $this->get('security.context')->getToken()->getUser()->getProfile(); 
-    	if($album->getProfile()->getId() == $uploader->getId() ){
-    		
-    		$mediaItem->setAlbum($album);
-	    	$mediaItem->setMimeType($mimeType);
-	    	$mediaItem->setViews(0);
-	    	$mediaItem->setDisabled(false);
-	    	$mediaItem->setPublic(false);
-	    	$mediaItem->setProfile($uploader);
-	    	
-	 		$mediaItem->setFileSize($_FILES['file']['size']);
-	    	
-	    	$em = $this->get('doctrine')->getEntityManager();
-	    	$em->persist($mediaItem);
-	    	$em->flush();
-	    	//
-	    	//echo $album->getId();
-	    	//echo $mediaItem->getAlbum()->getId();
-	    	//Add permissions
-	    	$ws = $this->get('wixet.permission_manager');
-	    	$ws->setPermission($mediaItem,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
-	    	//Save file
-	    	$mim = $this->get('wixet.media_item_manager');
-	    	$mim->saveFile($_FILES['file']['tmp_name'], $mediaItem);
-    	}
-    	
-    	
-    	$data = array("id"=>$mediaItem->getId());
- 
 
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
-    }
-    
-    /**
-    * @Route("/thumbnail/profile", name="_thumbnail_profile_get")
-    * @Method({"GET"})
-    */
-    public function getThumbnailProfileAction()
-    {
-    
-    	$fetcher = $this->get('wixet.fetcher');
-    	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
-    	if($mediaItem != null){
-    		$mim = $this->get('wixet.media_item_manager');
-    		$mim->printProfileThumbnail($mediaItem);
-    	}
-    	
-    		 
-    
-    
-        	return new \Symfony\Component\HttpFoundation\Response();
-     }
 }

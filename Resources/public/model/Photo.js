@@ -1,5 +1,5 @@
 var Photo = Backbone.Model.extend({
 	url: function(){
-		return "/photo?id="+this.get('id'); 
+		return "/multimedia/photo?id="+this.get('id'); 
 	}
 });

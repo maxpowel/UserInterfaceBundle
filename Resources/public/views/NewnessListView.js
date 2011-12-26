@@ -32,7 +32,13 @@ var NewnessListView = Backbone.View.extend({
     createOnEnter: function(e) {
       var text = this.input.val();
       if (!text || e.keyCode != 13) return;
-      this.collection.create({body: text});
+      var newness = new Newness();
+      var collection = this.collection;
+      newness.save({body: text},{success: function(){
+    	  collection.add(newness);
+      }
+      });
+
       this.input.val('');
     },
     
@@ -40,13 +46,13 @@ var NewnessListView = Backbone.View.extend({
       var cont = this.newnessContainer;
       this.collection.each(function(newness){
     	  var view = new NewnessView({model: newness});
-          cont.append(view.render().el);
+          cont.prepend(view.render().el);
       });
     },
     
     addOne: function(newness) {
       var view = new NewnessView({model: newness});
-      this.newnessContainer.append(view.render().el);
+      this.newnessContainer.prepend(view.render().el);
     }
 });
 

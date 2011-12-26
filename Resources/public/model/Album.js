@@ -1,8 +1,8 @@
 var Album = Backbone.Model.extend({
 	url: function(){
 		if(this.get('id') != null)
-			return "/album?id="+this.get('id');
+			return "/multimedia/album?id="+this.get('id');
 		else
-			return "/album";
+			return "/multimedia/album";
 	}
 });

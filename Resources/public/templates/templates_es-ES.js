@@ -287,7 +287,7 @@ template.multimediaView.photoList = function(opt_data, opt_sb) {
 
 template.multimediaView.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<a href="#"><img alt="" src="/thumbnail/profile?id=', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a><span class="span" style="margin-left:-20px; margin-top: 5px"><input type="checkbox" class="ckbox"></span>');
+  output.append('<a href="#photo/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="/photo/thumbnail?id=', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a><span class="span" style="margin-left:-20px; margin-top: 5px"><input type="checkbox" class="ckbox"></span>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -421,11 +421,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList677 = opt_data.elements;
-  var elementListLen677 = elementList677.length;
-  for (var elementIndex677 = 0; elementIndex677 < elementListLen677; elementIndex677++) {
-    var elementData677 = elementList677[elementIndex677];
-    template.preferencesView.aboutMeEntry(elementData677, output);
+  var elementList679 = opt_data.elements;
+  var elementListLen679 = elementList679.length;
+  for (var elementIndex679 = 0; elementIndex679 < elementListLen679; elementIndex679++) {
+    var elementData679 = elementList679[elementIndex679];
+    template.preferencesView.aboutMeEntry(elementData679, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -491,11 +491,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList818 = opt_data.favourites;
-  var favouriteListLen818 = favouriteList818.length;
-  for (var favouriteIndex818 = 0; favouriteIndex818 < favouriteListLen818; favouriteIndex818++) {
-    var favouriteData818 = favouriteList818[favouriteIndex818];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData818.url), '">', soy.$$escapeHtml(favouriteData818.title), '</li>');
+  var favouriteList820 = opt_data.favourites;
+  var favouriteListLen820 = favouriteList820.length;
+  for (var favouriteIndex820 = 0; favouriteIndex820 < favouriteListLen820; favouriteIndex820++) {
+    var favouriteData820 = favouriteList820[favouriteIndex820];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData820.url), '">', soy.$$escapeHtml(favouriteData820.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -556,21 +556,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList903 = opt_data.things;
-    var thingListLen903 = thingList903.length;
-    for (var thingIndex903 = 0; thingIndex903 < thingListLen903; thingIndex903++) {
-      var thingData903 = thingList903[thingIndex903];
-      output.append('<li>', soy.$$escapeHtml(thingData903.name), '</li>');
+    var thingList905 = opt_data.things;
+    var thingListLen905 = thingList905.length;
+    for (var thingIndex905 = 0; thingIndex905 < thingListLen905; thingIndex905++) {
+      var thingData905 = thingList905[thingIndex905];
+      output.append('<li>', soy.$$escapeHtml(thingData905.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList915 = opt_data.friends;
-    var friendListLen915 = friendList915.length;
-    for (var friendIndex915 = 0; friendIndex915 < friendListLen915; friendIndex915++) {
-      var friendData915 = friendList915[friendIndex915];
-      output.append('<li>', soy.$$escapeHtml(friendData915.name), '</li>');
+    var friendList917 = opt_data.friends;
+    var friendListLen917 = friendList917.length;
+    for (var friendIndex917 = 0; friendIndex917 < friendListLen917; friendIndex917++) {
+      var friendData917 = friendList917[friendIndex917];
+      output.append('<li>', soy.$$escapeHtml(friendData917.name), '</li>');
     }
     output.append('</ul>');
   }
