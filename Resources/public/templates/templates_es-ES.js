@@ -147,7 +147,7 @@ template.meetingView.meeting = function(opt_data, opt_sb) {
 
 template.meetingView.doMeeting = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<h3>Main information</h3><table><tbody id="meetingInformation"><tr><td>Title</td><td><input type="text" class="xlarge"/></td></tr><tr><td>Date</td><td><input type="text" class="xlarge" /></td></tr><tr><td>Description</td><td><textarea class="xlarge" ></textarea></td></tr><tbody></table><button class="btn" id="addField-but">Add field</button><h3 style="margin-top:17px">Participants</h3><div>Invite people to your meeting</div><br><div><input type="text" placeholder="Name of the person or group"></div>');
+  output.append('\t<h3>Main information</h3><table><tbody id="meetingInformation"><tr><td>Title</td><td><input type="text" id="title" class="xlarge"/></td></tr><tr><td>Date</td><td><input type="text" id="date" class="xlarge" /></td></tr><tr><td>Description</td><td><textarea id="description" class="xlarge" ></textarea></td></tr><tbody></table><button class="btn" id="addField-but">Add field</button><div id="invitePeople-form"></div><br><br></div><button class="btn primary" id="create-but">Create meeting</button></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -159,9 +159,23 @@ template.meetingView.doMeetingRow = function(opt_data, opt_sb) {
 };
 
 
+template.meetingView.invitedPeopleList = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<h3 style="margin-top:17px">Participants</h3><div>Invite people to your meeting</div><br><div><span class="span4"><input id="invitedName-txt" type="text" placeholder="Name of the person or group"></span><span class="span2"><button class="btn" id="invite-but">Invite</button></span></div><br><br><div style="max-height: 300px; overflow:auto"><ul id="invited-people"></ul></div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
 template.meetingView.doMeetingAddField = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<div class="modal hide fade" style="display: none;"><div class="modal-header"><a class="close" href="#">×</a><h3>New field</h3></div><div class="modal-body">Field name:&nbsp;&nbsp;<input type="text"></div><div class="modal-footer"><button class="btn secondary">Cancel</button><button class="btn primary">Accept</button></div></div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.meetingView.invitedPeopleEntryExternal = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<a href="javascript:void(0)" class="close">×</a></td><div class="row"><div class="span3">', soy.$$escapeHtml(opt_data.name), '</div><div class="span5">Email: <input type="text" class="email"/></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -421,11 +435,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList679 = opt_data.elements;
-  var elementListLen679 = elementList679.length;
-  for (var elementIndex679 = 0; elementIndex679 < elementListLen679; elementIndex679++) {
-    var elementData679 = elementList679[elementIndex679];
-    template.preferencesView.aboutMeEntry(elementData679, output);
+  var elementList694 = opt_data.elements;
+  var elementListLen694 = elementList694.length;
+  for (var elementIndex694 = 0; elementIndex694 < elementListLen694; elementIndex694++) {
+    var elementData694 = elementList694[elementIndex694];
+    template.preferencesView.aboutMeEntry(elementData694, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -491,11 +505,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList820 = opt_data.favourites;
-  var favouriteListLen820 = favouriteList820.length;
-  for (var favouriteIndex820 = 0; favouriteIndex820 < favouriteListLen820; favouriteIndex820++) {
-    var favouriteData820 = favouriteList820[favouriteIndex820];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData820.url), '">', soy.$$escapeHtml(favouriteData820.title), '</li>');
+  var favouriteList835 = opt_data.favourites;
+  var favouriteListLen835 = favouriteList835.length;
+  for (var favouriteIndex835 = 0; favouriteIndex835 < favouriteListLen835; favouriteIndex835++) {
+    var favouriteData835 = favouriteList835[favouriteIndex835];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData835.url), '">', soy.$$escapeHtml(favouriteData835.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -556,21 +570,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList905 = opt_data.things;
-    var thingListLen905 = thingList905.length;
-    for (var thingIndex905 = 0; thingIndex905 < thingListLen905; thingIndex905++) {
-      var thingData905 = thingList905[thingIndex905];
-      output.append('<li>', soy.$$escapeHtml(thingData905.name), '</li>');
+    var thingList920 = opt_data.things;
+    var thingListLen920 = thingList920.length;
+    for (var thingIndex920 = 0; thingIndex920 < thingListLen920; thingIndex920++) {
+      var thingData920 = thingList920[thingIndex920];
+      output.append('<li>', soy.$$escapeHtml(thingData920.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList917 = opt_data.friends;
-    var friendListLen917 = friendList917.length;
-    for (var friendIndex917 = 0; friendIndex917 < friendListLen917; friendIndex917++) {
-      var friendData917 = friendList917[friendIndex917];
-      output.append('<li>', soy.$$escapeHtml(friendData917.name), '</li>');
+    var friendList932 = opt_data.friends;
+    var friendListLen932 = friendList932.length;
+    for (var friendIndex932 = 0; friendIndex932 < friendListLen932; friendIndex932++) {
+      var friendData932 = friendList932[friendIndex932];
+      output.append('<li>', soy.$$escapeHtml(friendData932.name), '</li>');
     }
     output.append('</ul>');
   }

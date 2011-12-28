@@ -17,22 +17,24 @@
 	<table>
 	  <tbody id="meetingInformation">
 		<tr>
-			<td>{msg desc="Meeting title"}Title{/msg}</td><td><input type="text" class="xlarge"/></td>
+			<td>{msg desc="Meeting title"}Title{/msg}</td><td><input type="text" id="title" class="xlarge"/></td>
 	 	</tr>
 		<tr>
-			<td>{msg desc="Meeting date"}Date{/msg}</td><td><input type="text" class="xlarge" /></td>
+			<td>{msg desc="Meeting date"}Date{/msg}</td><td><input type="text" id="date" class="xlarge" /></td>
 	 	</tr>
 		<tr>
-			<td>{msg desc="Meeting description"}Description{/msg}</td><td><textarea class="xlarge" ></textarea></td>
+			<td>{msg desc="Meeting description"}Description{/msg}</td><td><textarea id="description" class="xlarge" ></textarea></td>
 	 	</tr>
        <tbody>
 	</table>
 	<button class="btn" id="addField-but">{msg desc="Meeting add field"}Add field{/msg}</button>
 
-	<h3 style="margin-top:17px">{msg desc="Participants of the meeting"}Participants{/msg}</h3>
-	<div>{msg desc="Invite people to a meeting"}Invite people to your meeting{/msg}</div>
+	<div id="invitePeople-form">
+	</div>
+	
 	<br>
-	<div><input type="text" placeholder="{msg desc="Specify name of the person or group to invite to the meeting"}Name of the person or group{/msg}"></div>
+	<br>
+	</div><button class="btn primary" id="create-but">{msg desc="Create meeting"}Create meeting{/msg}</button></div>
 	
 {/template}
 
@@ -45,6 +47,30 @@
 {/template}
 
 
+
+/**
+ * Invite people form
+ */
+{template .invitedPeopleList}
+
+<h3 style="margin-top:17px">{msg desc="Participants of the meeting"}Participants{/msg}</h3>
+	<div>{msg desc="Invite people to a meeting"}Invite people to your meeting{/msg}</div>
+	<br>
+	<div>
+	
+		<span class="span4"><input id="invitedName-txt" type="text" placeholder="{msg desc="Specify name of the person or group to invite to the meeting"}Name of the person or group{/msg}"></span>
+		<span class="span2"><button class="btn" id="invite-but">{msg desc="Invite"}Invite{/msg}</button></span>
+	</div>
+	<br>
+	<br>
+	<div style="max-height: 300px; overflow:auto">
+	 	<ul id="invited-people">
+	 	</ul>
+	</div>
+	
+{/template}
+
+	
 
 /**
  * Create a custom row in meeting creation
@@ -62,6 +88,24 @@
 			  <button class="btn secondary">{msg desc="Cancel"}Cancel{/msg}</button>
               <button class="btn primary">{msg desc="Accept"}Accept{/msg}</button>
             </div>
+</div>
+{/template} 
+
+
+
+/**
+ * Entry for external person
+ * @param name
+ */
+{template .invitedPeopleEntryExternal}
+<a href="javascript:void(0)" class="close">×</a></td>
+<div class="row">
+	<div class="span3">
+	{$name}
+	</div>
+	<div class="span5">
+	 {msg desc="Person email"}Email{/msg}: <input type="text" class="email"/>
+	</div>
 </div>
 {/template} 
 

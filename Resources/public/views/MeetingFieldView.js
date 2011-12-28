@@ -16,7 +16,7 @@ var MeetingFieldView = Backbone.View.extend({
       
     render: function() {
     	
-    	$(this.el).html(template.meetingView.doMeetingRow( this.model.get("text")));
+    	$(this.el).html(template.meetingView.doMeetingRow( {text: this.model.get("text")}));
 
       return this;
     },

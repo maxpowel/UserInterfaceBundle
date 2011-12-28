@@ -1,13 +1,15 @@
 var DoMeetingView = Backbone.View.extend({
     
+	invitedPeopleView: null,
     events: {
     	"click #addField-but":  "addFieldForm",
+    	"click #create-but":  "createMeeting",
     },
     initialize: function() {
 
     	this.fieldCollection = new MeetingFieldList();
     	
-    	new MeetingFieldListView({ collection: this.fieldCollection});
+    	this.fieldListView = new MeetingFieldListView({ collection: this.fieldCollection});
     	
 
     },
@@ -17,29 +19,20 @@ var DoMeetingView = Backbone.View.extend({
     	this.addFieldModal.modal('show');
     	
     },
-    
-    callBackFunction: function(item){
-    	console.log("Bieeen");
-    	
+   
+    createMeeting: function(){
+    	console.log(this.fieldListView.getFields());
+    	console.log($(this.el).find("#title").val());
+    	console.log($(this.el).find("#date").val());
+    	console.log($(this.el).find("#description").text());
     },
     render: function() {
     	
     	$(this.el).html(template.meetingView.doMeeting( this.options));
-		var callBackFunction = this.callBackFunction;
-    	$(this.el).find("input").autocomplete("/datos",
-    			{    minChars: 2,
-    				 mustMatch: true,
-	            	 formatItem: function(data, i, n) {
-	            		 
-	            		 //return "hola";
-	            		 
-	            		 
-	                     return "<div style='height:40px'><img style='float:left' src='" + data[2] + "'/> <a style='margin-left: 10px' href='javascript:void(0)'>" + data[0]+"</a></div>";
-	             }
-
-    			}).result(function(event, item) {
-    				callBackFunction(item);
-    			});
+    	//Invite people
+    	this.invitedPeople = new MeetingInvitedPeopleListView();
+    	$(this.el).find("#invitePeople-form").html(this.invitedPeople.render().el);
+    	
     	
 		if($("#doAddField").length == 0){
 			var modalTemplate = template.meetingView.doMeetingAddField( this.options );
@@ -54,7 +47,7 @@ var DoMeetingView = Backbone.View.extend({
 		    //Insert the new field
 		    this.addFieldModal.find(".primary").click(function(){
 		    	//Only insert if text is written
-		    	var val = form.find("input").val().trim();
+		    	var val = $.trim(form.find("input").val());
 		    	if(val.length)
 		    		fieldCollection.add(new MeetingField({text: val}));
 		    	
