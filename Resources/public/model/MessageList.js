@@ -1,4 +1,4 @@
 var MessageList = PaginatedCollection.extend({
   model: Message,
-  baseUrl:"/message"
+  baseUrl:"/privateMessage/message"
 });

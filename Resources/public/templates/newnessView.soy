@@ -26,14 +26,14 @@
 /**
  * Newness list
  * @param isOwner
- * @param friendName
+ * @param name
  */
 {template .newnessList}
         	<div class="hero-unit">
         		{if $isOwner == true}
 		  			<h3>{msg desc="Share something update in my profile"}Share something{/msg}</h3>
 		  		{else}
-		  			<h3>{msg desc="Share something in other profile"}Share something with {$friendName}{/msg}</h3>
+		  			<h3>{msg desc="Share something in other profile"}Share something with {$name}{/msg}</h3>
 		  		{/if}
 		  		<input type="text" class="wlarge" id="new-share" placeholder="{msg desc="Profile section share note"}Write here{/msg}">
         	</div>

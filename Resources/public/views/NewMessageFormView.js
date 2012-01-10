@@ -5,6 +5,8 @@ var NewMessageFormView = Backbone.View.extend({
     */
     events: {
     	"click #attachFile-btn":  "attachFileForm",
+    	"click #sendMessage-btn":  "sendMessage",
+    	"click #success-close": "successClose"
     },
     initialize: function() {
     	
@@ -33,7 +35,22 @@ var NewMessageFormView = Backbone.View.extend({
       return this;
     },
     
+    successClose: function(){
+    	$(this.el).find("#sentSuccess").hide();
+    },
+    sendMessage: function(){
+    	var data = {body: $(this.el).find("#body").val(), profile_id: $(this.el).find("#to").val(), subject: $(this.el).find("#subject").val()};
+    	var message = new Message();
+    	var localThis = this;
+    	message.save(data,{success:function(){
+    		$(localThis.el).find("#sentSuccess").show();
+    		$(localThis.el).find("#body").val("");
+    		$(localThis.el).find("#subject").val("");
+    	}});
+    },
+    
     attachFileForm: function(){
-    	alert($(this.el).find("#body").val());
+    	alert("N/A");
+    	//alert($(this.el).find("#body").val());
     }
 });

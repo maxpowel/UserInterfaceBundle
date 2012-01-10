@@ -217,7 +217,7 @@ template.messagesView.message = function(opt_data, opt_sb) {
 
 template.messagesView.newMessage = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<table><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input type="text" id="to" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row show-grid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn primary" id="attachFile-btn">Send</button></div></div>');
+  output.append('\t', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<div class="alert-message success" id="sentSuccess" style="display:none"><a href="javascript:void(0)" id="success-close" class="close">×</a><p>Message succesfully sent</p></div><table><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input type="text" id="to" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input value="' + soy.$$escapeHtml(opt_data.to.id) + '" type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row show-grid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn primary" id="sendMessage-btn">Send</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -378,7 +378,7 @@ template.newnessView.newness = function(opt_data, opt_sb) {
 
 template.newnessView.newnessList = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="hero-unit">', (opt_data.isOwner == true) ? '<h3>Share something</h3>' : '<h3>Share something with ' + soy.$$escapeHtml(opt_data.friendName) + '</h3>', '<input type="text" class="wlarge" id="new-share" placeholder="Write here"></div><div id="newness-container"></div><button class="btn wlarge-btn" id="more-newness">More</button>');
+  output.append('<div class="hero-unit">', (opt_data.isOwner == true) ? '<h3>Share something</h3>' : '<h3>Share something with ' + soy.$$escapeHtml(opt_data.name) + '</h3>', '<input type="text" class="wlarge" id="new-share" placeholder="Write here"></div><div id="newness-container"></div><button class="btn wlarge-btn" id="more-newness">More</button>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -435,11 +435,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList694 = opt_data.elements;
-  var elementListLen694 = elementList694.length;
-  for (var elementIndex694 = 0; elementIndex694 < elementListLen694; elementIndex694++) {
-    var elementData694 = elementList694[elementIndex694];
-    template.preferencesView.aboutMeEntry(elementData694, output);
+  var elementList699 = opt_data.elements;
+  var elementListLen699 = elementList699.length;
+  for (var elementIndex699 = 0; elementIndex699 < elementListLen699; elementIndex699++) {
+    var elementData699 = elementList699[elementIndex699];
+    template.preferencesView.aboutMeEntry(elementData699, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -483,7 +483,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.profile = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="sidebar"><div class="well"><div class="media-grid"><a href="#"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="sidebar-right"><div class="well"><h5>Last photos</h5><div id="lastPhotos-cont"></div><h5>Friends</h5><div id="friends-cont"></div></div></div><div class="content" id="newness"><div><h2>', soy.$$escapeHtml(opt_data.ownerName), '\'s profile</h2></div><div align="center"><ul class="pills" style="width: 400px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="javascript:void(0)">Albums</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div>');
+  output.append('<div class="sidebar"><div class="well"><div class="media-grid"><a href="#"><img alt="" src="" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="sidebar-right"><div class="well"><h5>Last photos</h5><div id="lastPhotos-cont"></div><h5>Friends</h5><div id="friends-cont"></div></div></div><div class="content" id="newness"><div><h2 id="profileTitle"></h2></div><div align="center"><ul class="pills" style="width: 400px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="javascript:void(0)">Albums</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -505,11 +505,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList835 = opt_data.favourites;
-  var favouriteListLen835 = favouriteList835.length;
-  for (var favouriteIndex835 = 0; favouriteIndex835 < favouriteListLen835; favouriteIndex835++) {
-    var favouriteData835 = favouriteList835[favouriteIndex835];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData835.url), '">', soy.$$escapeHtml(favouriteData835.title), '</li>');
+  var favouriteList833 = opt_data.favourites;
+  var favouriteListLen833 = favouriteList833.length;
+  for (var favouriteIndex833 = 0; favouriteIndex833 < favouriteListLen833; favouriteIndex833++) {
+    var favouriteData833 = favouriteList833[favouriteIndex833];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData833.url), '">', soy.$$escapeHtml(favouriteData833.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -570,21 +570,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList920 = opt_data.things;
-    var thingListLen920 = thingList920.length;
-    for (var thingIndex920 = 0; thingIndex920 < thingListLen920; thingIndex920++) {
-      var thingData920 = thingList920[thingIndex920];
-      output.append('<li>', soy.$$escapeHtml(thingData920.name), '</li>');
+    var thingList918 = opt_data.things;
+    var thingListLen918 = thingList918.length;
+    for (var thingIndex918 = 0; thingIndex918 < thingListLen918; thingIndex918++) {
+      var thingData918 = thingList918[thingIndex918];
+      output.append('<li>', soy.$$escapeHtml(thingData918.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList932 = opt_data.friends;
-    var friendListLen932 = friendList932.length;
-    for (var friendIndex932 = 0; friendIndex932 < friendListLen932; friendIndex932++) {
-      var friendData932 = friendList932[friendIndex932];
-      output.append('<li>', soy.$$escapeHtml(friendData932.name), '</li>');
+    var friendList930 = opt_data.friends;
+    var friendListLen930 = friendList930.length;
+    for (var friendIndex930 = 0; friendIndex930 < friendListLen930; friendIndex930++) {
+      var friendData930 = friendList930[friendIndex930];
+      output.append('<li>', soy.$$escapeHtml(friendData930.name), '</li>');
     }
     output.append('</ul>');
   }

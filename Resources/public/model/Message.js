@@ -1,5 +1,8 @@
 var Message = Backbone.Model.extend({
 	url: function(){
-		return "/message?id="+this.get('id'); 
+		if(this.get('id') != undefined)
+			return "/privateMessage/message?id="+this.get('id');
+		else
+			return "/privateMessage/message";
 	}
 });

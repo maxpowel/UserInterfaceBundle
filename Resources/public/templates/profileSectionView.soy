@@ -1,15 +1,13 @@
 {namespace template.section}
 /**
  * Profile section
- * @param thumbnail
- * @param ownerName
  */
 {template .profile}
 <div class="sidebar">
         <div class="well">
 			<div class="media-grid">
 			  <a href="#">
-						<img alt="" src="{$thumbnail}" class="thumbnail">
+						<img alt="" src="" class="thumbnail">
 					</a>
 			</div>
 			<div id="personalInfo-cont">
@@ -42,7 +40,7 @@
       <div class="content" id="newness">
         
         <div>
-			<h2>{msg desc="User profile"}{$ownerName}'s profile{/msg}</h2>
+			<h2 id="profileTitle"></h2>
 		</div>
 
         	<div align="center">

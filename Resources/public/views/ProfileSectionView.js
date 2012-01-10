@@ -1,5 +1,6 @@
 var ProfileSectionView = Backbone.View.extend({
 	className: "container-fluid",
+	user: null,
     events: {
     	"click #newness-pill": "showNewness",
     	"click #aboutMe-pill": "showAboutMe",
@@ -24,15 +25,31 @@ var ProfileSectionView = Backbone.View.extend({
 
     },
     
-    render: function(){
-    	var params = this.options;
-    	//params.thumbnail = window.getViewer().get('thumbnail');
-    	params.thumbnail = "http://placehold.it/170x150";
-    	params.isOwner = false;
-    	params.friendName = "Pepito";
-		$(this.el).html(template.section.profile( params ));
-		
-		
+    
+    
+    renderForUser: function(user){
+    	
+	      
+		/*var favouritesList;
+		var photos;
+		var friends;
+		var profileGadget;
+		//
+  	var newnessList = new NewnessListView({ collection: new NewnessList()});
+
+  	var notificationList = new NotificationListView({ collection: new NotificationList()});
+
+  	var contactSuggestionList = new ContactSuggestionListView({ collection: new ContactSuggestionList()});
+
+  	var nearbyTaskList = new AgendaNearbyTaskListView({ collection: new AgendaNearbyTaskList()});
+  	
+  	var meetingList = new MeetingListView({ collection: new MeetingList()});
+		*/
+	      
+    },
+    
+    
+    renderProfile: function(user){
 
 	      this.subSections = this.$(".subSection");
 	      this.newnessList = this.$("#newness-list");
@@ -43,33 +60,51 @@ var ProfileSectionView = Backbone.View.extend({
 	    
 	      
 	      this.favourites = $(this.el).find("#favourites-cont");
-	      this.favouriteList.fetch({data:{id:this.userId}});
+	      this.favouriteList.fetch({data:{id: this.user.get("id") }});
 	      
 	      
 	      this.personalInfoCont = $(this.el).find("#personalInfo-cont");
-	      this.personalInfo.fetch({data:{id:this.userId}});
+	      this.personalInfo.fetch({data:{id: this.user.get("id")}});
 	    
 	      
 	      //personalInfo.html(template.profileView.personalInformation( {name:"cosas"}));
 	      
 	      this.showNewness(null);
-	      return this;
-	      
-		/*var favouritesList;
-		var photos;
-		var friends;
-		var profileGadget;
-		//
-    	var newnessList = new NewnessListView({ collection: new NewnessList()});
-
-    	var notificationList = new NotificationListView({ collection: new NotificationList()});
-
-    	var contactSuggestionList = new ContactSuggestionListView({ collection: new ContactSuggestionList()});
-
-    	var nearbyTaskList = new AgendaNearbyTaskListView({ collection: new AgendaNearbyTaskList()});
+    },
+    
+    render: function(){
     	
-    	var meetingList = new MeetingListView({ collection: new MeetingList()});
+    	var viewer = getViewer();
+    	
+    	
+//		params.thumbnail = "http://placehold.it/170x150";
+		/*params.firstName = user.get("firstName");
+		params.lastName = user.get("lastName");
+		params.id = user.get("id");
 		*/
+    	$(this.el).html(template.section.profile());
+    	
+    	var isOwner = viewer.get("id") == this.options.userId;
+    	if(isOwner){
+    		$(this.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});
+    		$(this.el).find("#profileTitle").text( viewer.get("firstName") +" "+ viewer.get("lastName") );
+			this.user = viewer;
+			this.renderProfile();
+    	}else{
+    		//Load user data
+    		var user = new User({id: this.options.userId});
+    		var localThis = this;
+    		user.fetch({success:function(){
+    			$(localThis.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});
+        		$(localThis.el).find("#profileTitle").text( user.get("firstName") +" "+ user.get("lastName") );
+    			localThis.user = user;
+    			localThis.renderProfile();
+    		}});
+    		
+    	}
+    	
+	      return this;
+
     	
     },
     
@@ -87,7 +122,7 @@ var ProfileSectionView = Backbone.View.extend({
     showNewness: function(event){
     	this.changeToSimple(this.newnessList,event);
     	if(this.newness == null){
-    		var newness = new NewnessListView({collection: new NewnessList()});
+    		var newness = new NewnessListView({isOwner: this.user.get("isOwner"), name:this.user.get("firstName"), collection: new NewnessList()});
     		this.newness = newness;
     		$(this.el).find("#newness-container").html(this.newness.render().el);
     	}
@@ -98,7 +133,7 @@ var ProfileSectionView = Backbone.View.extend({
     	this.changeToSimple(this.aboutMe,event);
     	if(this.aboutMeView == null){
     		var aboutMe = new AboutMe();
-    		aboutMe.fetch({data:{profile:1}});
+    		aboutMe.fetch({data:{profile: this.user.get("id")}});
     		this.aboutMeView = new AboutMeView({model: aboutMe});
     	}
     },
@@ -110,8 +145,8 @@ var ProfileSectionView = Backbone.View.extend({
     		this.aboutMeView = new AboutMeView({model: aboutMe});*/
     		this.sendMessageView = new NewMessageFormView({
     				to:{ 
-    					name: "Un pavo",
-    					id: this.options.id
+    					name: this.user.get("firstName") +" "+this.user.get("lastName"),
+    					id: this.user.get("id")
     				}
     		});
     		

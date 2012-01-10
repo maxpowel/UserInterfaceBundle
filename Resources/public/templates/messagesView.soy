@@ -59,13 +59,18 @@
 	{if $to == null}
 	<h3>{msg desc="New message title"}New message{/msg}</h3>
 	{/if}
+	<div class="alert-message success" id="sentSuccess" style="display:none">
+        <a href="javascript:void(0)" id="success-close" class="close">×</a>
+        <p>{msg desc="Message sent"}Message succesfully sent{/msg}</p>
+    </div>
+      
 	<table>
 	  <tbody>
 		<tr>
 		{if $to == null}
 			<td>{msg desc="Send to message receiver"}Send to{/msg}</td><td><input type="text" id="to" class="xlarge"/></td>
 		{else}
-			<td>{msg desc="Send to message receiver"}Send to{/msg}</td><td>{$to.name}<input type="hidden" id="to" class="xlarge"/></td>
+			<td>{msg desc="Send to message receiver"}Send to{/msg}</td><td>{$to.name}<input value="{$to.id}" type="hidden" id="to" class="xlarge"/></td>
 		{/if}
 	 	</tr>
 		<tr>
@@ -79,7 +84,7 @@
 
 	<div class="row show-grid">
     	<div class="span2"><button class="btn" id="attachFile-btn">{msg desc="Attach file"}Attach file{/msg}</button></div>
-    	<div class="span2"><button class="btn primary" id="attachFile-btn">{msg desc="Send message"}Send{/msg}</button></div>
+    	<div class="span2"><button class="btn primary" id="sendMessage-btn">{msg desc="Send message"}Send{/msg}</button></div>
   	</div>
 	
 	

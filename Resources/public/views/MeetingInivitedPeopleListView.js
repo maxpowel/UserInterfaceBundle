@@ -26,8 +26,14 @@ var MeetingInvitedPeopleListView = Backbone.View.extend({
     	var entryType = this.input.attr("entrytype");
     	if( entryType == "person"){
     		//Do person things
+    		var person = new User();
+    		person.set({name: $.trim(this.input.val())});
+    		this.invitedPeople.add(person);
     	}else if(entryType == "group"){
     		//Do group things
+    		var group = new Group();
+    		group.set({name: $.trim(this.input.val())});
+    		this.invitedGroups.add(group);
     	}else{
     		//External person
     		var person = new User();

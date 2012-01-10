@@ -3,10 +3,8 @@ window.viewer = null;
 window.getViewer = function() {
 	return viewer;
 }
-$(document).ready(function(){
-	//Starts the magic	
-	window.viewer = new User({id:57, thumbnail:"http://placehold.it/90x90"});
-	//window.viewer.fetch({url:"/whoAmI"});
+
+function startUp(){
 	var app = new AppView();
 	$("#app").html(app.el);
 	var loadTimeout = null;//Used to avoid disturb when fast loadings 
@@ -20,4 +18,16 @@ $(document).ready(function(){
 		clearTimeout(loadTimeout);
 		$(this).hide();
 	});
+} 
+
+$(document).ready(function(){
+	//Starts the magic	
+	//window.viewer = new User({id:57, thumbnail:"http://placehold.it/90x90"});
+	window.viewer = new User();
+	window.viewer.fetch({success:function(){
+		startUp();
+	}});
+	
+	//window.viewer.fetch({url:"/whoAmI"});
+	
 });
