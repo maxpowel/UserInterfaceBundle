@@ -104,7 +104,9 @@ class MainController extends Controller
     		foreach ($updateList as $update){
     			$author = $update->getAuthor();
     			
-    			$data[] = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+    			$element = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+    			$element['comments'] = array( array("id"=>"44", "body"=>"Eyyy") );
+    			$data[] = $element;
     		}
     		
     		

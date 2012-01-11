@@ -371,7 +371,14 @@ if (typeof template.newnessView == 'undefined') { template.newnessView = {}; }
 
 template.newnessView.newness = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="#">Comment</a> - <a href="#">I like it</a> - <a href="#">I don\'t like it</a></div></div></div><hr>');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a> - <a href="#">I like it</a> - <a href="#">I don\'t like it</a></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table style="border:0" class="zebra-striped"><tbody id="comments"></tbody></table></div></div><hr>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.newnessView.newnessComment = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<tr><td><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div></td></tr>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -435,11 +442,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList699 = opt_data.elements;
-  var elementListLen699 = elementList699.length;
-  for (var elementIndex699 = 0; elementIndex699 < elementListLen699; elementIndex699++) {
-    var elementData699 = elementList699[elementIndex699];
-    template.preferencesView.aboutMeEntry(elementData699, output);
+  var elementList710 = opt_data.elements;
+  var elementListLen710 = elementList710.length;
+  for (var elementIndex710 = 0; elementIndex710 < elementListLen710; elementIndex710++) {
+    var elementData710 = elementList710[elementIndex710];
+    template.preferencesView.aboutMeEntry(elementData710, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -505,11 +512,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList833 = opt_data.favourites;
-  var favouriteListLen833 = favouriteList833.length;
-  for (var favouriteIndex833 = 0; favouriteIndex833 < favouriteListLen833; favouriteIndex833++) {
-    var favouriteData833 = favouriteList833[favouriteIndex833];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData833.url), '">', soy.$$escapeHtml(favouriteData833.title), '</li>');
+  var favouriteList844 = opt_data.favourites;
+  var favouriteListLen844 = favouriteList844.length;
+  for (var favouriteIndex844 = 0; favouriteIndex844 < favouriteListLen844; favouriteIndex844++) {
+    var favouriteData844 = favouriteList844[favouriteIndex844];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData844.url), '">', soy.$$escapeHtml(favouriteData844.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -570,21 +577,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList918 = opt_data.things;
-    var thingListLen918 = thingList918.length;
-    for (var thingIndex918 = 0; thingIndex918 < thingListLen918; thingIndex918++) {
-      var thingData918 = thingList918[thingIndex918];
-      output.append('<li>', soy.$$escapeHtml(thingData918.name), '</li>');
+    var thingList929 = opt_data.things;
+    var thingListLen929 = thingList929.length;
+    for (var thingIndex929 = 0; thingIndex929 < thingListLen929; thingIndex929++) {
+      var thingData929 = thingList929[thingIndex929];
+      output.append('<li>', soy.$$escapeHtml(thingData929.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList930 = opt_data.friends;
-    var friendListLen930 = friendList930.length;
-    for (var friendIndex930 = 0; friendIndex930 < friendListLen930; friendIndex930++) {
-      var friendData930 = friendList930[friendIndex930];
-      output.append('<li>', soy.$$escapeHtml(friendData930.name), '</li>');
+    var friendList941 = opt_data.friends;
+    var friendListLen941 = friendList941.length;
+    for (var friendIndex941 = 0; friendIndex941 < friendListLen941; friendIndex941++) {
+      var friendData941 = friendList941[friendIndex941];
+      output.append('<li>', soy.$$escapeHtml(friendData941.name), '</li>');
     }
     output.append('</ul>');
   }

@@ -17,10 +17,27 @@
 			<div style="margin-left:60px">
 				<div><a href="#">{$authorName}</a> - {$date}</div>
 				<div>{$body}</div>
-				<div style="padding:10px"><a href="#">{msg desc="Newness comment"}Comment{/msg}</a> - <a href="#">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="#">{msg desc="User dislikes the newness"}I don't like it{/msg}</a></div>
+				<div style="padding:10px"><a href="javascript:void(0)" id="doComment">{msg desc="Newness comment"}Comment{/msg}</a> - <a href="#">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="#">{msg desc="User dislikes the newness"}I don't like it{/msg}</a></div>
+				<input style="display: none;" type="text" id="comment" class="span5" placeholder="{msg desc="Write a comment"}Write your comment and push enter{/msg}">
+				<table style="border:0" class="zebra-striped">
+				<tbody id="comments">
+				</tbody></table>
 			</div>
 </div>
 <hr>
+{/template}
+
+/**
+ * Newness comment
+ * @param authorName
+ * @param date 
+ * @param body
+ */
+{template .newnessComment}
+<tr><td>
+	<div><a href="#">{$authorName}</a> - {$date}</div>
+	<div>{$body}</div>
+</td></tr>
 {/template}
 
 /**
