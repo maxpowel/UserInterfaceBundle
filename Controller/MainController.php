@@ -3,6 +3,7 @@
 namespace Wixet\UserInterfaceBundle\Controller;
 
 use Wixet\WixetBundle\Entity\ProfileUpdate;
+use Wixet\WixetBundle\Entity\ProfileUpdateComment;
 
 use Symfony\Component\BrowserKit\Response;
 
@@ -77,6 +78,39 @@ class MainController extends Controller
         return array();
     }
     
+    
+    /**
+    * @Route("/newness/comment", name="_newness_comment_post")
+    * @Method({"POST"})
+    */
+    public function postNewnessCommentAction()
+    {
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	$em = $this->get('doctrine')->getEntityManager();
+    	$ws = $this->get('wixet.fetcher');
+    	
+    	$update = $em->getRepository('Wixet\WixetBundle\Entity\ProfileUpdate')->find($data['updateId']);
+    
+    	//Only can comment between friends
+    	$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$update->getProfile()->getId(),$profile);
+    	//If the user are not granted to view the profile, $friend is null
+    	if($friend != null){
+    		$comment = new ProfileUpdateComment();
+    		$comment->setAuthor($profile);
+    		$comment->setBody($data['body']);
+    		$comment->setProfileUpdate($update);
+    		$em->persist($comment);
+    		$em->flush();   
+    		$data['id'] = $comment->getId();
+    		$data['authorName'] = $profile->getFirstName()." ".$profile->getLastName();
+    		$data['date'] = $comment->getCreated()->format('Y-m-d H:i:s');
+    	}else $data = array("error"=>"Not allowed");
+    	 
+    	 
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+    
     /**
     * @Route("/newness", name="_newness_get")
     * @Method({"GET"})
@@ -105,7 +139,17 @@ class MainController extends Controller
     			$author = $update->getAuthor();
     			
     			$element = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
-    			$element['comments'] = array( array("id"=>"44", "body"=>"Eyyy") );
+    			
+    			//Comments
+    			$comments = $update->getComments();
+    			$commentList = $comments->slice(0, 5);
+    			//$totalComments = $comments->count();
+    			$comments = array();
+    			foreach ($commentList as $comment){
+    				$author = $comment->getAuthor();
+    				$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorName" => $author->getFirstName()." ".$author->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'));
+    			}	
+    			$element['comments'] = $comments;
     			$data[] = $element;
     		}
     		

@@ -58,16 +58,16 @@ var NewnessView = Backbone.View.extend({
     commentOnEnter: function(e) {
         var text = this.commentInput.val();
         if (!text || e.keyCode != 13) return;
-        /*var newness = new Newness();
-        var collection = this.collection;
-        newness.save({body: text},{success: function(){
-      	  collection.add(newness);
-      	  this.commentInput.("#comment").hide();
-        }
-        });*/
+
         
-        var comment = new NewnessComment({body: this.commentInput.val()});
-        this.addOne(comment);
+        var comment = new NewnessComment({updateId:this.model.get("id"), body: this.commentInput.val()});
+        var localThis = this;
+        comment.save({},
+        {success: function(){
+        		localThis.addOne(comment);
+        	}
+        });
+        
         this.commentInput.val('');
         this.commentInput.hide();
       },

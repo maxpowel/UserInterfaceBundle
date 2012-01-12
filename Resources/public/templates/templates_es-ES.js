@@ -371,14 +371,14 @@ if (typeof template.newnessView == 'undefined') { template.newnessView = {}; }
 
 template.newnessView.newness = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a> - <a href="#">I like it</a> - <a href="#">I don\'t like it</a></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table style="border:0" class="zebra-striped"><tbody id="comments"></tbody></table></div></div><hr>');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a> - <a href="#">I like it</a> - <a href="#">I don\'t like it</a></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table width="100%" style="border:0" class="zebra-striped"><tbody id="comments"></tbody></table></div></div><hr>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.newnessView.newnessComment = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<tr><td><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div></td></tr>');
+  output.append('<td><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div></td>');
   return opt_sb ? '' : output.toString();
 };
 

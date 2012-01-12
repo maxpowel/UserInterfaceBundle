@@ -1,3 +1,3 @@
 var NewnessComment = Backbone.Model.extend({
-	url: '/newnessComment'
+	url: '/newness/comment'
 });

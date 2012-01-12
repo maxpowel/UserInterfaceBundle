@@ -1,5 +1,5 @@
 var NewnessCommentView = Backbone.View.extend({
-	
+	tagName:"tr",
 	events:{
 		"click .close": "destroyModel"
 	},
