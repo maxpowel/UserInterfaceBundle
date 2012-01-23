@@ -50,7 +50,11 @@ var ProfileSectionView = Backbone.View.extend({
     
     
     renderProfile: function(user){
-
+    	//Check if the user are allowed
+    	if(this.user.get("id") == 0){
+    		//Redirect to the user profile
+    		location.href = "#profile";
+    	}else{
 	      this.subSections = this.$(".subSection");
 	      this.newnessList = this.$("#newness-list");
 	      this.aboutMe = this.$("#aboutMe");
@@ -70,6 +74,7 @@ var ProfileSectionView = Backbone.View.extend({
 	      //personalInfo.html(template.profileView.personalInformation( {name:"cosas"}));
 	      
 	      this.showNewness(null);
+    	}
     },
     
     render: function(){
@@ -84,7 +89,8 @@ var ProfileSectionView = Backbone.View.extend({
 		*/
     	$(this.el).html(template.section.profile());
     	
-    	var isOwner = viewer.get("id") == this.options.userId;
+    	var isOwner = viewer.get("id") == this.userId;
+
     	if(isOwner){
     		$(this.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});
     		$(this.el).find("#profileTitle").text( viewer.get("firstName") +" "+ viewer.get("lastName") );
@@ -92,7 +98,7 @@ var ProfileSectionView = Backbone.View.extend({
 			this.renderProfile();
     	}else{
     		//Load user data
-    		var user = new User({id: this.options.userId});
+    		var user = new User({id: this.userId});
     		var localThis = this;
     		user.fetch({success:function(){
     			$(localThis.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});

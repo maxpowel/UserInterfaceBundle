@@ -36,20 +36,68 @@
 
 /**
  * Message
+ * @param author
+ * @param subject
+ * @param date
+ * @param isRead
  */
 {template .message}
 <td>
 			<div style="cursor:pointer;cursor:hand" id="message">
 				<span class="span"><input type="checkbox" class="ckbox"></span>
-				<span class="span">R</span>
-				<span class="span3">Alvaro García Gómez</span>
-				<span class="span6">ASUNTO</span>
-				<span style="text-align:right" class="span2">FECHA</span>
+				<span class="span3">
+					{if $isRead}
+						{$author.firstName} {$author.lastName}
+					{else}
+						<strong>{$author.firstName} {$author.lastName}</strong>
+					{/if}
+						
+					
+				</span>
+				<span class="span5">
+					{if $isRead}
+						{$subject}
+					{else}
+						<strong>{$subject}</strong>
+					{/if}
+					
+				</span>
+				<span style="text-align:right" class="span3">{$date}</span>
 			</div>
-			<div>
+			<div style="display:none; clear: left" id="conversation">
+			
 			</div>
 </td>
 {/template}
+
+/**
+ * Conversation
+ */
+{template .conversation}
+<div>
+<textarea id="body" class="span12" style="height: 50px">
+</textarea>
+<br><br>
+<button class="btn primary" id="send-but">{msg desc="Send message"}Send{/msg}</button>
+<br><br>
+</div>
+<table width="100%" class="zebra-striped" style="border:0"><tbody id="message-list"></table>
+{/template}
+
+
+/**
+ * Conversation entry
+ * @param author
+ * @param date 
+ * @param body
+ */
+{template .conversationEntry}
+<td>
+	<div><a href="#">{$author.firstName} {$author.lastName}</a> - {$date}</div>
+	<div>{$body}</div>
+</td>
+{/template}
+
 
 /**
  * New Message

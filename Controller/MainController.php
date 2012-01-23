@@ -56,12 +56,22 @@ class MainController extends Controller
     public function userAction()
     {
     	$data = array();
-    	 
-    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	$data['id'] = $profile->getId();
-    	$data['firstName'] = $profile->getFirstName();
-    	$data['lastName'] = $profile->getLastName();
-    	$data['isOwner'] = true;
+    	$viewer = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	if(isset($_GET['id'])){
+    		$ws = $this->get('wixet.fetcher');    		
+    		//Only can get it if you are allowed
+    		$profile = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$_GET['id'],$viewer);
+    	}else
+    		$profile = $viewer;
+    	
+    	if($profile){
+    		$data['id'] = $profile->getId();
+    		$data['firstName'] = $profile->getFirstName();
+    		$data['lastName'] = $profile->getLastName();
+    		$data['isOwner'] = true;
+    	}else{
+    		$data['id'] = 0;
+    	}
     	
     	 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));

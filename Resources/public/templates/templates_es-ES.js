@@ -210,7 +210,21 @@ template.messagesView.messageList = function(opt_data, opt_sb) {
 
 template.messagesView.message = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<td><div style="cursor:pointer;cursor:hand" id="message"><span class="span"><input type="checkbox" class="ckbox"></span><span class="span">R</span><span class="span3">Alvaro García Gómez</span><span class="span6">ASUNTO</span><span style="text-align:right" class="span2">FECHA</span></div><div></div></td>');
+  output.append('<td><div style="cursor:pointer;cursor:hand" id="message"><span class="span"><input type="checkbox" class="ckbox"></span><span class="span3">', (opt_data.isRead) ? soy.$$escapeHtml(opt_data.author.firstName) + ' ' + soy.$$escapeHtml(opt_data.author.lastName) : '<strong>' + soy.$$escapeHtml(opt_data.author.firstName) + ' ' + soy.$$escapeHtml(opt_data.author.lastName) + '</strong>', '</span><span class="span5">', (opt_data.isRead) ? soy.$$escapeHtml(opt_data.subject) : '<strong>' + soy.$$escapeHtml(opt_data.subject) + '</strong>', '</span><span style="text-align:right" class="span3">', soy.$$escapeHtml(opt_data.date), '</span></div><div style="display:none; clear: left" id="conversation"></div></td>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.messagesView.conversation = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div><textarea id="body" class="span12" style="height: 50px"></textarea><br><br><button class="btn primary" id="send-but">Send</button><br><br></div><table width="100%" class="zebra-striped" style="border:0"><tbody id="message-list"></table>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.messagesView.conversationEntry = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<td><div><a href="#">', soy.$$escapeHtml(opt_data.author.firstName), ' ', soy.$$escapeHtml(opt_data.author.lastName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div></td>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -442,11 +456,11 @@ template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList710 = opt_data.elements;
-  var elementListLen710 = elementList710.length;
-  for (var elementIndex710 = 0; elementIndex710 < elementListLen710; elementIndex710++) {
-    var elementData710 = elementList710[elementIndex710];
-    template.preferencesView.aboutMeEntry(elementData710, output);
+  var elementList747 = opt_data.elements;
+  var elementListLen747 = elementList747.length;
+  for (var elementIndex747 = 0; elementIndex747 < elementListLen747; elementIndex747++) {
+    var elementData747 = elementList747[elementIndex747];
+    template.preferencesView.aboutMeEntry(elementData747, output);
   }
   output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
   return opt_sb ? '' : output.toString();
@@ -512,11 +526,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList844 = opt_data.favourites;
-  var favouriteListLen844 = favouriteList844.length;
-  for (var favouriteIndex844 = 0; favouriteIndex844 < favouriteListLen844; favouriteIndex844++) {
-    var favouriteData844 = favouriteList844[favouriteIndex844];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData844.url), '">', soy.$$escapeHtml(favouriteData844.title), '</li>');
+  var favouriteList881 = opt_data.favourites;
+  var favouriteListLen881 = favouriteList881.length;
+  for (var favouriteIndex881 = 0; favouriteIndex881 < favouriteListLen881; favouriteIndex881++) {
+    var favouriteData881 = favouriteList881[favouriteIndex881];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData881.url), '">', soy.$$escapeHtml(favouriteData881.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -577,21 +591,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList929 = opt_data.things;
-    var thingListLen929 = thingList929.length;
-    for (var thingIndex929 = 0; thingIndex929 < thingListLen929; thingIndex929++) {
-      var thingData929 = thingList929[thingIndex929];
-      output.append('<li>', soy.$$escapeHtml(thingData929.name), '</li>');
+    var thingList966 = opt_data.things;
+    var thingListLen966 = thingList966.length;
+    for (var thingIndex966 = 0; thingIndex966 < thingListLen966; thingIndex966++) {
+      var thingData966 = thingList966[thingIndex966];
+      output.append('<li>', soy.$$escapeHtml(thingData966.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList941 = opt_data.friends;
-    var friendListLen941 = friendList941.length;
-    for (var friendIndex941 = 0; friendIndex941 < friendListLen941; friendIndex941++) {
-      var friendData941 = friendList941[friendIndex941];
-      output.append('<li>', soy.$$escapeHtml(friendData941.name), '</li>');
+    var friendList978 = opt_data.friends;
+    var friendListLen978 = friendList978.length;
+    for (var friendIndex978 = 0; friendIndex978 < friendListLen978; friendIndex978++) {
+      var friendData978 = friendList978[friendIndex978];
+      output.append('<li>', soy.$$escapeHtml(friendData978.name), '</li>');
     }
     output.append('</ul>');
   }

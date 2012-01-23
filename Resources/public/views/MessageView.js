@@ -1,7 +1,7 @@
 var MessageView = Backbone.View.extend({
     
 	tagName: "tr",
-	
+	conversationLoaded: false,
 	events: {
 		"click #message":  "showConversation",
 		"change input": "checkState",
@@ -33,8 +33,24 @@ var MessageView = Backbone.View.extend({
     	
     },
     showConversation: function(event){
-    	if(!$(event.target).hasClass("ckbox"))
-    		console.log(event.target);
+    	var conversation = $(this.el).find("#conversation");
+    	if(!$(event.target).hasClass("ckbox")){
+    		if(conversation.is(":visible")){
+    			conversation.hide();
+    		}else{
+    			conversation.show();
+    			if(!this.conversationLoaded){
+    				var conversationView = new ConversationView({model: this.model});
+    				conversation.html(conversationView.render().el);
+    				this.conversationLoaded = true;
+    			}
+    				
+    			
+    		}
+    			
+    	}
+    		
+    	
     },
     
     removeIfChecked: function(){

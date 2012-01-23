@@ -53,7 +53,10 @@ var NewnessView = Backbone.View.extend({
     },
     
     showCommentForm: function(){
-    	this.commentInput.show();
+    	if(this.commentInput.is(":visible"))
+    		this.commentInput.hide();
+    	else
+    		this.commentInput.show();
     },
     commentOnEnter: function(e) {
         var text = this.commentInput.val();
