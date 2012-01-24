@@ -2,7 +2,7 @@
 
 /**
  * Personal
- * @param name
+ * @param firstName
  * @param lastName
  * @param email 
  */
@@ -11,18 +11,22 @@
         	<div>
 				<table>
 					<tr>
-						<td>First name</td><td><input type="text" class="span5" value="{$name}"></td>
+						<td>First name</td><td><input type="text" id="firstName" class="span5" value="{$firstName}"></td>
 					</tr>
 					<tr>
-						<td>Last name</td><td><input type="text" class="span5" value="{$lastName}"></td>
+						<td>Last name</td><td><input type="text" id="lastName" class="span5" value="{$lastName}"></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td>Email name</td><td><input type="text" class="span5" value="{$email}"></td>
-					</tr>
+					</tr>-->
 				</table>
         	</div>
+        	<div class="alert-message success" id="notif-success" style="display:none">
+        		<a href="javascript:void(0)" id="close-success" class="close">×</a>
+        		<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
+      		</div>
         	<div>
-        		<button class="btn primary">{msg desc="Save changes"}Save changes{/msg}</button>
+        		<button class="btn primary" id="save-but">{msg desc="Save changes"}Save changes{/msg}</button>
         	</div>
 {/template}
 
@@ -31,14 +35,26 @@
  * @param title
  * @param body
  */
-{template .aboutMeEntry}
+{template .aboutMeEditEntry}
 	<div align="center">
 		<table>
 			<tr>
-				<td><input type="text" class="span7" placeholder="{msg desc="Title"}Title{/msg}" value="{$title}"></td>
+				<td><input type="text" id="title" class="span7" placeholder="{msg desc="Title"}Title (ej. hobbies, books...){/msg}" value="{$title}"></td>
 			</tr>
 			<tr>
-				<td><textarea type="text" class="span12" rows="12" placeholder="{msg desc="Description"}Description{/msg}">{$body}</textarea></td>
+				<td><textarea type="text" id="body" class="span12" rows="12" placeholder="{msg desc="Description"}Description{/msg}">{$body}</textarea></td>
+			</tr>
+			<tr>
+				<td>
+				<div class="alert-message success" id="notif-success" style="display:none">
+        			<a href="javascript:void(0)" id="close-success" class="close">×</a>
+        			<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
+      			</div>
+					<div class="row show-grid">
+						<div class="span3"><button class="btn primary" id="save">{msg desc="Save"}Save{/msg}</button></div>
+						<div class="span3"><button class="btn danger" id="delete">{msg desc="Delete"}Delete{/msg}</button></div>
+					</div>
+				</td>
 			</tr>
 		</table>
     </div>
@@ -46,18 +62,14 @@
 {/template}
 
 /**
- * About me
- * @param elements 
+ * About me 
  */
 {template .aboutMe}
 			<div><h3>{msg desc="About me"}About me{/msg}</h3></div>
-			{foreach $element in $elements}
-				{call .aboutMeEntry data="$element" /}
-			{/foreach}
-
+			<div id="aboutMeList">
+			</div>
         	<div class="row show-grid">
-    			<div class="span2"><button class="btn">{msg desc="Add new"}Add new{/msg}</button></button></div>
-    			<div class="span3"><button class="btn primary">{msg desc="Save changes"}Save changes{/msg}</button></div>
+    			<div class="span2"><button class="btn" id="newAboutMe-but">{msg desc="Add new"}Add new{/msg}</button></button></div>
   			</div>
         		
 {/template}

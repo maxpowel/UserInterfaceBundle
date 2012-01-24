@@ -441,28 +441,21 @@ if (typeof template.preferencesView == 'undefined') { template.preferencesView =
 
 template.preferencesView.personalInformation = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>Personal information</h3></div><div><table><tr><td>First name</td><td><input type="text" class="span5" value="', soy.$$escapeHtml(opt_data.name), '"></td></tr><tr><td>Last name</td><td><input type="text" class="span5" value="', soy.$$escapeHtml(opt_data.lastName), '"></td></tr><tr><td>Email name</td><td><input type="text" class="span5" value="', soy.$$escapeHtml(opt_data.email), '"></td></tr></table></div><div><button class="btn primary">Save changes</button></div>');
+  output.append('\t\t\t<div><h3>Personal information</h3></div><div><table><tr><td>First name</td><td><input type="text" id="firstName" class="span5" value="', soy.$$escapeHtml(opt_data.firstName), '"></td></tr><tr><td>Last name</td><td><input type="text" id="lastName" class="span5" value="', soy.$$escapeHtml(opt_data.lastName), '"></td></tr><!--<tr><td>Email name</td><td><input type="text" class="span5" value="', soy.$$escapeHtml(opt_data.email), '"></td></tr>--></table></div><div class="alert-message success" id="notif-success" style="display:none"><a href="javascript:void(0)" id="close-success" class="close">×</a><p>Your new information has been saved successfully</p></div><div><button class="btn primary" id="save-but">Save changes</button></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
-template.preferencesView.aboutMeEntry = function(opt_data, opt_sb) {
+template.preferencesView.aboutMeEditEntry = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<div align="center"><table><tr><td><input type="text" class="span7" placeholder="Title" value="', soy.$$escapeHtml(opt_data.title), '"></td></tr><tr><td><textarea type="text" class="span12" rows="12" placeholder="Description">', soy.$$escapeHtml(opt_data.body), '</textarea></td></tr></table></div>');
+  output.append('\t<div align="center"><table><tr><td><input type="text" id="title" class="span7" placeholder="Title (ej. hobbies, books...)" value="', soy.$$escapeHtml(opt_data.title), '"></td></tr><tr><td><textarea type="text" id="body" class="span12" rows="12" placeholder="Description">', soy.$$escapeHtml(opt_data.body), '</textarea></td></tr><tr><td><div class="alert-message success" id="notif-success" style="display:none"><a href="javascript:void(0)" id="close-success" class="close">×</a><p>Your new information has been saved successfully</p></div><div class="row show-grid"><div class="span3"><button class="btn primary" id="save">Save</button></div><div class="span3"><button class="btn danger" id="delete">Delete</button></div></div></td></tr></table></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>About me</h3></div>');
-  var elementList747 = opt_data.elements;
-  var elementListLen747 = elementList747.length;
-  for (var elementIndex747 = 0; elementIndex747 < elementListLen747; elementIndex747++) {
-    var elementData747 = elementList747[elementIndex747];
-    template.preferencesView.aboutMeEntry(elementData747, output);
-  }
-  output.append('<div class="row show-grid"><div class="span2"><button class="btn">Add new</button></button></div><div class="span3"><button class="btn primary">Save changes</button></div></div>');
+  output.append('\t\t\t<div><h3>About me</h3></div><div id="aboutMeList"></div><div class="row show-grid"><div class="span2"><button class="btn" id="newAboutMe-but">Add new</button></button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -526,11 +519,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList881 = opt_data.favourites;
-  var favouriteListLen881 = favouriteList881.length;
-  for (var favouriteIndex881 = 0; favouriteIndex881 < favouriteListLen881; favouriteIndex881++) {
-    var favouriteData881 = favouriteList881[favouriteIndex881];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData881.url), '">', soy.$$escapeHtml(favouriteData881.title), '</li>');
+  var favouriteList886 = opt_data.favourites;
+  var favouriteListLen886 = favouriteList886.length;
+  for (var favouriteIndex886 = 0; favouriteIndex886 < favouriteListLen886; favouriteIndex886++) {
+    var favouriteData886 = favouriteList886[favouriteIndex886];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData886.url), '">', soy.$$escapeHtml(favouriteData886.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -591,21 +584,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList966 = opt_data.things;
-    var thingListLen966 = thingList966.length;
-    for (var thingIndex966 = 0; thingIndex966 < thingListLen966; thingIndex966++) {
-      var thingData966 = thingList966[thingIndex966];
-      output.append('<li>', soy.$$escapeHtml(thingData966.name), '</li>');
+    var thingList971 = opt_data.things;
+    var thingListLen971 = thingList971.length;
+    for (var thingIndex971 = 0; thingIndex971 < thingListLen971; thingIndex971++) {
+      var thingData971 = thingList971[thingIndex971];
+      output.append('<li>', soy.$$escapeHtml(thingData971.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList978 = opt_data.friends;
-    var friendListLen978 = friendList978.length;
-    for (var friendIndex978 = 0; friendIndex978 < friendListLen978; friendIndex978++) {
-      var friendData978 = friendList978[friendIndex978];
-      output.append('<li>', soy.$$escapeHtml(friendData978.name), '</li>');
+    var friendList983 = opt_data.friends;
+    var friendListLen983 = friendList983.length;
+    for (var friendIndex983 = 0; friendIndex983 < friendListLen983; friendIndex983++) {
+      var friendData983 = friendList983[friendIndex983];
+      output.append('<li>', soy.$$escapeHtml(friendData983.name), '</li>');
     }
     output.append('</ul>');
   }

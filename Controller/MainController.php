@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Wixet\WixetBundle\Entity\Favourite;
+
 
 class MainController extends Controller
 {
@@ -51,9 +53,10 @@ class MainController extends Controller
     }
     
     /**
-    * @Route("/user", name="_user")
+    * @Route("/user", name="_user_get")
+    * @Method({"GET"})
     */
-    public function userAction()
+    public function getUserAction()
     {
     	$data = array();
     	$viewer = $this->get('security.context')->getToken()->getUser()->getProfile();
@@ -76,8 +79,60 @@ class MainController extends Controller
     	 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
-	
+    
+    /**
+    * @Route("/user", name="_user_put")
+    * @Method({"PUT"})
+    */
+    public function putUserAction()
+    {
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	//A profile only can be updated by the owner
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
     	
+    	$em = $this->get('doctrine')->getEntityManager();
+    	
+    	$profile->setFirstName($data['firstName']);
+    	$profile->setLastName($data['lastName']);
+    	
+    	$em->flush();
+    	
+    	
+    	 
+    
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+	
+
+    /**
+    * @Route("/favourite", name="_favourite_post")
+    * @Method({"POST"})
+    */
+    public function postFavouriteAction()
+    {
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	$favourite = new Favourite();
+    	
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$favourite->setProfile($profile);
+    	$favourite->setBody($data['body']);
+    	$favourite->setTitle($data['title']);
+    	
+    	
+    	$em = $this->get('doctrine')->getEntityManager();
+    	 
+    	$em->persist($favourite);
+    	 
+    	$em->flush();
+    	 
+    	$data['id'] = $favourite->getId();
+    	 
+    
+    
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+    
+    
     	
     /**
      * @Route("/", name="_index")

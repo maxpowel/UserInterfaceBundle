@@ -5,4 +5,5 @@ var User = Backbone.Model.extend({
 		else
 			return "user?id="+this.get("id");
 	}
+
 });
