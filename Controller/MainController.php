@@ -2,6 +2,9 @@
 
 namespace Wixet\UserInterfaceBundle\Controller;
 
+use Wixet\WixetBundle\Entity\UserProfile;
+use Wixet\WixetBundle\Entity\UserProfileExtension;
+
 use Wixet\WixetBundle\Entity\ProfileUpdate;
 use Wixet\WixetBundle\Entity\ProfileUpdateComment;
 
@@ -105,33 +108,82 @@ class MainController extends Controller
 	
 
     /**
-    * @Route("/favourite", name="_favourite_post")
+    * @Route("/profile/extension", name="_profile_extension_post")
     * @Method({"POST"})
     */
-    public function postFavouriteAction()
+    public function postProfileExtensionAction()
     {
     	$data = json_decode(file_get_contents('php://input'),true);
-    	$favourite = new Favourite();
+    	$pe = new UserProfileExtension();
     	
     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	$favourite->setProfile($profile);
-    	$favourite->setBody($data['body']);
-    	$favourite->setTitle($data['title']);
+    	$pe->setProfile($profile);
+    	$pe->setBody($data['body']);
+    	$pe->setTitle($data['title']);
     	
     	
     	$em = $this->get('doctrine')->getEntityManager();
     	 
-    	$em->persist($favourite);
+    	$em->persist($pe);
     	 
     	$em->flush();
     	 
-    	$data['id'] = $favourite->getId();
+    	$data['id'] = $pe->getId();
     	 
     
     
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     
+    /**
+    * @Route("/profile/extension", name="_profile_extension_get")
+    * @Method({"GET"})
+    */
+    public function getProfileExtensionAction()
+    {
+    	//Profile extensions are public
+    	$data = array();
+    	 
+    	 
+    	$em = $this->get('doctrine')->getEntityManager();
+    	
+    	$profile = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($_GET['profile']);
+    	
+    	$q = $em->createQuery("SELECT pe FROM Wixet\WixetBundle\Entity\UserProfileExtension pe where pe.profile = :profile")
+    	->setParameter('profile', $profile);
+    	$peList = $q->getResult();
+    
+    	
+    	foreach($peList as $pe){
+    		$data[] = array("id"=>$pe->getId(),
+    						"body"=>$pe->getBody(),
+    						"title"=>$pe->getTitle());
+    	}
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+    
+    /**
+    * @Route("/profile/extension", name="_profile_extension_delete")
+    * @Method({"DELETE"})
+    */
+    public function deleteProfileExtensionAction()
+    {
+    	//Profile extensions are public
+    	$data = array();
+    
+    	$em = $this->get('doctrine')->getEntityManager();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$pe = $em->getRepository('Wixet\WixetBundle\Entity\UserProfileExtension')->find($_GET['id']);
+    	 
+    	if($profile->getId() == $pe->getProfile()->getId()){
+    		$em->remove($pe);
+    		$em->flush();
+    	}
+    
+
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
     
     	
     /**

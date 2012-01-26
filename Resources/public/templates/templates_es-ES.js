@@ -455,7 +455,7 @@ template.preferencesView.aboutMeEditEntry = function(opt_data, opt_sb) {
 
 template.preferencesView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>About me</h3></div><div id="aboutMeList"></div><div class="row show-grid"><div class="span2"><button class="btn" id="newAboutMe-but">Add new</button></button></div></div>');
+  output.append('\t\t\t<div><h3>About me</h3></div><p>Be care about what you write here, this information is public and accesible by everyone and used by the search engine</p><div id="aboutMeList"></div><div class="row show-grid"><div class="span2"><button class="btn" id="newAboutMe-but">Add new</button></button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -519,11 +519,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList886 = opt_data.favourites;
-  var favouriteListLen886 = favouriteList886.length;
-  for (var favouriteIndex886 = 0; favouriteIndex886 < favouriteListLen886; favouriteIndex886++) {
-    var favouriteData886 = favouriteList886[favouriteIndex886];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData886.url), '">', soy.$$escapeHtml(favouriteData886.title), '</li>');
+  var favouriteList889 = opt_data.favourites;
+  var favouriteListLen889 = favouriteList889.length;
+  for (var favouriteIndex889 = 0; favouriteIndex889 < favouriteListLen889; favouriteIndex889++) {
+    var favouriteData889 = favouriteList889[favouriteIndex889];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData889.url), '">', soy.$$escapeHtml(favouriteData889.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -584,21 +584,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList971 = opt_data.things;
-    var thingListLen971 = thingList971.length;
-    for (var thingIndex971 = 0; thingIndex971 < thingListLen971; thingIndex971++) {
-      var thingData971 = thingList971[thingIndex971];
-      output.append('<li>', soy.$$escapeHtml(thingData971.name), '</li>');
+    var thingList974 = opt_data.things;
+    var thingListLen974 = thingList974.length;
+    for (var thingIndex974 = 0; thingIndex974 < thingListLen974; thingIndex974++) {
+      var thingData974 = thingList974[thingIndex974];
+      output.append('<li>', soy.$$escapeHtml(thingData974.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList983 = opt_data.friends;
-    var friendListLen983 = friendList983.length;
-    for (var friendIndex983 = 0; friendIndex983 < friendListLen983; friendIndex983++) {
-      var friendData983 = friendList983[friendIndex983];
-      output.append('<li>', soy.$$escapeHtml(friendData983.name), '</li>');
+    var friendList986 = opt_data.friends;
+    var friendListLen986 = friendList986.length;
+    for (var friendIndex986 = 0; friendIndex986 < friendListLen986; friendIndex986++) {
+      var friendData986 = friendList986[friendIndex986];
+      output.append('<li>', soy.$$escapeHtml(friendData986.name), '</li>');
     }
     output.append('</ul>');
   }

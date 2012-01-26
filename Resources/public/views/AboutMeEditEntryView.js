@@ -9,7 +9,6 @@ var AboutMeEditEntryView = Backbone.View.extend({
       
     render: function() {
     			
-    			
     	$(this.el).html(template.preferencesView.aboutMeEditEntry({title: this.model.get("title"), body:this.model.get("body")}));
     	this.notificationSuccess = $(this.el).find("#notif-success");
     
@@ -18,7 +17,10 @@ var AboutMeEditEntryView = Backbone.View.extend({
     
     deleteEntry: function(){
     	this.model.destroy();
-    	$(this.el).remove();
+    	$(this.el).fadeOut(function(){
+    		$(this).remove();
+    	});
+    	
     },
     
     saveEntry: function(){

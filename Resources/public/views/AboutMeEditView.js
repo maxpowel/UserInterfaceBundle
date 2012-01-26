@@ -15,7 +15,6 @@ var AboutMeEditView = Backbone.View.extend({
     			
     			
     	$(this.el).html(template.preferencesView.aboutMe());
-    		//{elements:[{title:"hola", body:"que tal"}]} )
     	this.aboutMeCollection.fetch({data:{profile: getViewer().get("id")}});
     	this.aboutMeList = $(this.el).find("#aboutMeList");
     	
@@ -25,7 +24,11 @@ var AboutMeEditView = Backbone.View.extend({
     },
     
     addAll: function() {
-  	  
+    	var cont =this.aboutMeList; 
+    	this.aboutMeCollection.each(function(aboutMe,i){
+    	  var view = new AboutMeEditEntryView({model: aboutMe});
+          cont.append(view.render().el);
+      });  
     },
     
     addOne: function(aboutMe){
