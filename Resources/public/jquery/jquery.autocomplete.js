@@ -350,6 +350,12 @@ $.Autocompleter = function(input, options) {
 					limit: options.max
 				}, extraParams),
 				success: function(data) {
+					var json = eval("("+data+")");
+					data =  "";
+					$.each(json,function(i,item){
+						data += item.name+"|"+item.id+"\n";
+					});
+					
 					var parsed = options.parse && options.parse(data) || parse(data);
 					cache.add(term, parsed);
 					success(term, parsed);

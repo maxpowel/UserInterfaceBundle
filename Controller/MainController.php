@@ -375,5 +375,29 @@ class MainController extends Controller
     }
     
 
+    /**
+    * @Route("/profile/contactSearch", name="_profile_contact_search")
+    */
+    public function contactSearchAction()
+    {
+    	$data = array();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	
+    	$em = $this->get('doctrine')->getEntityManager();
+    	
+    	$q = $em->createQuery("SELECT p.id, p.first_name, p.last_name FROM Wixet\WixetBundle\Entity\ProfileGroup pg JOIN pg.profiles p WHERE pg.profile = :profile AND (p.first_name LIKE :query OR p.last_name LIKE :query)")
+    	->setParameter('profile', $profile)
+    	->setParameter('query', $_GET['q']);
+    	$list = $q->getResult();
+    	
+    	foreach($list as $contact){
+			$data[] = array("id"=>$contact['id'], 
+							"firstName"=>$contact['first_name'],
+							"lastName"=>$contact['last_name']);
+    	}
+
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
 
 }

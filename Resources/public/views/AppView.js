@@ -99,9 +99,8 @@ var AppView = Backbone.View.extend({
 			  },
 			  
 			  loadSearch: function() {
-				  this.activeMenuSection("search");
-				  
-				  var view = new SearchSectionView();
+				  app.activeMenuSection("search");
+				  app.loadView(new SearchSectionView());
 			  },
 			  
 			  loadMessages: function() {

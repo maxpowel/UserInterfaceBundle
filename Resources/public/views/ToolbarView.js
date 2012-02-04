@@ -77,7 +77,7 @@ var ToolbarView = Backbone.View.extend({
 	     }, false);
 	     xhr.addEventListener("error", this.uploadFailed, false);
 	     //xhr.addEventListener("abort", uploadCanceled, false);
-	     xhr.open("POST", "/upload");
+	     xhr.open("POST", "/photo/upload");
 	     xhr.send(fd); 
 	},
 	
