@@ -13,40 +13,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class AccountController extends Controller
 {
-    /**
-     * @Route("/", name="_index")
-     */
-    public function indexAction()
-    {
-        return $this->forward('OpenSocialBundle:Section:start');
-    }
     
     /**
-     * @Route("/start", name="_start")
-     * @Template()
+     * @Route("/register", name="_account_register")
      */
     public function startAction()
     {
-
-        return array();
+    	$data = array("error"=>false);
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
 
-    /**
-     * @Route("/profile/{id}", name="_profile")
-     * @Template()
-     */
-    public function profileAction($id)
-    {
-        return array();
-    }
-     
-    /**
-     * @Route("/search", name="_search")
-     * @Template()
-     */
-    public function searchAction($id)
-    {
-        return array();
-    }
 
 }

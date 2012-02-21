@@ -16,7 +16,7 @@ var ToolbarView = Backbone.View.extend({
 	initialize: function() {
 		this.bind('uploading', this.changeToUploading, this);
 		this.uploader = new UploaderView({context: this});
-		$(this.el).dropdown();
+		//$(this.el).dropdown();
 		this.percentCont = $(this.el).find("#totalPercent");
 	},
   
@@ -119,7 +119,7 @@ var ToolbarView = Backbone.View.extend({
 	},
 	
 	render: function(){		
-    	this.uploadPhotosWindow = $(this.uploader.render().el).modal({backdrop:true, keyboard: true});
+    	this.uploadPhotosWindow = $(this.uploader.render().el).modal({backdrop:true, keyboard: true, show:false});
 	}
 	
 });

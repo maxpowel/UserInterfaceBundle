@@ -5,27 +5,99 @@
  * @param thumbnail
  */
 {template .start}
-<div class="sidebar">
-        <div class="well">
-			<div class="media-grid">
-			  <a href="#">
+    <div class="row-fluid">
+    	<div class="span3">
+        	<div class="well">
+				<div class="media-grid">
+			  		<a href="#">
 						<img alt="" src="{$thumbnail}" class="thumbnail">
 					</a>
-			</div>
+				</div>
 			
-	      <h5>{msg desc="Notification in start section"}Notifications{/msg}</h5>
-          <ul id="notification">
+	      		<h5>{msg desc="Notification in start section"}Notifications{/msg}</h5>
+          		<ul id="notification">
             
-          </ul>
+          		</ul>
           
-          <h5>{msg desc="Start section agenda"}Agenda{/msg}</h5>
-          <ul class="agenda-short-list" id="agendaTask-list">
+          		<h5>{msg desc="Start section agenda"}Agenda{/msg}</h5>
+          		<ul class="agenda-short-list" id="agendaTask-list">
 
-          </ul>
-        </div>
+          		</ul>
+        	</div>
+		</div>
+      
+    <div class="span6">
+    		<div class="content" id="multimenu"></div>
+    </div>
+      
+      
+    <div class="span3">
+        	<div class="well">
+          		<h5>{msg desc="Start section suggestions"}Suggestions{/msg}</h5>
+          	<div id="contact-suggestion">
+          
+            </div>
+            <br>
+            
+            <h5>{msg desc="Start section meetings"}Meetings{/msg}</h5>
+            <div>{msg desc="Start section meeting description"}Start a new meeting to organize an event{/msg}</div>
+            <br>
+            
+			<div id="meetings">
+              <div><button class="btn btn-success" id="doMeeting-but">{msg desc="Start section create meeting"}Create meeting{/msg}</button></div>
+              <br>
+              <ul id="meeting-list">
+
+              </ul>
+              <div><button id="allMeetings-but" class="btn btn-info small">{msg desc="Start section show all meetings"}{/msg}All</button></div>
+			</div>
+            <br>
+            
+            <h5>{msg desc="Start section find friends"}Find friends{/msg}</h5>
+            <div>{msg desc="Start section find friends description"}Send invitations to your friends or search them in other social networks{/msg}</div>
+            <br>
+            
+            <div><button class="btn btn-danger">{msg desc="Start section send invitations"}{/msg}Send invitations</button></div>
+            <br>
+            
+            <div><button class="btn btn-primary">{msg desc="Start section search in other networks"}{/msg}Search in other networks</button></div>
+            <br>
+          
       </div>
       
-       <div class="sidebar-right">
+      </div>
+{/template}
+
+
+/**
+ * Start section
+ * @param thumbnail
+ */
+{template .start_old}
+    <div class="row-fluid">
+    	<div class="span2">
+        	<div class="well">
+				<div class="media-grid">
+			  		<a href="#">
+						<img alt="" src="{$thumbnail}" class="thumbnail">
+					</a>
+				</div>
+			
+	      		<h5>{msg desc="Notification in start section"}Notifications{/msg}</h5>
+          		<ul id="notification">
+            
+          		</ul>
+          
+          		<h5>{msg desc="Start section agenda"}Agenda{/msg}</h5>
+          		<ul class="agenda-short-list" id="agendaTask-list">
+
+          		</ul>
+        	</div>
+		</div>
+	</div>
+      
+    <div class="row-fluid">
+    	<div class="span2">
         <div class="well">
           <h5>{msg desc="Start section suggestions"}Suggestions{/msg}</h5>
           <div id="contact-suggestion">
@@ -63,6 +135,8 @@
 
 		</div>
       </div>
+      </div></div>
+      
 {/template}
 
 

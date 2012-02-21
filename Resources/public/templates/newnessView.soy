@@ -19,7 +19,7 @@
 				<div>{$body}</div>
 				<div style="padding:10px"><a href="javascript:void(0)" id="doComment">{msg desc="Newness comment"}Comment{/msg}</a> - <a href="#">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="#">{msg desc="User dislikes the newness"}I don't like it{/msg}</a></div>
 				<input style="display: none;" type="text" id="comment" class="span5" placeholder="{msg desc="Write a comment"}Write your comment and push enter{/msg}">
-				<table width="100%" style="border:0" class="zebra-striped">
+				<table style="margin-left:10px" width="100%" style="border:0" class="table table-striped">
 				<tbody id="comments">
 				</tbody></table>
 			</div>
@@ -46,13 +46,13 @@
  * @param name
  */
 {template .newnessList}
-        	<div class="hero-unit">
+        	<div class="hero-unit" style="padding: 20px 40px 40px">
         		{if $isOwner == true}
 		  			<h3>{msg desc="Share something update in my profile"}Share something{/msg}</h3>
 		  		{else}
 		  			<h3>{msg desc="Share something in other profile"}Share something with {$name}{/msg}</h3>
 		  		{/if}
-		  		<input type="text" class="wlarge" id="new-share" placeholder="{msg desc="Profile section share note"}Write here{/msg}">
+		  		<input type="text" class="span5" id="new-share" placeholder="{msg desc="Profile section share note"}Write here and push enter{/msg}">
         	</div>
         
         
@@ -61,5 +61,5 @@
         	<div id="newness-container">
         
         	</div>
-			<button class="btn wlarge-btn" id="more-newness">{msg desc="Start section more updates"}More{/msg}</button>
+			<button class="btn span6" style="margin-left:10px" id="more-newness">{msg desc="Start section more updates"}More{/msg}</button>
 {/template}

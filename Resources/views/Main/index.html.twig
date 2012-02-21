@@ -5,24 +5,20 @@
         
         
         {% stylesheets '@UserInterfaceBundle/Resources/public/fullcalendar/*.css'
+        			   '@UserInterfaceBundle/Resources/public/bootstrap/css/*.css'
         output='css/main.css'
         %}
         
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
         {% endstylesheets %}
-        
-        {% stylesheets '@UserInterfaceBundle/Resources/public/bootstrap/lib/compilado.css'
-        output='css/style.css'
-        %}
-        
-        <link rel="stylesheet" href="{{ asset_url }}" media="all" />
-        {% endstylesheets %}
+
         
         
        {% javascripts '@UserInterfaceBundle/Resources/public/jquery/*.js'
        				  '@UserInterfaceBundle/Resources/public/backbone/underscore-min.js'
        				  '@UserInterfaceBundle/Resources/public/backbone/backbone-min.js'
                       '@UserInterfaceBundle/Resources/public/closure/soyutils.js'
+                      '@UserInterfaceBundle/Resources/public/bootstrap/js/*.js'
        	 	output='js/main.js'
         %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -30,41 +26,6 @@
        
        
        
-       
-       <!--bootstrap-->
-        {% javascripts '@UserInterfaceBundle/Resources/public/bootstrap/js/bootstrap-dropdown.js'
-       	 	output='js/dropdown.js'
-        %}
-                  <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        
-        {% javascripts 
-                       '@UserInterfaceBundle/Resources/public/bootstrap/js/bootstrap-modal.js'
-
-       	 	output='js/modal.js'
-        %}
-                  <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        {% javascripts 
-                       '@UserInterfaceBundle/Resources/public/bootstrap/js/bootstrap-twipsy.js'
-       	 	output='js/twipsy.js'
-        %}
-                  <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        {% javascripts 
-                       '@UserInterfaceBundle/Resources/public/bootstrap/js/bootstrap-popover.js'
-       	 	output='js/popover.js'
-        %}
-                  <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        
-        {% javascripts 
-                       '@UserInterfaceBundle/Resources/public/bootstrap/js/bootstrap-buttons.js'
-       	 	output='js/buttons.js'
-        %}
-                  <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        <!--bootend-->
         
                
        {% javascripts '@UserInterfaceBundle/Resources/public/model/super/*.js'
@@ -96,6 +57,8 @@
    <style type="text/css">
       body {
         padding-top: 60px;
+        width:1024px;
+        margin: 0 auto;
       }
     </style>     
         

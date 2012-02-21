@@ -4,7 +4,7 @@
  * Login form
  */
 {template .login}
-<table style="width:150px" class="hero-unit-simple">
+<table style="width:150px" class="well table table-bordered">
 				<tbody>
 					<tr>
 						<td colspan="2"><div align="center"><b>{msg desc="Login title"}Access to my account{/msg}</b></div></td>
@@ -24,18 +24,18 @@
 							<a href="javascript:void(0)" class="close">×</a>
 							{msg desc="Login fail"}The data entered are incorrect{/msg}
 						</div>
-						<div align="center"><button class="btn success" id="login-btn">{msg desc="Login"}Login{/msg}</button></div></td>
+						<div align="center"><button class="btn btn-success" id="login-btn">{msg desc="Login"}Login{/msg}</button></div></td>
 					</tr>
 							
 				  </tbody>
 				</table>
 				
 				<a href="#newAccount" id="newAccount-btn">
-					<span class="label warning">{msg desc="New account"}New account{/msg}</span>
+					<span class="label label-warning">{msg desc="New account"}New account{/msg}</span>
 				</a>
 				&nbsp;&nbsp;
 				<a href="#recoverPassword" id="recoverPassword-btn">
-					<span class="label important">{msg desc="Recover password"}Recover password{/msg}</span>
+					<span class="label label-important">{msg desc="Recover password"}Recover password{/msg}</span>
 				</a>
 {/template}
 
@@ -43,7 +43,7 @@
  * New account form
  */
 {template .newAccount}
-<table style="width:150px" class="hero-unit-simple">
+<table style="width:150px" class="well table table-bordered">
 				<tbody>
 					<tr>
 						<td colspan="2"><div align="center"><b>{msg desc="Complete the form"}Please complete the form{/msg}</b></div></td>
@@ -59,11 +59,11 @@
 					</tr>
 					<tr>
 						<td>{msg desc="Pass"}Password{/msg}</td>
-						<td><input type="text" id="password"></td>
+						<td><input type="password" id="password"></td>
 					</tr>
 					<tr>
 						<td>{msg desc="Repeat Pass"}Repeat password{/msg}</td>
-						<td><input type="text" id="rpassword"></td>
+						<td><input type="password" id="rpassword"></td>
 					</tr>
 					<tr>
 						<td>{msg desc="Birthdate"}Birthdate{/msg}</td>
@@ -75,7 +75,7 @@
 								{/for}
 				              </select>
 				              
-				            <select id="mediumSelect" name="tinySelect" class="tinySelect">
+				            <select id="month" name="tinySelect" class="tinySelect">
 				                <option>Month</option>
 				                <option value="1">{msg desc="Jaunary"}Jaunary{/msg}</option>
 				                <option value="2">{msg desc="February"}February{/msg}</option>
@@ -91,7 +91,7 @@
 				                <option value="12">{msg desc="December"}December{/msg}</option>
 				              </select>
 				              
-				            <select id="mediumSelect" name="tinySelect" class="tinySelect">
+				            <select id="year" name="tinySelect" class="tinySelect">
 				                <option>Year</option>
 				                {for $year in range(-2010,-1900)}
   <option>{-$year}</option>
@@ -102,17 +102,48 @@
 				              </select>
 						</td>
 					</tr>
+
+					
 					<tr>
-						<td colspan="2"><div align="center"><button class="btn primary" id="createAccount-btn">{msg desc="Create account"}Create account{/msg}</button></div></td>
+						<td colspan="2">
+							<div id="nameError" style="display:none" align="center" class="alert-message block-message error">
+								<a href="javascript:void(0)" class="close">×</a>
+								{msg desc="Blank name"}Please write your name{/msg}
+							</div>
+							
+							<div id="passError" style="display:none" align="center" class="alert-message block-message error">
+								<a href="javascript:void(0)" class="close">×</a>
+								{msg desc="Passwords does not match"}The passwords does not match{/msg}
+							</div>
+							
+							<div id="dateError" style="display:none" align="center" class="alert-message block-message error">
+								<a href="javascript:void(0)" class="close">×</a>
+								{msg desc="Invalid birthdate"}Please select your birthdate{/msg}
+							</div>
+							
+							<div id="emailError" style="display:none" align="center" class="alert-message block-message error">
+								<a href="javascript:void(0)" class="close">×</a>
+								{msg desc="Invalid email"}Please write a valid email address{/msg}
+							</div>
+							
+							<div id="allOk" style="display:none" align="center" class="alert-message block-message success">
+								{msg desc="Creating account"}Creating account...{/msg}
+							</div>
+						</td>
+					</tr>
+
+					
+					<tr>
+						<td colspan="2"><div align="center"><button class="btn btn-primary" id="createAccount-btn">{msg desc="Create account"}Create account{/msg}</button></div></td>
 					</tr>
 				  </tbody>
 				</table>
 				
 				<a href="#" id="goLogin-btn">
-					<span class="label success">{msg desc="Login"}Login{/msg}</span>
+					<span class="label label-success">{msg desc="Login"}Login{/msg}</span>
 				</a>
 				&nbsp;&nbsp;
 				<a href="#recoverPassword" id="recoverPassword-btn">
-					<span class="label important">{msg desc="Recover password"}Recover password{/msg}</span>
+					<span class="label label-important">{msg desc="Recover password"}Recover password{/msg}</span>
 				</a>
 {/template}

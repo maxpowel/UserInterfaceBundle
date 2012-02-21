@@ -14,7 +14,7 @@
  */
 {template .doMeeting}
 	<h3>{msg desc="Meeting main information"}Main information{/msg}</h3>
-	<table>
+	<table class="table table-bordered">
 	  <tbody id="meetingInformation">
 		<tr>
 			<td>{msg desc="Meeting title"}Title{/msg}</td><td><input type="text" id="title" class="xlarge"/></td>
@@ -34,7 +34,7 @@
 	
 	<br>
 	<br>
-	</div><button class="btn primary" id="create-but">{msg desc="Create meeting"}Create meeting{/msg}</button></div>
+	</div><button class="btn btn-primary" id="create-but">{msg desc="Create meeting"}Create meeting{/msg}</button></div>
 	
 {/template}
 
@@ -85,8 +85,8 @@
               {msg desc="Field name"}Field name{/msg}:&nbsp;&nbsp;<input type="text">
             </div>
             <div class="modal-footer">
-			  <button class="btn secondary">{msg desc="Cancel"}Cancel{/msg}</button>
-              <button class="btn primary">{msg desc="Accept"}Accept{/msg}</button>
+			  <button class="btn btn-secondary secondary">{msg desc="Cancel"}Cancel{/msg}</button>
+              <button class="btn btn-primary primary">{msg desc="Accept"}Accept{/msg}</button>
             </div>
 </div>
 {/template} 

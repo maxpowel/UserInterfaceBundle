@@ -1,12 +1,12 @@
 var AppView = Backbone.View.extend({
 	actualSection: null,
-	topbar: null,
+	navbar: null,
 	toolbar: null,
 	sectionContainer: null,
 	activeMenuSection: function( section ){
 		//Activate the menu toolbar button
-		this.topbar.find(".active").removeClass("active");
-		this.topbar.find("#menu-"+section).addClass("active");
+		this.navbar.find(".active").removeClass("active");
+		this.navbar.find("#menu-"+section).addClass("active");
 	},
 	  
 	clean: function(){
@@ -22,11 +22,16 @@ var AppView = Backbone.View.extend({
     },
 	initialize: function() {
 		this.render();
-		this.topbar = $(this.el).find("#topbar");
+		
+		$(this.el).find(".dropdown-toggle").dropdown();
+		
+		
+		this.navbar = $(this.el).find("#navbar");
+		var navbar = this.navbar;
 		this.sectionContainer = $(this.el).find("#content"); 
 		var app = this;
 		var Controller = Backbone.Router.extend({
-			  topbar: $("#topbar"),
+			  navbar: navbar,
 			  
 			  routes: {
 			    "start":                 "loadStart",
@@ -112,7 +117,7 @@ var AppView = Backbone.View.extend({
 
 			Backbone.emulateHTTP = true;
 			var controller = new Controller();
-			this.toolbar = new ToolbarView({router: controller, el: $(this.el).find("#topbar")});
+			this.toolbar = new ToolbarView({router: controller, el: $(this.el).find("#navbar")});
 			this.toolbar.render();
 			Backbone.history.start();
 			
@@ -144,6 +149,7 @@ var AppView = Backbone.View.extend({
 	
 	render: function(){
 		$(this.el).html(template.appView.app());
+		return this;
 	}
 	
 });

@@ -39,7 +39,7 @@ var DoMeetingView = Backbone.View.extend({
 
 		    this.addFieldModal = $(modalTemplate);
 		    this.addFieldModal.attr({id: "doAddField"});
-		    this.addFieldModal.modal({backdrop:true, keyboard: true});
+		    this.addFieldModal.modal({backdrop:true, keyboard: true, show:false});
 		    
 		    var form = this.addFieldModal;
 

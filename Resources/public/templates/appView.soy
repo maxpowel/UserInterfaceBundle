@@ -1,9 +1,61 @@
 {namespace template.appView}
 
+
 /**
  * Main app skeleton
  */
 {template .app}
+    <div id="navbar" class="navbar navbar-fixed-top">
+    	<div class="navbar-inner">
+    		<div class="container">
+    		
+    		    <ul class="nav">
+    				<li id="menu-start"><a href="#start">{msg desc="Start"}Start{/msg}</a></li>	
+		            <li id="menu-profile"><a href="#profile">{msg desc="Profile"}Profile{/msg}</a></li>
+		            <li id="menu-search"><a href="#search">{msg desc="Search"}Search{/msg}</a></li>
+		            <li id="menu-multimedia"><a href="#multimedia">{msg desc="Multimedia"}Multimedia{/msg}</a></li>
+		            <li id="menu-messages"><a href="#messages">{msg desc="Messages"}Messages{/msg}</a></li>
+		            <li id="menu-agenda"><a href="#agenda">{msg desc="Agenda"}Agenda{/msg}</a></li>
+		            <li id="menu-settings"><a href="#preferences">{msg desc="Preferences"}Preferences{/msg}</a></li>
+
+			    </ul>
+			    
+			    <form class="navbar-search pull-left">
+    				<input type="text" class="search-query" placeholder="{msg desc="Quick search"}Quick search{/msg}">
+    				
+    				<button id="uploadPhotos-but" style="margin-left:15px; margin-top:0px" class="btn btn-success btn-small">
+    					<span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span>
+    					<span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}
+    						<span id="totalPercent"></span>%
+    					</span>
+    				</button>
+    			</form>
+ 
+    
+    
+    			<ul class="nav" id="chat-dropdown">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">{msg desc="Chat"}Chat{/msg}<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+					</li>
+				</ul>
+    		</div>
+    	</div>
+    </div>
+    
+    <div id="content"></div>
+{/template}    
+    
+/**
+ * Main app skeleton
+ */
+{template .app2}
 <div class="topbar" id="topbar">
       <div class="topbar-inner">
         <div class="container">
@@ -23,7 +75,7 @@
             <li class="dropdown" id="quick-search-result">
              <input id="quick-search-input" class="quick-search" class="dropdown-toggle" type="text" placeholder="{msg desc="Quick search"}Quick search{/msg}">
              
-             <button id="uploadPhotos-but" style="margin-left:15px" class="btn success small"><span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span><span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}<span id="totalPercent"></span>%</span></button>
+             <button id="uploadPhotos-but" style="margin-left:15px" class="btn btn-success btn-small"><span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span><span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}<span id="totalPercent"></span>%</span></button>
               <ul class="dropdown-menu" style="	max-width: 230px; top: 35px;">
                 <li><a href="#">Nosequien - Estado de mierda</a></li>
                 <li><a href="#">Otra persona con un nick super super super largo</a></li>
@@ -68,7 +120,7 @@
 	<div id="original"></div>
 	{foreach $subsection in $subsections}
 	  <div style="display:none" id="{$subsection.subSectionId}" class="submenu">
-	  	<button class="btn wlarge-btn {$subsection.buttonClass} back-but">{msg desc="Back"}Back{/msg}</button>
+	  	<button style="margin-left:11px" class="btn span6 btn-{$subsection.buttonClass} back-but">{msg desc="Back"}Back{/msg}</button>
 	  	<div class="subSection-content"></div>
 	  </div>
 	  
@@ -125,8 +177,8 @@
             </form>
             </div>
             <div class="modal-footer">
-			  <button class="btn upload secondary disabled">{msg desc="Upload"}Upload{/msg}</button>
-              <button class="btn cancel primary">{msg desc="Cancel"}Cancel{/msg}</button>
+			  <button class="btn upload btn-secondary secondary disabled">{msg desc="Upload"}Upload{/msg}</button>
+              <button class="btn cancel btn-primary primary">{msg desc="Cancel"}Cancel{/msg}</button>
             </div>
 {/template}
 
