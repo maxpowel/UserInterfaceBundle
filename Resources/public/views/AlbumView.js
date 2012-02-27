@@ -18,7 +18,7 @@ var AlbumView = Backbone.View.extend({
     	this.messageContainer.find("#folderName").text(this.model.get('name'));
     },
     render: function() {
-    	$(this.el).html(template.messagesView.messageFolder( this.model.toJSON()) );
+    	$(this.el).html(template.multimediaView.album( {name: this.model.get('name')} ) );
 
       return this;
     },
@@ -32,5 +32,6 @@ var AlbumView = Backbone.View.extend({
     	
     	var menu = new MultimenuView({original:photoList, subsections:[albumOptions,this.options.newAlbumButton], el: this.photoContainer});
     	menu.render();
+    	this.trigger("loaded",this.el);
     }
 });

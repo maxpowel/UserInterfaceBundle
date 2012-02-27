@@ -4,30 +4,30 @@
  * Preferences section
  */
 {template .preferences}
-<div class="sidebar">
-        <div class="well">
+<div class="row-fluid">
+	<div class="span3">
+        <div class="well" style="padding: 8px 0;">
 
 		  
 	     <div id="folderList">
-	     	<ul class="inputs-list">
-	     		<li style="padding:10px"><label><span style="margin-left: 4px"><a id="personal-lnk" class="load" href="javascript:void(0)">{msg desc="Personal"}Personal{/msg}</a></span></label></li>
-	     		<li style="padding:10px"><label><span style="margin-left: 4px"><a id="aboutMe-lnk" class="load" href="javascript:void(0)">{msg desc="About me"}About me{/msg}</a></span></label></li>
-	     		<li style="padding:10px"><label><span style="margin-left: 4px"><a id="favourites-lnk" class="load" href="javascript:void(0)">{msg desc="Favourites"}Favourites{/msg}</a></span></label></li>
-	     		<li style="padding:10px"><label><span style="margin-left: 4px"><a id="security-lnk" class="load" href="javascript:void(0)">{msg desc="Security"}Security{/msg}</a></span></label></li>
-	     		<li style="padding:10px"><label><span style="margin-left: 4px"><a id="customize-lnk" class="load" href="javascript:void(0)">{msg desc="Customize"}Customize{/msg}</a></span></label></li>
+    
+    
+	     	<ul class="nav nav-list">
+	     		<li class="active"><a id="personal-lnk" class="load" href="javascript:void(0)">{msg desc="Personal"}Personal{/msg}</a></li>
+	     		<li><a id="aboutMe-lnk" class="load" href="javascript:void(0)">{msg desc="About me"}About me{/msg}</a></li>
+	     		<li><a id="favourites-lnk" class="load" href="javascript:void(0)">{msg desc="Favourites"}Favourites{/msg}</a></li>
+	     		<li><a id="security-lnk" class="load" href="javascript:void(0)">{msg desc="Security"}Security{/msg}</a></li>
+	     		<li><a id="customize-lnk" class="load" href="javascript:void(0)">{msg desc="Customize"}Customize{/msg}</a></li>
 	     	</ul>
 	     </div>
 
-</div>
+		</div>
 
         </div>
-      </div>
       
-      <div id="bodyContent" class="content-big">	
 
-
-		</div>
-
-		</div>
-      </div>
+	<div class="span9">
+      <div id="bodyContent" class="content-big"></div>
+	</div>
+</div>
 {/template}

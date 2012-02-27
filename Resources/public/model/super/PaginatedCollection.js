@@ -42,5 +42,9 @@ PaginatedCollection = Backbone.Collection.extend({
   previousPage: function() {
     this.page = this.page - 1;
     this.fetch();
+  },
+  reinit: function(){
+	this.page = 1;
+	this.fetch();  
   }
 });

@@ -24,7 +24,7 @@ var MultimediaSectionView = Backbone.View.extend({
     	
     	
     	var albumListView = new AlbumListView({collection: this.albumCollection, photoContainer: $(this.el).find("#multimenu"), newAlbumButton: newAlbumButtonView, optionsButtonContainer:$(this.el).find("#optionsButton-cont"), profileId:this.options.profileId});
-    	$(this.el).find("#folderList").html(albumListView.render().el);
+    	$(this.el).find(".well").prepend(albumListView.render().el);
 
     	/*
     	var newMessageFormView = new NewMessageFormView();

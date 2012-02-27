@@ -8,8 +8,9 @@
  */
 {template .personalInformation}
 			<div><h3>{msg desc="Personal information"}Personal information{/msg}</h3></div>
+			<br>
         	<div>
-				<table>
+				<table class="table">
 					<tr>
 						<td>First name</td><td><input type="text" id="firstName" class="span5" value="{$firstName}"></td>
 					</tr>
@@ -19,14 +20,18 @@
 					<!--<tr>
 						<td>Email name</td><td><input type="text" class="span5" value="{$email}"></td>
 					</tr>-->
+					<tr>
+						<td colspan="2">
+							<div class="alert alert-success span5" id="notif-success" style="display:none">
+				        		<a href="javascript:void(0)" id="close-success" class="close">×</a>
+				        		<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
+				      		</div>
+						</td>
+					</tr>
 				</table>
         	</div>
-        	<div class="alert-message success" id="notif-success" style="display:none">
-        		<a href="javascript:void(0)" id="close-success" class="close">×</a>
-        		<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
-      		</div>
         	<div>
-        		<button class="btn primary" id="save-but">{msg desc="Save changes"}Save changes{/msg}</button>
+        		<button class="btn btn-primary" id="save-but">{msg desc="Save changes"}Save changes{/msg}</button>
         	</div>
 {/template}
 
@@ -46,13 +51,13 @@
 			</tr>
 			<tr>
 				<td>
-				<div class="alert-message success" id="notif-success" style="display:none">
+				<div class="alert alert-success" id="notif-success" style="display:none">
         			<a href="javascript:void(0)" id="close-success" class="close">×</a>
         			<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
       			</div>
-					<div class="row show-grid">
-						<div class="span3"><button class="btn primary" id="save">{msg desc="Save"}Save{/msg}</button></div>
-						<div class="span3"><button class="btn danger" id="delete">{msg desc="Delete"}Delete{/msg}</button></div>
+					<div class="btn-toolbar">
+						<button class="btn btn-primary" id="save">{msg desc="Save"}Save{/msg}</button>
+						<button class="btn btn-danger" id="delete">{msg desc="Delete"}Delete{/msg}</button>
 					</div>
 				</td>
 			</tr>
@@ -70,7 +75,7 @@
 			<div id="aboutMeList">
 			</div>
         	<div class="row show-grid">
-    			<div class="span2"><button class="btn" id="newAboutMe-but">{msg desc="Add new"}Add new{/msg}</button></button></div>
+    			<div class="span2"><button class="btn" id="newAboutMe-but">{msg desc="Add new"}Add new{/msg}</button></div>
   			</div>
         		
 {/template}
@@ -93,7 +98,8 @@
  * @param name
  */
 {template .groupListEntry}
-	<label><span style="margin-left: 4px"><a href="javascript:void(0)" class="load">{$name}</a></span></label>
+	<a href="javascript:void(0)" class="load">{$name}</a>
+	<a style="display:none; margin-top:-35px" class="close" data-dismiss="alert">×</a>
 {/template}
 
 
@@ -111,13 +117,13 @@
     </select>
 	</div>
 	<div>
-		<button id="removeSelected-btn" class="btn danger disabled">{msg desc="Remove selectede users"}Remove selected from the group{/msg}</button>
+		<button id="removeSelected-btn" class="btn btn-danger disabled">{msg desc="Remove selectede users"}Remove selected from the group{/msg}</button>
 	</div>
 	<br>
 	<div><h4>{msg desc="Add member"}Add members to the group{/msg}<h4></div>
 	<div>{msg desc="Person name"}Person name{/msg}:{sp}<input type="text" id="personName-txt" class="span4"></div>
 	<div>
-		<button style="margin-top:4px" id="addMember-btn" class="btn success">{msg desc="Add member"}Add member to the group{/msg}</button>
+		<button style="margin-top:4px" id="addMember-btn" class="btn btn-success">{msg desc="Add member"}Add member to the group{/msg}</button>
 	</div>
 {/template}
 
@@ -127,7 +133,7 @@
  */
 {template .manageGroups}
 			<div><h3>{msg desc="Manage groups"}Manage groups{/msg}</h3></div>
-			<table>
+			<table class="table table-bordered">
 				<tr>
 					<td>
 						<h4>{msg desc="Group list"}Group list{/msg}</h4>
@@ -135,7 +141,7 @@
 				</tr>
     			<tr>
     				<td>
-						<ul id="groupList" class="inputs-list">
+						<ul id="groupList" class="nav nav-pills nav-stacked">
 						</ul>
     				</td>
     			</tr>
@@ -158,7 +164,7 @@
     			</tr>
     			<tr>
     				<td colspan="2">
-    					<div><button class="btn primary" id="createGroup-btn">{msg desc="Create group"}Create{/msg}</button></div>
+    					<div><button class="btn btn-primary" id="createGroup-btn">{msg desc="Create group"}Create{/msg}</button></div>
     				</td>
     			</tr>
     		</table>

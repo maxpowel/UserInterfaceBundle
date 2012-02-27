@@ -35,6 +35,7 @@ var AppView = Backbone.View.extend({
 			  
 			  routes: {
 			    "start":                 "loadStart",
+			    "photo/:id":					"loadPhoto",
 			    "search":                 "loadSearch",
 			    "messages":                 "loadMessages",
 			    "agenda/:year/:month":   "loadAgenda",
@@ -91,9 +92,15 @@ var AppView = Backbone.View.extend({
 			  
 			  toMultimedia: function() {
 				  this.navigate("multimedia/"+getViewer().get('id'),true);
-				  //this.activeMenuSection("profile");
+			  },
+			  
+			  loadPhoto: function(id) {
+				  app.activeMenuSection("multimedia");
+				  app.loadView(new PhotoSectionView({photoId:id}));
+				  /*
+				  this.activeMenuSection("profile");
 				  
-				  //var view = new ProfileSectionView();
+				  var view = new ProfileSectionView({profileId:id});*/
 			  },
 			  
 			  loadAgenda: function(year, month) {

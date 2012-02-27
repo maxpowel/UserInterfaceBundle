@@ -1,0 +1,48 @@
+{namespace template.section}
+
+/**
+ * Photo section
+ * @param id
+ * @param description
+ */
+{template .photo}
+<div class="row-fluid">
+	<div class="span9" id="photoContainer">
+	
+	 
+    				
+	    <div id="photo" class="carousel">
+		    <!-- Carousel items -->
+		    <div class="carousel-inner">
+		    <div class="active imgtag item">
+		    	    <img src="/photo/normal/{$id}" />
+		    	    {if $description != null }
+					    <div class="carousel-caption">
+                  			<p>{$description}</p>
+                		</div>
+					{/if} 
+
+
+		    </div>
+		    </div>
+		    <!-- Carousel nav -->
+		    <a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a>
+		    <a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a>
+	    </div>
+    
+    
+	</div>
+	
+	
+	<div class="span3">
+		<div class="well" style="padding: 8px 0;">
+    	  <ul id="tagList" class="nav nav-list">
+          		<li class="active"><a href="#"><i class="icon-tags icon-white"></i> Tags</a></li>
+          		<li><a href="#">Library</a></li>
+          		<li><a href="#">Applications</a></li>
+          		<li><a href="#">Misc</a></li>
+        	</ul> 
+        </div>
+	</div>
+</div>
+{/template}

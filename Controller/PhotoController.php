@@ -2,6 +2,8 @@
 
 namespace Wixet\UserInterfaceBundle\Controller;
 
+use Wixet\WixetBundle\Entity\MediaItemComment;
+
 use Symfony\Component\BrowserKit\Response;
 
 use Wixet\WixetBundle\Entity\MediaItem;
@@ -22,9 +24,100 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class PhotoController extends Controller
 {
      
+	
+	/**
+	* @Route("/comment", name="_photo_comment_get")
+	* @Method({"GET"})
+	*/
+	public function getCommentAction()
+	{
+		$pageSize = 10;
+		$offset = ($_GET['page']-1)*$pageSize;
+		$photoId = $_GET['photo'];
+		
+		$data = array();
+		
+		$fetcher = $this->get('wixet.fetcher');
+		$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$photoId,$profile);
+		if($mediaItem != null){
+			$comments = $mediaItem->getComments();
+			$models = array();
+			
+			foreach($comments->slice($offset, $pageSize) as $comment){
+				$profile = $comment->getProfile();
+				$models[] = array("id"=>$comment->getId(),"firstName"=>$profile->getFirstName(), "lastName"=>$profile->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'), "body"=>$comment->getBody());
+			}
+			
+			$data = array("total"=> $comments->count(),
+								  "psize"=> $pageSize,
+								  "models"=> $models);
+			
+		
+		}else{
+			$data['error'] = "Access denied";
+		}
+		
+		
+		
+
+		
+		
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	* @Route("/comment", name="_photo_comment_post")
+	* @Method({"POST"})
+	*/
+	public function postCommentAction()
+	{
+		$data = json_decode(file_get_contents('php://input'),true);
+		
+		$photoId = $data['photoId'];
+		$body = trim($data['body']);
+		
+		$data = array();
+		
+		$fetcher = $this->get('wixet.fetcher');
+		$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$photoId,$profile);
+		if($mediaItem != null && strlen($body) > 0){
+			$comment = new MediaItemComment();
+			$comment->setProfile($profile);
+			$comment->setBody($body);
+			$comment->setMediaItem($mediaItem);
+			
+			$em = $this->get('doctrine')->getEntityManager();
+			$em->persist($comment);
+			$em->flush();
+				
+		
+		}else{
+			$data['error'] = "Access denied";
+		}
+		
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	* @Route("/tag", name="_photo_tag_get")
+	* @Method({"GET"})
+	*/
+	public function getTagAction()
+	{
+		$data = array(
+		array("x"=>10,"y"=>10),
+		);
+	
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}	
+	
+		
      /**
      * @Route("/upload", name="_upload_post")
-      * @Method({"POST"})
+     * @Method({"POST"})
      */
      public function postUploadAction()
      {
@@ -85,14 +178,14 @@ class PhotoController extends Controller
      }
      
      /**
-     * @Route("/thumbnail", name="_thumbnail_get")
+     * @Route("/thumbnail/{id}", name="_thumbnail_get")
      */
-     public function getThumbnailAction()
+     public function getThumbnailAction($id)
      {
      	 
      	$fetcher = $this->get('wixet.fetcher');
      	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
-     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$id,$profile);
      	if($mediaItem != null){
      		$mim = $this->get('wixet.media_item_manager');
      		$mim->printMediaItemThumbnail($mediaItem);
@@ -124,15 +217,16 @@ class PhotoController extends Controller
      	return new \Symfony\Component\HttpFoundation\Response();
      }
      
+     
      /**
-     * @Route("/", name="_photo_index")
+     * @Route("/normal/{id}", name="_photo_index")
      */
-     public function getPhotoAction()
+     public function getPhotoAction($id)
      {
      	 
      	$fetcher = $this->get('wixet.fetcher');
      	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
-     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$id,$profile);
      	if($mediaItem != null){
      		$mim = $this->get('wixet.media_item_manager');
      		$mim->printMediaItem($mediaItem);
@@ -142,6 +236,32 @@ class PhotoController extends Controller
      	 
      	 
      	return new \Symfony\Component\HttpFoundation\Response();
+     }
+     
+     /**
+     * @Route("/{id}", name="_photo_data")
+     */
+     public function getPhotoDataAction($id)
+     {
+     
+     	$data = array();
+     	$fetcher = $this->get('wixet.fetcher');
+     	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
+     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$id,$profile);
+     	if($mediaItem != null){
+     		$data['id']=$mediaItem->getId();
+     		$data['description'] = $mediaItem->getDescription();
+     		$data['next']= $id + 1;
+     		$data['prev']= $id - 1;
+     
+     	}else{
+     		$data['error'] = "Access denied";
+     	}
+     		
+     
+     		
+     		
+     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
      }
      
 }

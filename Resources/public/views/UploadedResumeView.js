@@ -1,7 +1,7 @@
 var UploadedResumeView = Backbone.View.extend({
     
 	items: new Array(),
-    className: "popover fade below in",
+    className: "span2 popover fade bottom in",
     content: null,
     events: {
     	"click #resume-but":  "uploadStats",
@@ -46,7 +46,7 @@ var UploadedResumeView = Backbone.View.extend({
     	var button = this.options.element;
     	var pos = button.offset();
 		var pop = $(this.el);
-		$("body").append(pop)
+		$("#navbar").append(pop)
 		var height = button.height();
 		var width = button.width();
 		

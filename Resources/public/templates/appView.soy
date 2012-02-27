@@ -51,66 +51,6 @@
     
     <div id="content"></div>
 {/template}    
-    
-/**
- * Main app skeleton
- */
-{template .app2}
-<div class="topbar" id="topbar">
-      <div class="topbar-inner">
-        <div class="container">
-          <ul class="nav">
-            <li id="menu-start"><a href="#start">{msg desc="Start"}Start{/msg}</a></li>
-
-            <li id="menu-profile"><a href="#profile">{msg desc="Profile"}Profile{/msg}</a></li>
-            <li id="menu-search"><a href="#search">{msg desc="Search"}Search{/msg}</a></li>
-            <li id="menu-multimedia"><a href="#multimedia">{msg desc="Multimedia"}Multimedia{/msg}</a></li>
-            <li id="menu-messages"><a href="#messages">{msg desc="Messages"}Messages{/msg}</a></li>
-            <li id="menu-agenda"><a href="#agenda">{msg desc="Agenda"}Agenda{/msg}</a></li>
-            <li id="menu-settings"><a href="#preferences">{msg desc="Preferences"}Preferences{/msg}</a></li>
-
-          </ul>
-          <form action="" id="quick-search-form" class="pull-left">
-            <ul class="nav secondary-nav">
-            <li class="dropdown" id="quick-search-result">
-             <input id="quick-search-input" class="quick-search" class="dropdown-toggle" type="text" placeholder="{msg desc="Quick search"}Quick search{/msg}">
-             
-             <button id="uploadPhotos-but" style="margin-left:15px" class="btn btn-success btn-small"><span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span><span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}<span id="totalPercent"></span>%</span></button>
-              <ul class="dropdown-menu" style="	max-width: 230px; top: 35px;">
-                <li><a href="#">Nosequien - Estado de mierda</a></li>
-                <li><a href="#">Otra persona con un nick super super super largo</a></li>
-
-                <li class="divider"></li>
-                <li><a href="#">{msg desc="Settings"}Settings{/msg}</a></li>
-              </ul>
-            </li>
-          </ul>
-          </form>
-          <ul class="nav secondary-nav">
-            <li class="dropdown">
-
-              <a class="dropdown-toggle" href="#">Amigos</a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Nosequien - Estado de mierda</a></li>
-                <li><a href="#">Otra persona con un nick super super super largo</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Configuración</a></li>
-              </ul>
-
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-
-    <div id="content">
-      
-      
-     
-    </div>
-{/template}
-
 
 /**
  * Multimenu
@@ -121,6 +61,7 @@
 	{foreach $subsection in $subsections}
 	  <div style="display:none" id="{$subsection.subSectionId}" class="submenu">
 	  	<button style="margin-left:11px" class="btn span6 btn-{$subsection.buttonClass} back-but">{msg desc="Back"}Back{/msg}</button>
+	  	<br><br>
 	  	<div class="subSection-content"></div>
 	  </div>
 	  
@@ -186,7 +127,7 @@
  * Upload resume
  */
 {template .uploadResume}
-<div class="arrow"></div><div class="inner"><h3 class="title"><button id="resume-but" class="btn" data-toggle="toggle" >{msg desc="Check uploaded photos"}Check uploaded photos{/msg}</button><a href="javascript:void(0)" class="close">×</a></h3><div style="display:none" class="content"><p><ul class="media-grid"></ul></p></div></div>
+<div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"><button id="resume-but" class="btn" data-toggle="toggle" >{msg desc="Check uploaded photos"}Check uploaded photos{/msg}</button><a href="javascript:void(0)" class="close">×</a></h3><div style="display:none" class="popover-content"><p><ul class="nav-list nav"></ul></p></div></div>
 {/template}
 
 /**
@@ -194,7 +135,7 @@
  * @param id
  */
 {template .resumeEntry}
-          <a href="#">
-            <img alt="" src="/thumbnail/profile?id={$id}" class="thumbnail">
+          <a href="#photo/{$id}">
+            <img alt="" src="/photo/thumbnail/{$id}" class="thumbnail">
           </a>
 {/template}

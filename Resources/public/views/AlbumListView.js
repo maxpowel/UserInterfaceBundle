@@ -1,6 +1,7 @@
 var AlbumListView = Backbone.View.extend({
 	tagName:"ul",
-    className:"inputs-list",
+    className:"nav nav-list",
+    loadedAlbum: null,
     
     initialize: function() {
     	this.photoContainer = this.options.photoContainer;
@@ -19,22 +20,38 @@ var AlbumListView = Backbone.View.extend({
       	//this.menu.render();
       	//this.newMessageButtonView = new NewMessageButtonView();
     	//$(this.el).find("#newButton-cont").html(this.newMessageButtonView.render().el);
+    	  
           this.options.collection.fetch({data:{profile: this.profileId}});
     	  return this;
       },
       
       addAll: function() {
     	  var cont = $(this.el);
+    	  var self = this;
     	  cont.html("");
+    	  cont.append('<li class="nav-header">Albums</li>');
     	  var photoCon = this.photoContainer;
     	  var albumButton = this.newAlbumButton;
     	  var profileId = this.profileId;
           this.options.collection.each(function(folder,i){
         	  var view = new AlbumView({model: folder, photoContainer: photoCon, newAlbumButton: albumButton});
-        	  if(i == 0)
-        		  view.loadAlbum();
+        	  
         	  cont.append(view.render().el);
+        	  view.bind('loaded', self.albumLoaded, self);
+        	  
+        	  if(i == 0){
+        		  view.loadAlbum();
+        	  }
           });    	  
+      },
+      
+      albumLoaded: function(album){
+    	  
+    	  if(this.loadedAlbum != null)
+    		  this.loadedAlbum.removeClass("active");
+    	  
+    	  this.loadedAlbum = $(album);
+    	  this.loadedAlbum.addClass("active");
       },
       
       addOne: function(album){

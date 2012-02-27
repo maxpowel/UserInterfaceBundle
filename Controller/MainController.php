@@ -7,6 +7,7 @@ use Wixet\WixetBundle\Entity\UserProfileExtension;
 
 use Wixet\WixetBundle\Entity\ProfileUpdate;
 use Wixet\WixetBundle\Entity\ProfileUpdateComment;
+use Wixet\WixetBundle\Entity\ProfileGroup;
 
 use Symfony\Component\BrowserKit\Response;
 
@@ -168,7 +169,7 @@ class MainController extends Controller
     */
     public function deleteProfileExtensionAction()
     {
-    	//Profile extensions are public
+    	//Profile extensions are public, because of that Wixet fetcher is not used
     	$data = array();
     
     	$em = $this->get('doctrine')->getEntityManager();
@@ -185,6 +186,28 @@ class MainController extends Controller
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     
+    /**
+    * @Route("/profile/extension", name="_profile_extension_put")
+    * @Method({"PUT"})
+    */
+    public function putProfileExtensionAction()
+    {
+    	$data = json_decode(file_get_contents('php://input'),true);
+    
+    	$em = $this->get('doctrine')->getEntityManager();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$pe = $em->getRepository('Wixet\WixetBundle\Entity\UserProfileExtension')->find($data['id']);
+    
+    	if($profile->getId() == $pe->getProfile()->getId()){
+    		$pe->setBody($data['body']);
+    		$pe->setTitle($data['title']);
+    		$em->flush();
+    	}
+    
+    
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
     	
     /**
      * @Route("/", name="_index")
@@ -362,15 +385,67 @@ class MainController extends Controller
     {
     	$data = array();
     	
-
-
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$em = $this->get('doctrine')->getEntityManager();
+    	$groups = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->findBy(array('profile' => $profile->getId()));
+    	
+    	
     	$models = array();
-    		$models[] = array("name"=>"Amigos","id"=>1);
-    		$models[] = array("name"=>"Feos","id"=>2);
-    		$models[] = array("name"=>"Otros","id"=>3);
-    		
+    	foreach($groups as $group){
+    		$models[] = array("name"=>$group->getName(),"id"=>$group->getId());
+    	}
     	
     	$data = $models;
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+    
+    /**
+    * @Route("/group", name="_group_post")
+    * @Method({"POST"})
+    */
+    public function postGroupAction()
+    {
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	$pe = new ProfileGroup();
+    	
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$pe->setProfile($profile);
+    	$pe->setName($data['name']);
+    	
+    	
+    	$em = $this->get('doctrine')->getEntityManager();
+    	 
+    	$em->persist($pe);
+    	 
+    	$em->flush();
+    	 
+    	$data['id'] = $pe->getId();
+    	 
+    
+    
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    
+    }
+    
+    /**
+    * @Route("/group/{id}", name="_group_delete")
+    * @Method({"DELETE"})
+    */
+    public function deleteGroupAction($id)
+    {
+    	$data = array();
+    
+    	$em = $this->get('doctrine')->getEntityManager();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$pe = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($id);
+    
+    	if($profile->getId() == $pe->getProfile()->getId()){
+    		$em->remove($pe);
+    		$em->flush();
+    	}
+    
+    
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     

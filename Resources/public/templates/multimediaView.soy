@@ -8,7 +8,7 @@
 			<div><h3 id="folderName">{$folder}</h3></div>
         	<div align="right" class="breadcrumb">
 
-				<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check photo"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All photos"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn error small disabled" id="remove-btn">{msg desc="Remove checked photos"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn info small disabled" id="move-btn">{msg desc="Move checked photos"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
+				<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check photo"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All photos"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">{msg desc="Remove checked photos"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">{msg desc="Move checked photos"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
 	
 				<div style="width:200px;float:right;">
 				{msg desc="page"}Page{/msg} <span id="start-page"></span> {msg desc="n of n pages"}of{/msg} <span id="last-page"></span>
@@ -25,7 +25,7 @@
         
             
         	<div>
-        		<ul class="media-grid" id="photo-list">
+        		<ul class="thumbnails" id="photo-list">
         		</ul>
         	</div>
 			
@@ -36,45 +36,12 @@
  * @param id
  */
 {template .photo}
-<a href="#photo/{$id}">
-          <img alt="" src="/photo/thumbnail?id={$id}" class="thumbnail">
+<a class="thumbnail" href="#photo/{$id}">
+          <img alt="" src="/photo/thumbnail/{$id}">
         </a>
-        <span class="span" style="margin-left:-20px; margin-top: 5px"><input type="checkbox" class="ckbox"></span>
+        <span class="span" style="margin-left:0px;"><input type="checkbox" class="ckbox"></span>
 {/template}
 
-/**
- * New Message
- * @param to
- */
-{template .newMessage}
-	{if $to == null}
-	<h3>{msg desc="New message title"}New message{/msg}</h3>
-	{/if}
-	<table>
-	  <tbody>
-		<tr>
-		{if $to == null}
-			<td>{msg desc="Send to message receiver"}Send to{/msg}</td><td><input type="text" id="to" class="xlarge"/></td>
-		{else}
-			<td>{msg desc="Send to message receiver"}Send to{/msg}</td><td>{$to.name}<input type="hidden" id="to" class="xlarge"/></td>
-		{/if}
-	 	</tr>
-		<tr>
-			<td>{msg desc="Message subject"}Subject{/msg}</td><td><input type="text" class="xlarge" id="subject"/></td>
-	 	</tr>
-		<tr>
-			<td>{msg desc="Message body"}Body{/msg}</td><td><textarea class="xlarge" id="body"></textarea></td>
-	 	</tr>
-       <tbody>
-	</table>
-
-	<div class="row show-grid">
-    	<div class="span2"><button class="btn" id="attachFile-btn">{msg desc="Attach file"}Attach file{/msg}</button></div>
-    	<div class="span2"><button class="btn primary" id="attachFile-btn">{msg desc="Send message"}Send{/msg}</button></div>
-  	</div>
-	
-	
-{/template}
 
 /**
  * Folder options
@@ -92,7 +59,7 @@
 	
 	<div class="row show-grid">
     	<div class="span"><button class="btn" id="save-folder-btn">{msg desc="Save changes"}Save changes{/msg}</button></div>
-    	<div class="span"><button id="remove-folder-btn" class="btn error">{msg desc="Remove album"}Remove album{/msg}</button></div>
+    	<div class="span"><button id="remove-folder-btn" class="btn btn-error">{msg desc="Remove album"}Remove album{/msg}</button></div>
   	</div>
 	
 	
@@ -112,7 +79,7 @@
 	</table>
 	
 	<div class="row show-grid">
-    	<div class="span"><button class="btn primary" id="save-folder-btn">{msg desc="Create"}Create{/msg}</button></div>
+    	<div class="span"><button class="btn btn-primary primary" id="save-folder-btn">{msg desc="Create"}Create{/msg}</button></div>
   	</div>
 {/template} 
 
@@ -129,39 +96,37 @@
               {msg desc="Are you really sure you want to delete the album?"}Are you really sure you want to delete the album {$folder}?{/msg}
             </div>
             <div class="modal-footer">
-			  <button class="btn remove secondary">{msg desc="Remove"}Remove{/msg}</button>
-              <button class="btn cancel primary">{msg desc="Cancelt"}Cancel{/msg}</button>
+			  <button class="btn remove btn-secondary">{msg desc="Remove"}Remove{/msg}</button>
+              <button class="btn cancel btn-primary">{msg desc="Cancelt"}Cancel{/msg}</button>
             </div>
 </div>
 {/template} 
 
 /**
- * Message folder
+ * Album
  * @param name
  */
-{template .messageFolder}
-                  <label>
-                    <span style="margin-left: 4px"><a href="javascript:void(0)" class="load">{$name}</a></span>
-                  </label>
+{template .album}
+                    <a href="javascript:void(0)" class="load">{$name}</a>
 {/template} 
 
 /**
  * New message button
  */
 {template .newMessageButton}
-<button id="new-message-btn" class="btn success">{msg desc="New message"}New message{/msg}</button>
+<button id="new-message-btn" class="btn btn-success">{msg desc="New message"}New message{/msg}</button>
 {/template}
 
 /**
  * Folder options button
  */
 {template .albumOptionsButton}
-<button class="btn primary small" id="options-btn">{msg desc="album options"}Options{/msg}</button>
+<button class="btn btn-primary primary btn-small" id="options-btn">{msg desc="album options"}Options{/msg}</button>
 {/template}
 
 /**
  * New folder button
  */
 {template .newAlbumButton}
-<button id="new-folder-btn" class="btn info">{msg desc="New album"}New album{/msg}</button>
+<button id="new-folder-btn" class="btn btn-info">{msg desc="New album"}New album{/msg}</button>
 {/template}

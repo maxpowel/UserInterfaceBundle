@@ -10,7 +10,6 @@ var ManageGroupsView = Backbone.View.extend({
     	this.groupCollection = new GroupList();
         this.groupCollection.bind('add',   this.addOne, this);
         this.groupCollection.bind('reset', this.addAll, this);
-        this.groupCollection.bind('remove', this.removeOne, this);
       },
       
       render: function(){
@@ -31,20 +30,14 @@ var ManageGroupsView = Backbone.View.extend({
       },
       
       addOne: function(group){
-    	  //var view = template.preferencesView.groupListEntry({name:group.get("name")});
-    	  
-    	 /* $(view).find("a").click(function(){
-    		  this.changeTo("edit-sub", new GroupEdit());
-    	  });
-    	  */
-    	  //this.groupContainer.append(view);
+    	  var view = new GroupListEntryView({model: group, call: this.changeTo});
+    	  this.groupContainer.append(view.render().el);
+    	  //TODO dont know why the "close" content in changed
+
     	  
     	  
       },
       
-      removeOne: function(folder) {
-    	  this.addAll();
-      },
       
       createGroup: function(){
     	  var group = new Group();

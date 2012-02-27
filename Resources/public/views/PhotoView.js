@@ -9,13 +9,13 @@ var PhotoView = Backbone.View.extend({
 	},
 	
     initialize: function() {
-    	this.render();
+    	//this.render();
     },
     
       
     render: function() {
     	$(this.el).html(template.multimediaView.photo( this.model.toJSON()) );
-    	$(this.el).css("padding-top","65px");
+    	//$(this.el).css("padding-top","65px");
       return this;
     },
     

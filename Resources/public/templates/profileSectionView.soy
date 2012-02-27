@@ -3,7 +3,8 @@
  * Profile section
  */
 {template .profile}
-<div class="sidebar">
+<div class="row-fluid">
+	<div class="span3">
         <div class="well">
 			<div class="media-grid">
 			  <a href="#">
@@ -21,22 +22,10 @@
 
         </div>
       </div>
-      
-       <div class="sidebar-right">
-        <div class="well">
-          <h5>{msg desc="Last photos"}Last photos{/msg}</h5>
-          <div id="lastPhotos-cont">
-          
-          </div>
-          
-          <h5>{msg desc="Friends"}Friends{/msg}</h5>
-          <div id="friends-cont">
-          
-          </div>
-          
-        </div>
-      </div>
-      
+    
+    
+    
+    <div class="span6">
       <div class="content" id="newness">
         
         <div>
@@ -44,7 +33,7 @@
 		</div>
 
         	<div align="center">
-            	<ul class="pills" style="width: 400px; height:50px">
+            	<ul class="nav nav-pills" style="width: 400px; height:50px">
 			    	<li class="active"><a id="newness-pill" href="javascript:void(0)">{msg desc="Newness in profile"}Newness{/msg}</a></li>
 			    	<li><a id="aboutMe-pill" href="javascript:void(0)">{msg desc="About me in profile"}About me{/msg}</a></li>
 			    	<li><a id="sendMessage-pill" href="javascript:void(0)">{msg desc="Send message in profile"}Send message{/msg}</a></li>
@@ -86,6 +75,27 @@
 		<!--about me end-->
 		</div>
       </div>
+      
+    
+    
+    
+    
+	<div class="span3">
+        <div class="well">
+          <h5>{msg desc="Last photos"}Last photos{/msg}</h5>
+          <div id="lastPhotos-cont">
+          
+          </div>
+          
+          <h5>{msg desc="Friends"}Friends{/msg}</h5>
+          <div id="friends-cont">
+          
+          </div>
+          
+        </div>
+      </div>
+      
+ </div>     
 {/template}
 
 

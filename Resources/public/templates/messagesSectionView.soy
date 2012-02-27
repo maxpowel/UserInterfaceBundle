@@ -3,28 +3,26 @@
 /**
  * Private messages section
  */
-{template .multimedia}
-<div class="sidebar">
+{template .messages}
+<div class="row-fluid">
+	<div class="span3">
         <div class="well">
-		  <h5>{msg desc="Albums"}Albums{/msg}</h5>
+		  <h5>{msg desc="Messages Folders"}Folders{/msg}</h5>
 		  
-	      <div id="folderList">
+	        <div id="folderList">
                 
-         </div>
-         <br><br>
-<br><br>
-<div id="newFolder-cont">
-
-</div>
+            </div>
+            <br><br>
+			<div id="newButton-cont"></div>
+			<br><br>
+			<div id="newFolder-cont"></div>
 
         </div>
-      </div>
+     </div>
       
-      <div id="multimenu" class="content-big">	
+	<div class="span9">
+      <div id="multimenu" class="content-big"></div>
 
-
-		</div>
-
-		</div>
-      </div>
+	</div>
+</div>
 {/template}

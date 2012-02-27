@@ -8,7 +8,7 @@
 			<div><h3 id="folderName">{$folder}</h3></div>
         	<div align="right" class="breadcrumb">
 
-				<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check message"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All messages"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn error small disabled" id="remove-btn">{msg desc="Remove checked messages"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn info small disabled" id="move-btn">{msg desc="Move checked messages"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
+				<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check message"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All messages"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">{msg desc="Remove checked messages"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">{msg desc="Move checked messages"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
 	
 				<div style="width:200px;float:right;">
 				{msg desc="page"}Page{/msg} <span id="start-page"></span> {msg desc="n of n pages"}of{/msg} <span id="last-page"></span>
@@ -25,7 +25,7 @@
         
             
         	<div id="message-list">
-        		<table class="zebra-striped">
+        		<table class="table table-bordered table-striped">
         			<tbody id="message-table">
         			</tboby>
         		
@@ -43,7 +43,7 @@
  */
 {template .message}
 <td>
-			<div style="cursor:pointer;cursor:hand" id="message">
+			<div style="cursor:pointer;cursor:hand" id="message" class="row-fluid">
 				<span class="span"><input type="checkbox" class="ckbox"></span>
 				<span class="span3">
 					{if $isRead}
@@ -75,13 +75,13 @@
  */
 {template .conversation}
 <div>
-<textarea id="body" class="span12" style="height: 50px">
+<textarea id="body" class="span9" style="height: 50px">
 </textarea>
 <br><br>
-<button class="btn primary" id="send-but">{msg desc="Send message"}Send{/msg}</button>
+<button class="btn btn-primary" id="send-but">{msg desc="Send message"}Send{/msg}</button>
 <br><br>
 </div>
-<table width="100%" class="zebra-striped" style="border:0"><tbody id="message-list"></table>
+<table width="100%" class="table table-bordered table-striped" style="border:0"><tbody id="message-list"></table>
 {/template}
 
 
@@ -104,6 +104,8 @@
  * @param to
  */
 {template .newMessage}
+    <br>
+    <br>
 	{if $to == null}
 	<h3>{msg desc="New message title"}New message{/msg}</h3>
 	{/if}
@@ -112,7 +114,7 @@
         <p>{msg desc="Message sent"}Message succesfully sent{/msg}</p>
     </div>
       
-	<table>
+	<table class="table table-bordered">
 	  <tbody>
 		<tr>
 		{if $to == null}
@@ -132,7 +134,7 @@
 
 	<div class="row show-grid">
     	<div class="span2"><button class="btn" id="attachFile-btn">{msg desc="Attach file"}Attach file{/msg}</button></div>
-    	<div class="span2"><button class="btn primary" id="sendMessage-btn">{msg desc="Send message"}Send{/msg}</button></div>
+    	<div class="span2"><button class="btn btn-primary" id="sendMessage-btn">{msg desc="Send message"}Send{/msg}</button></div>
   	</div>
 	
 	
@@ -143,8 +145,10 @@
  * @param name
  */
 {template .folderOptions}
+	<br>
+	<br>
 	<h3>{msg desc="Folder form title"}Options{/msg}</h3>
-	<table>
+	<table class="table table-bordered">
 	  <tbody>
 		<tr>
 			<td>{msg desc="Folder name"}Folder name{/msg}</td><td><input value="{$name}" type="text" id="folderName-input" class="xlarge"/></td>
@@ -154,7 +158,7 @@
 	
 	<div class="row show-grid">
     	<div class="span"><button class="btn" id="save-folder-btn">{msg desc="Save changes"}Save changes{/msg}</button></div>
-    	<div class="span"><button id="remove-folder-btn" class="btn error">{msg desc="Remove folder"}Remove folder{/msg}</button></div>
+    	<div class="span"><button id="remove-folder-btn" class="btn btn-error">{msg desc="Remove folder"}Remove folder{/msg}</button></div>
   	</div>
 	
 	
@@ -164,8 +168,10 @@
  * Create a new folder
  */
 {template .newFolder}
+    <br>
+    <br>
 	<h3>{msg desc="New folder"}New folder{/msg}</h3>
-	<table>
+	<table class="table table-bordered">
 	  <tbody>
 		<tr>
 			<td>{msg desc="Folder name"}Folder name{/msg}</td><td><input type="text" id="folderName-input" class="xlarge"/></td>
@@ -174,7 +180,7 @@
 	</table>
 	
 	<div class="row show-grid">
-    	<div class="span"><button class="btn primary" id="save-folder-btn">{msg desc="Create"}Create{/msg}</button></div>
+    	<div class="span"><button class="btn btn-primary" id="save-folder-btn">{msg desc="Create"}Create{/msg}</button></div>
   	</div>
 {/template} 
 
@@ -191,8 +197,8 @@
               {msg desc="Are you really sure you want to delete the folder?"}Are you really sure you want to delete the folder {$folder}?{/msg}
             </div>
             <div class="modal-footer">
-			  <button class="btn remove secondary">{msg desc="Remove"}Remove{/msg}</button>
-              <button class="btn cancel primary">{msg desc="Cancelt"}Cancel{/msg}</button>
+			  <button class="btn remove btn-secondary">{msg desc="Remove"}Remove{/msg}</button>
+              <button class="btn cancel btn-primary">{msg desc="Cancelt"}Cancel{/msg}</button>
             </div>
 </div>
 {/template} 
@@ -211,19 +217,19 @@
  * New message button
  */
 {template .newMessageButton}
-<button id="new-message-btn" class="btn success">{msg desc="New message"}New message{/msg}</button>
+<button id="new-message-btn" class="btn btn-success">{msg desc="New message"}New message{/msg}</button>
 {/template}
 
 /**
  * Folder options button
  */
 {template .folderOptionsButton}
-<button class="btn primary small" id="options-btn">{msg desc="message folder options"}Options{/msg}</button>
+<button class="btn btn-primary btn-small" id="options-btn">{msg desc="message folder options"}Options{/msg}</button>
 {/template}
 
 /**
  * New folder button
  */
 {template .newFolderButton}
-<button id="new-folder-btn" class="btn info">{msg desc="New folder"}New folder{/msg}</button>
+<button id="new-folder-btn" class="btn btn-info">{msg desc="New folder"}New folder{/msg}</button>
 {/template}

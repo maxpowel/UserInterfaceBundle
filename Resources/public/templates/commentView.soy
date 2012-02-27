@@ -1,0 +1,37 @@
+{namespace template.commentView}
+
+/**
+ * Comment list
+ */
+{template .commentList}
+            
+            <div class="well">
+				<textarea class="span9" id="comment-text"></textarea>
+				<button class="btn btn-success" id="comment-send">{msg desc="Send photo comment"}Comment{/msg}</button>
+			</div>
+            
+        	<ul id="comment-list" class="nav nav-list">
+        	</ul>
+
+			<div class="pagination" style="width:205px">
+				<span id="page-number"></span>
+				<ul>
+					<li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← {msg desc="Previous page"}Previous{/msg}</a></li>
+					<li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">{msg desc="Next page"}Next page{/msg} →</a></li>
+				</ul>
+			</div>
+			
+{/template}
+
+/**
+ * Comment
+ * @param authorName
+ * @param date 
+ * @param body
+ */
+{template .comment}
+
+	<div><a href="#">{$authorName}</a> - {$date}</div>
+	<div>{$body}</div>
+	<hr>
+{/template}
