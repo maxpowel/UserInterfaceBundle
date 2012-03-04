@@ -41,6 +41,27 @@ class AutocompleteController extends Controller
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
 	
+	/**
+	* @Route("/contacts", name="_autocomplete_contacts")
+	*/
+	public function getContactAction()
+	{
+	
+		/*$pmc = $this->get('security.context')->getToken()->getUser()->getProfile()->getAlbums();*/
+		/*$ws = $this->get('wixet.fetcher');
+			$lista = $ws->getCollection(null,$this->get('security.context')->getToken()->getUser()->getProfile(),"Wixet\WixetBundle\Entity\Album");
+			
+		$pmc = $lista->get(0,100);//Get all
+		$data = array();
+		foreach ($pmc as $collection){
+		$data[] = array("id"=>$collection->getId(), "name"=> $collection->getTitle());
+		}*/
+		//$data[]=array("id"=>0, "name"=>"MAIN");
+		$data = array(array("id"=>1,"value"=>"Pisol"), array("id"=>2,"value"=>"Villa"));
+			
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
 	
     
 

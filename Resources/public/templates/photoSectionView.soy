@@ -14,8 +14,8 @@
 	    <div id="photo" class="carousel">
 		    <!-- Carousel items -->
 		    <div class="carousel-inner">
-		    <div class="active imgtag item">
-		    	    <img src="/photo/normal/{$id}" />
+		    <div class="active imgtag item" align="center">
+		    	    <img class="photoMain" src="/photo/normal/{$id}" />
 		    	    {if $description != null }
 					    <div class="carousel-caption">
                   			<p>{$description}</p>
@@ -33,14 +33,10 @@
     
 	</div>
 	
-	
 	<div class="span3">
 		<div class="well" style="padding: 8px 0;">
     	  <ul id="tagList" class="nav nav-list">
-          		<li class="active"><a href="#"><i class="icon-tags icon-white"></i> Tags</a></li>
-          		<li><a href="#">Library</a></li>
-          		<li><a href="#">Applications</a></li>
-          		<li><a href="#">Misc</a></li>
+          		<li class="active"><a id="tagDesc" href="#" rel="tooltip" title="{msg desc="Add tag description"}Click the photo to add tags{/msg}"><i class="icon-tags icon-white"></i> Tags</a></li>
         	</ul> 
         </div>
 	</div>

@@ -101,18 +101,30 @@ class PhotoController extends Controller
 	}
 	
 	/**
-	* @Route("/tag", name="_photo_tag_get")
-	* @Method({"GET"})
+	* @Route("/tag", name="_photo_tag_post")
+	* @Method({"POST"})
 	*/
-	public function getTagAction()
+	public function postTagAction()
 	{
-		$data = array(
-		array("x"=>10,"y"=>10),
-		);
+		
+		$data = json_decode(file_get_contents('php://input'),true);
+		$data['id'] = rand(0, 100);
 	
 	
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}	
+	
+	/**
+	* @Route("/tag/{id}", name="_photo_tag_delete")
+	* @Method({"DELETE"})
+	*/
+	public function deleteTagAction($id)
+	{
+		$data = array();
+	
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
 	
 		
      /**
@@ -253,6 +265,11 @@ class PhotoController extends Controller
      		$data['description'] = $mediaItem->getDescription();
      		$data['next']= $id + 1;
      		$data['prev']= $id - 1;
+     		
+     		$tags = array();
+     		$tags[] = array("id"=>45, "value"=>"Alvaro", "left"=>50, "top"=>100);
+     		$tags[] = array("id"=>60, "value"=>"Powel", "left"=>0, "top"=>130);
+     		$data['tags'] = $tags;
      
      	}else{
      		$data['error'] = "Access denied";

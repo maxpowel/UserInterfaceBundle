@@ -19,13 +19,7 @@ var PhotoSectionView = Backbone.View.extend({
     
     initialize: function() {
     	this.photoId = this.options.photoId;
-    	//Lista de etiquetas
-    },
-    
-    initTag: function(e){
-    	
-        
-        
+
     },
     
     render: function(){
@@ -34,14 +28,21 @@ var PhotoSectionView = Backbone.View.extend({
     		$(self.el).html(template.section.photo( data ));
     	
     		var commentList = new CommentListView({photoId: data.id});
+
     	
     		self.nextPhoto = data.next;
     		self.prevPhoto = data.prev;
     		$(self.el).find("#photoContainer").append(commentList.render().el);
+    		
+    		var photo = $(self.el).find("#photoContainer").find("img");
+    		var photoTagger = new PhotoTagListView({tags: data.tags,photo: photo, el: $(self.el).find("#tagList")});
+    		photoTagger.render();
+        	
+
+        	$(self.el).find("#tagDesc").tooltip({placement: "bottom"});
+        	
     	});
     	
-    	
-
     	    
 		return this;
     }

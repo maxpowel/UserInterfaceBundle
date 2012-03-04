@@ -36,7 +36,7 @@ var UploadedResumeView = Backbone.View.extend({
     	
     	$(this.el).html(template.appView.uploadResume( ));
     	$(this.el).css({display: "block"})
-    	this.content = $(this.el).find(".content");
+    	this.content = $(this.el).find(".popover-content");
     	var list = this.content.find("ul");
     	while((item = this.items.shift())){
     		var view = new PhotoUploadResumeEntryView({itemId: item});

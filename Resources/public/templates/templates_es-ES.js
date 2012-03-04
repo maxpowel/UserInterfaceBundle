@@ -441,7 +441,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item"><img src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" />', (opt_data.description != null) ? '<div class="carousel-caption"><p>' + soy.$$escapeHtml(opt_data.description) + '</p></div>' : '', '</div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a href="#"><i class="icon-tags icon-white"></i> Tags</a></li><li><a href="#">Library</a></li><li><a href="#">Applications</a></li><li><a href="#">Misc</a></li></ul></div></div></div>');
+  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item" align="center"><img class="photoMain" src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" />', (opt_data.description != null) ? '<div class="carousel-caption"><p>' + soy.$$escapeHtml(opt_data.description) + '</p></div>' : '', '</div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a id="tagDesc" href="#" rel="tooltip" title="Click the photo to add tags"><i class="icon-tags icon-white"></i> Tags</a></li></ul></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -547,11 +547,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList899 = opt_data.favourites;
-  var favouriteListLen899 = favouriteList899.length;
-  for (var favouriteIndex899 = 0; favouriteIndex899 < favouriteListLen899; favouriteIndex899++) {
-    var favouriteData899 = favouriteList899[favouriteIndex899];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData899.url), '">', soy.$$escapeHtml(favouriteData899.title), '</li>');
+  var favouriteList902 = opt_data.favourites;
+  var favouriteListLen902 = favouriteList902.length;
+  for (var favouriteIndex902 = 0; favouriteIndex902 < favouriteListLen902; favouriteIndex902++) {
+    var favouriteData902 = favouriteList902[favouriteIndex902];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData902.url), '">', soy.$$escapeHtml(favouriteData902.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -612,21 +612,21 @@ template.searchView.searchResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
   if (opt_data.things != null) {
     output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList984 = opt_data.things;
-    var thingListLen984 = thingList984.length;
-    for (var thingIndex984 = 0; thingIndex984 < thingListLen984; thingIndex984++) {
-      var thingData984 = thingList984[thingIndex984];
-      output.append('<li>', soy.$$escapeHtml(thingData984.name), '</li>');
+    var thingList987 = opt_data.things;
+    var thingListLen987 = thingList987.length;
+    for (var thingIndex987 = 0; thingIndex987 < thingListLen987; thingIndex987++) {
+      var thingData987 = thingList987[thingIndex987];
+      output.append('<li>', soy.$$escapeHtml(thingData987.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList996 = opt_data.friends;
-    var friendListLen996 = friendList996.length;
-    for (var friendIndex996 = 0; friendIndex996 < friendListLen996; friendIndex996++) {
-      var friendData996 = friendList996[friendIndex996];
-      output.append('<li>', soy.$$escapeHtml(friendData996.name), '</li>');
+    var friendList999 = opt_data.friends;
+    var friendListLen999 = friendList999.length;
+    for (var friendIndex999 = 0; friendIndex999 < friendListLen999; friendIndex999++) {
+      var friendData999 = friendList999[friendIndex999];
+      output.append('<li>', soy.$$escapeHtml(friendData999.name), '</li>');
     }
     output.append('</ul>');
   }
