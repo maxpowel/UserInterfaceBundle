@@ -48,3 +48,15 @@
 		  {/foreach}
           </ul>
 {/template}
+
+
+/**
+ * About me
+ * @param list
+ */
+{template .aboutMe}
+            {foreach $element in $list}
+  				<div class="well"><h3>{$element.title}</h3></div>
+	      		<p>{$element.body}</p>
+			{/foreach}
+{/template}

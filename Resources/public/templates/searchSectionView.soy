@@ -4,52 +4,100 @@
  * Search section
  */
 {template .search}
-<div class="sidebar">
+<div class="row-fluid">
+
+	<div class="span3">
         <div class="well">
-        <input type="text" id="query" class="span3" placeholder="Search..."/>
-        <br><br>
-        <button class="btn primary" id="but-search">Search</button>
-        <br><br>
-         
+        	<h3>{msg desc="Search options"}Search filter{/msg}</3>
+        	<br><br>
+        	<form class="form-horizontal">
+        		<div class="control-group">
+        			<input type="text" id="query" class="input-medium" placeholder="{msg desc="Person name"}Person name{/msg}"/>
+        		</div>
+        		
+        		<div class="control-group">
+        			<input type="text" id="query" class="input-medium" placeholder="{msg desc="City"}City{/msg}"/>
+        		</div>
+        		
+        		<div class="control-group">
+        			<input type="text" id="query" class="input-medium" placeholder="{msg desc="Place"}Place{/msg}"/>
+        		</div>
+        		
+        		<div class="control-group">
+        			<input type="text" id="query" class="input-medium" placeholder="{msg desc="Interest"}Interest{/msg}"/>
+        		</div>
+        		
+        		<div class="control-group">
+        			<label class="checkbox">
+                		<input type="checkbox" value="random" id="optionsCheckbox">
+                		{msg desc="Interest in common"}Interests in common{/msg}
+                	</label>
+        		</div>
+        		
+        		
+              
+              
+        	</form>
+        </div>
+    </div>
+      
+      
+    <div class="span9" id="search-result">
+      	<form style="margin-top:10px" class="form-search" id="initSearchContainer">
+      		<input type="text" class="span7 search-query" id="search-query" placeholder="{msg desc="What are you looking for"}What are you looking for?{/msg}">
+      		{sp}
+      		<button class="btn btn-primary" id="but-search">Search <i class="icon-search icon-white"></i></button>
+      	</form>
+		<div id="resultContainer" style="display:none">
+			    <ul class="nav nav-tabs">
+    				<li class="active">
+    					<a href="#">All</a>
+    				</li>
+    				<li><a href="#">People</a></li>
+    				<li><a href="#">Places</a></li>
+    				<li><a href="#">Groups</a></li>
+    			</ul>
+    			
+    			<div id="results">
+    			<!--<div style="min-height: 48px">
+					<div style="float:left; position:relative">
+						<a href="#as">
+							<img alt="" src="" class="thumbnail">
+						</a>
+					</div>
+					<div style="margin-left:60px">
+					<div><a href="#">Alvaro Garcia</a> <button class="btn btn-success btn-small" id="addGroup">Add to group</button> </div>
+				
+
+				 	<div>{msg desc="City"}City{/msg}: Ciudad</div>
+				
+				
+					<div><strong>{msg desc="Interests"}Interests{/msg}</strong></div>
+				  	<ul>
+				  		<li>Cosa</li>
+				  		<li>Bbbb</li>
+				  	</ul>
+				
+					<div><pre><div style="padding:10px">Otros</div></pre></div>
+					--!>
+				</div>
+				
+				<div>
+				{msg desc="page"}Page{/msg} <span id="start-page"></span> {msg desc="n of n pages"}of{/msg} <span id="last-page"></span>
+				</div>
+				<div class="pagination" style="width:205px">
+					<ul>
+						<li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← {msg desc="Previous page"}Previous{/msg}</a></li>
+						<li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">{msg desc="Next page"}Next page{/msg} →</a></li>
+					</ul>
+				</div>
+				
+			</div>
 			
-	      <h5>{msg desc="Search section city"}City{/msg}</h5>
-          <input type="text" id="city" class="span3" placeholder="{msg desc="Suggestion in search box"}City, town or villate{/msg}"/>
-          <div id="city-container" style="margin:10px" />  
-          <br><br>
-          <h5>{msg desc="Start section agenda"}Things in common{/msg}</h5>
-          <span class="help-block">
-                Study places, hobbies, etc
-          </span>
-          <input type="text" id="thing" class="span3"/>
-           <div id="thing-container" style="margin:10px" />
-           <br><br>
-		  <h5>{msg desc="Start section age"}Aproximately age{/msg}</h5>
-          
-          <input type="text" style="width:23px" maxlength="3" id="years"/> years 
-        </div>
-      </div>
+</div>
+		</div>
+    </div>
       
-       <div class="sidebar-right">
-        <div class="well">
-          <h5>{msg desc="Search section city"}Is friend of...{/msg}</h5>
-          <input type="text" class="span3" id="friend" placeholder="Friend name"/>
-          <div id="friend-container" style="margin:10px" />  
-          <br><br>
-          
-          <h5>{msg desc="Search section city"}About me{/msg}</h5>
-          <span class="help-block">
-                Some extra information about what are you looking for
-          </span>
-          <textarea id="other" class="span3" rows="7">
-          </textarea>  
-          <br><br>
-          
-        </div>
-      </div>
-      
-      <div class="content" id="search-result">
-		<table class="hero-unit-simple">
-        <tr><td><h3>{msg desc="Search explain"}Please fill any field{/msg}</h3></td></tr>
-        </table>
-      </div>
+
+</div>
 {/template}

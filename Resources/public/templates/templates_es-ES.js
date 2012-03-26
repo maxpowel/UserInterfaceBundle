@@ -385,7 +385,7 @@ template.multimediaView.albumOptionsButton = function(opt_data, opt_sb) {
 
 template.multimediaView.newAlbumButton = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<button id="new-folder-btn" class="btn btn-info">New album</button>');
+  output.append('<button style="margin-left:10px" id="new-folder-btn" class="btn btn-info">New album</button>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -557,6 +557,18 @@ template.profileView.favourites = function(opt_data, opt_sb) {
   return opt_sb ? '' : output.toString();
 };
 
+
+template.profileView.aboutMe = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  var elementList911 = opt_data.list;
+  var elementListLen911 = elementList911.length;
+  for (var elementIndex911 = 0; elementIndex911 < elementListLen911; elementIndex911++) {
+    var elementData911 = elementList911[elementIndex911];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData911.title), '</h3></div><p>', soy.$$escapeHtml(elementData911.body), '</p>');
+  }
+  return opt_sb ? '' : output.toString();
+};
+
 ;
 // This file was automatically generated from searchSectionView.soy.
 // Please don't edit this file by hand.
@@ -567,7 +579,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.search = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="sidebar"><div class="well"><input type="text" id="query" class="span3" placeholder="Search..."/><br><br><button class="btn primary" id="but-search">Search</button><br><br><h5>City</h5><input type="text" id="city" class="span3" placeholder="City, town or villate"/><div id="city-container" style="margin:10px" /><br><br><h5>Things in common</h5><span class="help-block">Study places, hobbies, etc</span><input type="text" id="thing" class="span3"/><div id="thing-container" style="margin:10px" /><br><br><h5>Aproximately age</h5><input type="text" style="width:23px" maxlength="3" id="years"/> years</div></div><div class="sidebar-right"><div class="well"><h5>Is friend of...</h5><input type="text" class="span3" id="friend" placeholder="Friend name"/><div id="friend-container" style="margin:10px" /><br><br><h5>About me</h5><span class="help-block">Some extra information about what are you looking for</span><textarea id="other" class="span3" rows="7"></textarea><br><br></div></div><div class="content" id="search-result"><table class="hero-unit-simple"><tr><td><h3>Please fill any field</h3></td></tr></table></div>');
+  output.append('<div class="row-fluid"><div class="span3"><div class="well"><h3>Search filter</3><br><br><form class="form-horizontal"><div class="control-group"><input type="text" id="query" class="input-medium" placeholder="Person name"/></div><div class="control-group"><input type="text" id="query" class="input-medium" placeholder="City"/></div><div class="control-group"><input type="text" id="query" class="input-medium" placeholder="Place"/></div><div class="control-group"><input type="text" id="query" class="input-medium" placeholder="Interest"/></div><div class="control-group"><label class="checkbox"><input type="checkbox" value="random" id="optionsCheckbox">Interests in common</label></div></form></div></div><div class="span9" id="search-result"><form style="margin-top:10px" class="form-search" id="initSearchContainer"><input type="text" class="span7 search-query" id="search-query" placeholder="What are you looking for?"> <button class="btn btn-primary" id="but-search">Search <i class="icon-search icon-white"></i></button></form><div id="resultContainer" style="display:none"><ul class="nav nav-tabs"><li class="active"><a href="#">All</a></li><li><a href="#">People</a></li><li><a href="#">Places</a></li><li><a href="#">Groups</a></li></ul><div id="results"><!--<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">Alvaro Garcia</a> <button class="btn btn-success btn-small" id="addGroup">Add to group</button> </div><div>City: Ciudad</div><div><strong>Interests</strong></div><ul><li>Cosa</li><li>Bbbb</li></ul><div><pre><div style="padding:10px">Otros</div></pre></div>--!></div><div>Page <span id="start-page"></span> of <span id="last-page"></span></div><div class="pagination" style="width:205px"><ul><li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← Previous</a></li><li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">Next page →</a></li></ul></div></div></div></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -607,30 +619,47 @@ template.searchView.resultList = function(opt_data, opt_sb) {
 };
 
 
-template.searchView.searchResult = function(opt_data, opt_sb) {
+template.searchView.addGroupDialog = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.name), '</a></div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
-  if (opt_data.things != null) {
-    output.append('<div><strong>Things in common</strong></div><ul>');
-    var thingList987 = opt_data.things;
-    var thingListLen987 = thingList987.length;
-    for (var thingIndex987 = 0; thingIndex987 < thingListLen987; thingIndex987++) {
-      var thingData987 = thingList987[thingIndex987];
-      output.append('<li>', soy.$$escapeHtml(thingData987.name), '</li>');
+  output.append('<div class="modal fade"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Please select the group</h3></div><div class="modal-body"><p align="center"><select id="select01"><option>something</option><option>2</option><option>3</option><option>4</option><option>5</option></select></p></div><div class="modal-footer"><a href="javascript:void(0)" class="btn cancel">Cancel</a><a href="javascript:void(0)" class="btn add btn-primary">Add user to group</a></div></div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.searchView.queryResult = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
+  if (opt_data.favourites != null) {
+    output.append('<div><strong>Interests</strong></div><ul>');
+    var favouriteList1034 = opt_data.favourites;
+    var favouriteListLen1034 = favouriteList1034.length;
+    for (var favouriteIndex1034 = 0; favouriteIndex1034 < favouriteListLen1034; favouriteIndex1034++) {
+      var favouriteData1034 = favouriteList1034[favouriteIndex1034];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1034.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList999 = opt_data.friends;
-    var friendListLen999 = friendList999.length;
-    for (var friendIndex999 = 0; friendIndex999 < friendListLen999; friendIndex999++) {
-      var friendData999 = friendList999[friendIndex999];
-      output.append('<li>', soy.$$escapeHtml(friendData999.name), '</li>');
+    var friendList1046 = opt_data.friends;
+    var friendListLen1046 = friendList1046.length;
+    for (var friendIndex1046 = 0; friendIndex1046 < friendListLen1046; friendIndex1046++) {
+      var friendData1046 = friendList1046[friendIndex1046];
+      output.append('<li>', soy.$$escapeHtml(friendData1046.name), '</li>');
     }
     output.append('</ul>');
   }
-  output.append((opt_data.other != null) ? '<div><pre><div style="padding:10px">' + soy.$$escapeHtml(opt_data.other) + '</div></pre></div>' : '', '</div></div><hr>');
+  if (opt_data.highlights != null) {
+    output.append('<div><pre>');
+    var resList1055 = opt_data.highlights;
+    var resListLen1055 = resList1055.length;
+    for (var resIndex1055 = 0; resIndex1055 < resListLen1055; resIndex1055++) {
+      var resData1055 = resList1055[resIndex1055];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1055.title), '</strong><div>', soy.$$escapeHtml(resData1055.body), '</div></div>');
+    }
+    output.append('</pre></div>');
+  }
+  output.append('</div></div><hr>');
   return opt_sb ? '' : output.toString();
 };
 

@@ -474,5 +474,39 @@ class MainController extends Controller
 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
+    
+    /**
+    * @Route("/security/group/{groupId}/add/{profileId}", name="_security_group_add")
+    */
+    public function securityGroupAddAction($groupId, $profileId)
+    {
+    	$em = $this->get('doctrine')->getEntityManager();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	
+    	$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
+
+    	//$ws = $this->get('wixet.permission_manager');
+    	//$ws->setPermission($em->getRepository('Wixet\WixetBundle\Entity\MediaItem')->find(1),$group,true,true,true,true);
+    	
+    	if($group && $group->getProfile()->getId() == $profile->getId()){
+
+    		
+    		$otherProfile = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($profileId);
+    		// $group->addProfile($otherProfile);
+    		// $em->flush();
+    		//TODO handle this with events
+    		//Update permissions
+    		$ws = $this->get('wixet.permission_manager');
+    		foreach($em->getRepository('Wixet\WixetBundle\Entity\GroupPermission')->findBy(array("group"=>$group->getId())) as $permission){
+    			$ws->setPermission($em->getRepository('Wixet\WixetBundle\Entity\MediaItem')->find(1),$group,$permission->getReadGranted(),$permission->getWriteGranted(),$permission->getReadDenied(),$permission->getWriteDenied());
+    		} 
+    		$data = array("error"=>false);
+    	}else
+    		$data = array("error"=>true, "msg"=>"access denied");
+    	
+    	//$data = array();
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
 
 }

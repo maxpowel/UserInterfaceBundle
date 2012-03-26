@@ -3,7 +3,7 @@ var AboutMeList = Backbone.Collection.extend({
   
   url: function(){
 	  if(this.get("profile") != null)
-		  return '/profile/extension?profile='+this.get("profile");
+		  return '/profile/extension/profile='+this.get("profile");
 	  else
 		  return '/profile/extension';
   }

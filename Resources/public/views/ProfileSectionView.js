@@ -138,9 +138,14 @@ var ProfileSectionView = Backbone.View.extend({
     showAboutMe: function(event){
     	this.changeToSimple(this.aboutMe,event);
     	if(this.aboutMeView == null){
-    		var aboutMe = new AboutMe();
-    		aboutMe.fetch({data:{profile: this.user.get("id")}});
-    		this.aboutMeView = new AboutMeView({model: aboutMe});
+    		var aboutMeCollection = new AboutMeList();
+    		var that = this;
+    		
+    		aboutMeCollection.fetch({data:{profile: this.user.get("id")},success: function(){
+    				that.aboutMeView = new AboutMeView({collection: aboutMeCollection});
+    			}
+    		});
+    		this.aboutMeView = "no null";
     	}
     },
     showSendMessage: function(event){

@@ -46,36 +46,71 @@
 	</div>
 {/template}
 
-
+/**
+ * Add group dialog
+ */
+{template .addGroupDialog}
+<div class="modal fade">
+        <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Please select the group</h3>
+        </div>
+        <div class="modal-body">
+        <p align="center"><select id="select01">
+                <option>something</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select></p>
+        </div>
+        <div class="modal-footer">
+        <a href="javascript:void(0)" class="btn cancel">Cancel</a>
+        <a href="javascript:void(0)" class="btn add btn-primary">Add user to group</a>
+        </div>
+</div>
+{/template}
 
 /**
  * Search result entry
+ * @param type
+ * @param id
  * @param name 
  * @param thumbnail
  * @param city
- * @param things
+ * @param favourites
  * @param friends
- * @param other
+ * @param highlights
+ * @param group
  */
-{template .searchResult}
+{template .queryResult}
 <div style="min-height: 48px">
 			<div style="float:left; position:relative">
-				<a href="#as">
+				<a href="#{$type}/{$id}">
 						<img alt="" src="{$thumbnail}" class="thumbnail">
 				</a>
 			</div>
 			<div style="margin-left:60px">
-				<div><a href="#">{$name}</a></div>
+				<div>
+					<a href="#{$type}/{$id}">{$name}</a>
+					{if $group == null}	  
+						<button style="float:right" class="btn btn-success btn-small" id="addGroup">{msg desc="Add to group"}Add to group{/msg}</button>
+					{else}
+						<div style="float:right" class="alert alert-info">
+        						{$group.name}
+      					</div>
+					{/if}
+				</div>
 				
 				{if $city != null}
 				 	<div>{msg desc="City"}City{/msg}: {$city.name}</div>
 				{/if}
 				
-				{if $things != null}
-				  <div><strong>{msg desc="Things in common"}Things in common{/msg}</strong></div>
+				{if $favourites != null}
+				  <div><strong>{msg desc="Interests"}Interests{/msg}</strong></div>
 				  <ul>
-				  {foreach $thing in $things}
-				  	<li>{$thing.name}</li>
+				  {foreach $favourite in $favourites}
+				  	<li>{$favourite.name}</li>
 				  {/foreach}
 				  </ul>
 				{/if}
@@ -88,8 +123,15 @@
 				  {/foreach}
 				  </ul>
 				{/if}
-				{if $other != null}
-					<div><pre><div style="padding:10px">{$other}</div></pre></div>
+				{if $highlights != null}
+				<div><pre>
+				{foreach $res in $highlights}
+					<div style="padding:10px">
+						<strong>{$res.title}</strong>
+						<div>{$res.body}</div>
+					</div>
+				  {/foreach}
+				</pre></div>
 				{/if}
 			</div>
 			

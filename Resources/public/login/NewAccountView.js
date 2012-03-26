@@ -15,7 +15,7 @@ var NewAccountView = Backbone.View.extend({
 	initialize: function() {
 		//Get the csrftoken
 		var localThis = this;
-		$.get("/register",function(data){
+		$.get("/register/",function(data){
 			var html = $(data);
 			localThis.csrfToken = html.find("#fos_user_registration_form__token").val();
 		});

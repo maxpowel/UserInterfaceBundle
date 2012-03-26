@@ -16,6 +16,11 @@ var AboutMeView = Backbone.View.extend({
     },
 	
     render: function(){
-    	$(this.el).html(template.profileView.aboutMe( this.options ));
+		
+		/*aboutMeCollection.each(function(aboutMe,i){
+	    	  var view = new AboutMeEditEntryView({model: aboutMe});
+	          cont.append(view.render().el);
+	      });*/
+    	$(this.el).html(template.profileView.aboutMe( {list: this.collection.toJSON()} ));
     }
 });
