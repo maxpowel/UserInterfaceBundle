@@ -13,12 +13,6 @@ var NewAccountView = Backbone.View.extend({
 	},
 	
 	initialize: function() {
-		//Get the csrftoken
-		var localThis = this;
-		$.get("/register/",function(data){
-			var html = $(data);
-			localThis.csrfToken = html.find("#fos_user_registration_form__token").val();
-		});
 		this.render();
 	},
 	
@@ -32,7 +26,7 @@ var NewAccountView = Backbone.View.extend({
 		var error = false;
 		var html = $(this.el);
 		
-		html.find(".error").hide();
+		html.find(".alert").hide();
 		
 		pass = $.trim(html.find("#password").val());
 		rpass = $.trim(html.find("#rpassword").val());
@@ -75,10 +69,25 @@ var NewAccountView = Backbone.View.extend({
 				//fos_user_registration_form_email">Email:</label><input type="email" id="fos_user_registration_form_email" name="fos_user_registration_form[email]" required="required" value="" /></div><div><label for="fos_user_registration_form_plainPassword_first">Contraseña:</label><input type="password" id="fos_user_registration_form_plainPassword_first" name="fos_user_registration_form[plainPassword][first]" required="required" value="" /></div><div><label for="fos_user_registration_form_plainPassword_second">Verificación:</label><input type="password" id="fos_user_registration_form_plainPassword_second" name="fos_user_registration_form[plainPassword][second]" required="required" value="" />
 				
 				user.set({
-					fos_user_registration_form__token:this.csrfToken,
-				//	fos_user_registration_form[username]:
+					email: email,
+					password: pass,
+					name: name,
+					birthday: {day: day, month: month, year: year}
 				});
-				user.save();
+				
+				user.save(null,{success: function(model,response){
+					html.find(".alert").hide();
+					if(response.error){
+						html.find("#exist").show();
+					}else{
+						html.find("#finished").show();
+					}
+	    		},
+	    		error: function(){
+	    			console.log("Ha sucedido un error. Refresca la página por favor");
+	    		}});
+				
+				
 			}
 		}
 	}

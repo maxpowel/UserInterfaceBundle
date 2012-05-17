@@ -23,6 +23,7 @@ var AppView = Backbone.View.extend({
 	initialize: function() {
 		this.render();
 		
+		
 		$(this.el).find(".dropdown-toggle").dropdown();
 		
 		

@@ -22,7 +22,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Wixet\WixetBundle\Entity\Favourite;
-
+use Wixet\WixetBundle\Entity\Cosa;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 class MainController extends Controller
 {
@@ -32,11 +34,14 @@ class MainController extends Controller
     public function testAction()
     {
     	$data = array();
+    	$em = $this->get('doctrine')->getEntityManager();
     	
+    	
+    	/*
     	$em = $this->get('doctrine')->getEntityManager();
     	$md = $em->getRepository('Wixet\WixetBundle\Entity\Album')->find(53);
 		$mi = $em->getRepository('Wixet\WixetBundle\Entity\MediaItem')->find(1);
-		
+		*/
     	/*$md = new \Wixet\WixetBundle\Entity\Album();
     	$md->setTitle("TST");
     	$md->setProfile($this->get('security.context')->getToken()->getUser()->getProfile());
@@ -46,11 +51,43 @@ class MainController extends Controller
     	$em->persist($md);
     	$em->flush();
     	*/
-    	$ws = $this->get('wixet.permission_manager');
-    	//$ws->setPermission($mi,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
-    	$ws->setPermission($md,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,true,true);
     	
-    	$data['id'] = $md->getId();
+    	/*$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	
+    	$album = $em->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find(1);
+    	
+    	
+    	$ws = $this->get('wixet.permission_manager');
+    	$ws->setPermissionProfileItem($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+    	*/
+    	
+    	//$owner = $profile;
+    	$ws = $this->get('wixet.permission_manager');
+    	$fetcher = $this->get('wixet.fetcher');
+    	
+    	/*$item = $em->getRepository('Wixet\WixetBundle\Entity\MediaItem')->find(1);
+    	$itemContainer = $em->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find(1);
+    	$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find(1);
+    	
+    	$permission = array();
+    	*/
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$itemContainer = $em->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find(24);
+    	$itemContainer = $profile->getMainItemContainer();
+    	$collection = $fetcher->getCollection($itemContainer, $profile);
+    	$items = $collection->get();
+    	echo $profile->getId();
+    	foreach($items as $item){
+    		echo $item->getId()."<br>";
+    	}
+    	
+    	//$ws->setPermissionProfileItem($profile, $item, $permission);
+    	//$ws->setItemContainer($item, $itemContainer);
+    	//$ws->removeProfileFromGroup($profile, $group);
+    	//$ws->setPermission($mi,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
+    	//$ws->setPermission($md,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,true,true);
+    	
+    	//$data['id'] = $md->getId();
     	
     	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));

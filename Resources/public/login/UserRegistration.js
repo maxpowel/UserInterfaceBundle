@@ -1,4 +1,4 @@
 var UserRegistration = Backbone.Model.extend({
-	"url":"/register"
+	"url":"/account/new"
 
 });

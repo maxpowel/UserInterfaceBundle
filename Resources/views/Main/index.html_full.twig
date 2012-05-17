@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        
+        {% stylesheets '@UserInterfaceBundle/Resources/public/fullcalendar/*.css'
+        			   '@UserInterfaceBundle/Resources/public/bootstrap/css/*.css'
+        			   '@UserInterfaceBundle/Resources/public/style.css'
+        output='css/main.css'
+        %}
+        
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+        {% endstylesheets %}
+
+        
+        
+       {% javascripts '@UserInterfaceBundle/Resources/public/jquery/*.js'
+       				  '@UserInterfaceBundle/Resources/public/backbone/underscore-min.js'
+       				  '@UserInterfaceBundle/Resources/public/backbone/backbone-min.js'
+                      '@UserInterfaceBundle/Resources/public/closure/soyutils.js'
+                      '@UserInterfaceBundle/Resources/public/bootstrap/js/*.js'
+       	 	output='js/main.js'
+        %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+       
+       
+       
+        
+               
+       {% javascripts '@UserInterfaceBundle/Resources/public/model/super/*.js'
+       	 	output='js/super.js'
+        %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        
+       {% javascripts '@UserInterfaceBundle/Resources/public/fullcalendar/fullcalendar.js'
+                      '@UserInterfaceBundle/Resources/public/views/*.js'
+                      '@UserInterfaceBundle/Resources/public/model/*.js'
+                      '@UserInterfaceBundle/Resources/public/templates/templates_es-ES.js'
+                      '@UserInterfaceBundle/Resources/public/javascript.js'
+       	 	output='js/app.js'
+        %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        
+                
+                
+                
+                    
+
+    
+                
+        <title>Wixet</title>
+
+
+   <style type="text/css">
+      body {
+        padding-top: 60px;
+        width:1024px;
+        margin: 0 auto;
+      }
+    </style>     
+        
+    </head>
+<body>
+
+<div id="loading" align="center" class="" style="z-index:50000; bottom:0px; right:50%; position:fixed;">
+
+
+<div class="alert-message">
+        <p><strong>Cargando...</strong></p>
+
+      </div>
+
+</div>
+
+
+<div id="app">
+
+</div>
+
+
+</body>
+
+  
+
+                
+</html>

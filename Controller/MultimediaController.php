@@ -27,16 +27,26 @@ class MultimediaController extends Controller
 	public function getAlbumAction()
 	{
 	
-		/*$pmc = $this->get('security.context')->getToken()->getUser()->getProfile()->getAlbums();*/
-		$ws = $this->get('wixet.fetcher');
-		$lista = $ws->getCollection(null,$this->get('security.context')->getToken()->getUser()->getProfile(),"Wixet\WixetBundle\Entity\Album");
-		 
-		$pmc = $lista->get(0,100);//Get all
 		$data = array();
-		foreach ($pmc as $collection){
-			$data[] = array("id"=>$collection->getId(), "name"=> $collection->getTitle());
+		
+		$em = $this->get('doctrine')->getEntityManager();
+		$fetcher = $this->get('wixet.fetcher');
+		
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$owner = $profile;
+		if(isset($_GET['profile'])){
+			$owner = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($_GET['profile']);
 		}
-		//$data[]=array("id"=>0, "name"=>"MAIN");
+		
+		$itemContainer = $owner->getMainItemContainer();
+		
+		
+		$collection = $fetcher->getCollection($itemContainer, $profile, "Wixet\WixetBundle\Entity\ItemContainer");
+		$items = $collection->get();
+		
+		foreach ($items as $collection){
+			$data[] = array("id"=>$collection->getId(), "name"=> $collection->getName());
+		}
 		 
 		 
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
@@ -49,8 +59,8 @@ class MultimediaController extends Controller
 	public function createAlbumAction()
 	{
 		$data = json_decode(file_get_contents('php://input'),true);
-		$md = new \Wixet\WixetBundle\Entity\Album();
-		$md->setTitle($data['name']);
+		$md = new \Wixet\WixetBundle\Entity\ItemContainer();
+		$md->setName($data['name']);
 		$md->setProfile($this->get('security.context')->getToken()->getUser()->getProfile());
 		$md->setPublic(false);
 		 
@@ -58,8 +68,14 @@ class MultimediaController extends Controller
 		$em->persist($md);
 		$em->flush();
 		 
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$mainItemContainer = $profile->getMainItemContainer();
+		
+		//Add permissions
 		$ws = $this->get('wixet.permission_manager');
-		$ws->setPermission($md,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
+		$ws->setItemContainer($md,$mainItemContainer);
+		$ws->setPermissionProfileItem($profile,$md, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+		
 		 
 		$data['id'] = $md->getId();
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
@@ -86,7 +102,7 @@ class MultimediaController extends Controller
 		$models = array();
 		 
 		$fetcher = $this->get('wixet.fetcher');
-		$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_GET['folder']);
+		$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_GET['folder']);
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
 		$collection = $fetcher->getCollection($album,$profile);
 		 

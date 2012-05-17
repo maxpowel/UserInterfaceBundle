@@ -1,14 +1,9 @@
 var MessagesSectionView = Backbone.View.extend({
 	className: "container-fluid",
-    /*events: {
-    	"click #new-message-btn":  "showNewMessage",
-    	"click #new-folder-btn": "showNewFolder",
-    },*/
     
     initialize: function() {
 
       this.folderCollection = new MessageFolderList();
-      //this.render();
       
       
       
@@ -17,9 +12,10 @@ var MessagesSectionView = Backbone.View.extend({
     render: function(){
     	$(this.el).html(template.section.messages( this.options ));
     	
-    	//Use a view because later we will pass the buttonView to the multimenu
+    	//Use a view because later we will pass the buttonView to the multimenu    	
     	var newMessageButtonView = new NewMessageButtonView();
     	$(this.el).find("#newButton-cont").html(newMessageButtonView.render().el);
+    	
     	
     	var newFolderButtonView = new NewFolderButtonView({collection: this.folderCollection});
     	$(this.el).find("#newFolder-cont").html(newFolderButtonView.render().el);

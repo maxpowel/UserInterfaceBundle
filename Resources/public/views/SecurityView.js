@@ -2,10 +2,11 @@ var SecurityView = Backbone.View.extend({
     
 	events: {
     	"click #manageGroups-btn":  "loadGroups",
-    	"click #profilePermissions-btn":  "loadPermissions",
+    	"click #newPermission-btn":  "addPermission",
     },
     initialize: function() {
-
+    	this.permissions = new PermissionList();
+    	this.permissions.bind('reset', this.addAll, this);
     },
     
     loadGroups: function(){
@@ -20,13 +21,23 @@ var SecurityView = Backbone.View.extend({
     	$(this.el).html(menu.render().el);
     },
     
-    loadPermissions: function(){
+    addPermission: function(){
+    	alert("Not available, please go to the photo/album and add permission from there")
+    },
+    
+    addAll: function() {
     	
+    	this.permissions.each(this.addOne);
+    },
+    
+    addOne: function(permission, context) {
+      var view = new PermissionRowView({model: permission});
+      this.$("#permissionTable").append(view.render().el);
     },
     render: function() {
     	
     	$(this.el).html(template.preferencesView.security());
-
+    	this.permissions.fetch();
       return this;
     }
 });

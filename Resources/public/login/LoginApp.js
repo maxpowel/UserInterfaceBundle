@@ -8,7 +8,7 @@ var LoginApp = Backbone.View.extend({
 			    "":                 "showLogin",
 			    "newAccount":       "showNewAccount",
 			    "recoverPassword":  "showRecoverPassword",
-			    "messages":                 "showLogin",
+			    "login":                 "showLogin",
 			  },
 
 			  

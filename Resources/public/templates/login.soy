@@ -12,15 +12,15 @@
 		
 					<tr>
 						<td>{msg desc="Username"}Username{/msg}</td>
-						<td><input type="text" id="username"></td>
+						<td><input type="text" id="usernameLogin"></td>
 					</tr>
 					<tr>
 						<td>{msg desc="Pass"}Password{/msg}</td>
-						<td><input type="password" id="password"></td>
+						<td><input type="password" id="passwordLogin"></td>
 					</tr>
 					<tr>
 						<td colspan="2">
-						<div align="center" class="alert-message block-message error" style="display:none">
+						<div align="center" class="alert block-message alert-error error" style="display:none">
 							<a href="javascript:void(0)" class="close">×</a>
 							{msg desc="Login fail"}The data entered are incorrect{/msg}
 						</div>
@@ -106,28 +106,36 @@
 					
 					<tr>
 						<td colspan="2">
-							<div id="nameError" style="display:none" align="center" class="alert-message block-message error">
+							<div id="nameError" style="display:none" align="center" class="alert block-message alert-error">
 								<a href="javascript:void(0)" class="close">×</a>
 								{msg desc="Blank name"}Please write your name{/msg}
 							</div>
 							
-							<div id="passError" style="display:none" align="center" class="alert-message block-message error">
+							<div id="passError" style="display:none" align="center" class="alert block-message alert-error">
 								<a href="javascript:void(0)" class="close">×</a>
 								{msg desc="Passwords does not match"}The passwords does not match{/msg}
 							</div>
 							
-							<div id="dateError" style="display:none" align="center" class="alert-message block-message error">
+							<div id="dateError" style="display:none" align="center" class="alert block-message alert-error">
 								<a href="javascript:void(0)" class="close">×</a>
 								{msg desc="Invalid birthdate"}Please select your birthdate{/msg}
 							</div>
 							
-							<div id="emailError" style="display:none" align="center" class="alert-message block-message error">
+							<div id="emailError" style="display:none" align="center" class="alert block-message alert-error">
 								<a href="javascript:void(0)" class="close">×</a>
 								{msg desc="Invalid email"}Please write a valid email address{/msg}
 							</div>
 							
-							<div id="allOk" style="display:none" align="center" class="alert-message block-message success">
+							<div id="allOk" style="display:none" align="center" class="alert block-message">
 								{msg desc="Creating account"}Creating account...{/msg}
+							</div>
+							
+							<div id="exist" style="display:none" align="center" class="alert block-message alert-error">
+								{msg desc="Creating account"}Sorry but this email is already registered. Please choose other email address{/msg}
+							</div>
+							
+							<div id="finished" style="display:none" align="center" class="alert block-message alert-success">
+								{msg desc="Creating account"}Account created, now you can log in using your account{/msg}
 							</div>
 						</td>
 					</tr>
@@ -139,7 +147,7 @@
 				  </tbody>
 				</table>
 				
-				<a href="#" id="goLogin-btn">
+				<a href="#login" id="goLogin-btn">
 					<span class="label label-success">{msg desc="Login"}Login{/msg}</span>
 				</a>
 				&nbsp;&nbsp;

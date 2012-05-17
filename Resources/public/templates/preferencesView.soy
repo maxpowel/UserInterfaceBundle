@@ -85,10 +85,59 @@
  */
 {template .security}
 			<div><h3>{msg desc="Security"}Security{/msg}</h3></div>
-			<div align="center">
+			<div>
+				<br>
     			<div><button class="btn" id="manageGroups-btn">{msg desc="Manage groups"}Manage groups{/msg}</button></button></div>
     			<br>
-    			<div><button class="btn" id="profilePermissions-btn">{msg desc="Profile permssions"}Profile permissions{/msg}</button></div>
+    			<div><button class="btn btn-primary" id="newPermission-btn">{msg desc="New permission"}New permission{/msg}</button></button></div>
+    			<br>
+    			
+    			    <table  align="center" class="table table-striped table-bordered table-condensed">
+    			    
+    			    <thead>
+          <tr>
+            <th>Identity type</th>
+            <th>Identity name</th>
+            <th>Protected object type</th>
+            <th>Protected object id</th>
+            <th>Read Granted</th>
+            <th>Read Denied</th>
+            
+            <th>Write Granted</th>
+            <th>Write Denied</th>
+            <th></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="permissionTable">
+        </tbody>
+        	<tr style="display:none">
+        	<td><select><option>aaa</option></td>
+        	<td><select><option>Name</option></td>
+        	<td><select><option>Type</option></td>
+        	<td><select><option>id</option></td>
+        	<td>
+	<input type="checkbox">
+</td>
+<td>
+	<input type="checkbox">
+</td>
+<td>
+	<input type="checkbox">
+</td>
+<td>
+	<input type="checkbox">
+</td>
+<td>
+	<button class="btn btn-primary" id="save-btn">{msg desc="Save"}Save{/msg}</button>
+</td>
+<td>
+	<button class="btn btn-danger" id="delete-btn">{msg desc="Delete"}Delete{/msg}</button>
+</td>
+        	</tr>
+        
+    
+				    </table>
     		</div>
         		
 {/template}
@@ -169,4 +218,45 @@
     			</tr>
     		</table>
         		
+{/template}
+
+/**
+ * Permission table row
+ * @param permission
+ */
+{template .permissionRow}
+<td>
+	{$permission.type}
+</td>
+<td>
+	{if $permission.type == 'profile'}
+		{$permission.firstName} {$permission.lastName}
+	{else}
+		{$permission.groupName}
+	{/if}
+	
+<td>
+	{$permission.objectType}
+</td>
+<td>
+	{$permission.objectId}
+</td>
+<td>
+	<input id="readGranted" type="checkbox" {if $permission.readGranted == 1} checked {/if} >
+</td>
+<td>
+	<input id="readDenied" type="checkbox" {if $permission.readDenied == 1} checked {/if} >
+</td>
+<td>
+	<input id="writeGranted" type="checkbox" {if $permission.writeGranted == 1} checked {/if} >
+</td>
+<td>
+	<input id="writeDenied" type="checkbox" {if $permission.writeDenied == 1} checked {/if} >
+</td>
+<td>
+	<button class="btn btn-primary" id="save-btn">{msg desc="Save"}Save{/msg}</button>
+</td>
+<td>
+	<button class="btn btn-danger" id="delete-btn">{msg desc="Delete"}Delete{/msg}</button>
+</td>
 {/template}

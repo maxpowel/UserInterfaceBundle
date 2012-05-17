@@ -7,8 +7,8 @@ var LoginView = Backbone.View.extend({
 	
 	initialize: function() {
 		this.render();
-		this.usernameInput = $(this.el).find("#username");
-		this.passwordInput = $(this.el).find("#password");
+		this.usernameInput = $(this.el).find("#usernameLogin");
+		this.passwordInput = $(this.el).find("#passwordLogin");
 		this.error = $(this.el).find(".error");
 		if($("#loginError").length > 0){
 			this.error.show();
@@ -21,7 +21,8 @@ var LoginView = Backbone.View.extend({
 	},
 	
 	login: function(){
-		var loginForm = $("#loginForm");
+		var loginForm = $('<form style="display:none" method="post" action="/login_check"><input type="text" name="_username" class="username"><input type="password" name="_password" class="password"></form>');
+		$("body").append(loginForm);
 		loginForm.find(".username").val(this.usernameInput.val());
 		loginForm.find(".password").val(this.passwordInput.val());
 		loginForm.submit();

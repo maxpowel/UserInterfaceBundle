@@ -22,13 +22,7 @@
 			    
 			    <form class="navbar-search pull-left">
     				<input type="text" class="search-query" placeholder="{msg desc="Quick search"}Quick search{/msg}">
-    				
-    				<button id="uploadPhotos-but" style="margin-left:15px; margin-top:0px" class="btn btn-success btn-small">
-    					<span class="upload">{msg desc="Upload photos but"}Upload photos{/msg}</span>
-    					<span class="uploading" style="display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}
-    						<span id="totalPercent"></span>%
-    					</span>
-    				</button>
+    				<span id="uploadBut-cont"></span>
     			</form>
  
     
@@ -85,7 +79,7 @@
  * Upload window
  * @param albumList
  */
-{template .uploadPhoto}
+{template .uploadPhoto2}
             <div class="modal-header">
             	<h3>{msg desc="Upload photos"}Upload photos{/msg}</h3>
             </div>
@@ -124,6 +118,54 @@
 {/template}
 
 /**
+ * Upload dialog
+ */
+{template .uploadDialog}
+<div class="modal fade">
+    <div class="modal-header">
+    <h3>{msg desc="Photo upload"}Photo upload{/msg}</h3>
+    </div>
+    <div class="modal-body" align="center">
+    
+    <h4>{msg desc="Save photos in the album"}Save photos in the album{/msg}</h4>
+    		<select id="albumList" name="mediumSelect" class="medium">
+
+      		</select>
+            <div><a href="javascript:void(0)" id="newAlbumA">{msg desc="Or in a new album"}Or in a new album{/msg}</a></div>
+            <div style="display:none" id="newAlbumCont">
+            	<input type="text" id="albumName-txt" placeholder="{msg desc="Album name"}Album name{/msg}" class="span">
+            	<button id="createAlbum-but" class="btn btn-small">{msg desc="Create"}Create{/msg}</button>
+            </div>
+            <br>
+            <h4>{msg desc="Select your photos"}Select your photos{/msg}</h4>
+            <div>{msg desc="Upload photo note"}You can select multiple files{/msg}</div>
+            <form id="photoForm" enctype="multipart/form-data" method="post" action="/upload">
+	                    <input type="file" id="files" multiple="multiple"/>
+						<div id="fileInfo" style="display:none; overflow: auto; max-height:400px">
+						<table class="bordered-table zebra-striped">
+					        <thead>
+					          <tr>
+					            <th>{msg desc="Filename"}Filename{/msg}</th>
+					            <th>{msg desc="Size"}Size{/msg}</th>
+					          </tr>
+					        </thead>
+					        <tbody>
+					
+					        </tbody>
+					     </table>
+						</div>
+            </form>
+    
+    </div>
+    <div class="modal-footer">
+    <button class="btn" class="close" data-dismiss="modal">{msg desc="Cancel"}Cancel{/msg}</button>
+    <a href="#" class="btn btn-primary disabled upload">{msg desc="Upload"}Upload{/msg}</a>
+    
+    </div>
+</div>    
+{/template}   
+    
+/**
  * Upload resume
  */
 {template .uploadResume}
@@ -138,4 +180,22 @@
           <a href="#photo/{$id}">
             <img alt="" src="/photo/thumbnail/{$id}" class="thumbnail">
           </a>
+{/template}
+
+
+/**
+ * Uploader button
+ */
+{template .uploader}
+ <button id="uploadPhotos-but" style="margin-left:15px; margin-top:0px" class="btn btn-success btn-small">
+ 	{msg desc="Upload photos but"}Upload photos{/msg}
+ </button>
+    	<span id="uploading-lbl" class="alert alert-info" style="padding:10px; display:none">{msg desc="Uploading photos but"}Uploading{/msg}{sp}
+    		<span id="totalPercent"></span>%
+		</span>
+		<span id="uploaded-lbl" class="alert alert-success" style="padding:10px; display:none">
+    		<strong><a href="#multimedia" id="albumLink">{msg desc="See photos"}See photos{/msg}</a></strong>{sp}
+		</span>
+	</span>
+</button>
 {/template}

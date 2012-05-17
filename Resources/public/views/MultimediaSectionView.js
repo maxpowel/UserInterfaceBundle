@@ -2,9 +2,7 @@ var MultimediaSectionView = Backbone.View.extend({
 	className: "container-fluid",
     
     initialize: function() {
-
       this.albumCollection = new AlbumList();
-      
       
       
     },
@@ -16,16 +14,13 @@ var MultimediaSectionView = Backbone.View.extend({
     	/*var newMessageButtonView = new NewMessageButtonView();
     	$(this.el).find("#newButton-cont").html(newMessageButtonView.render().el);
     	*/
-    	
     	var newAlbumButtonView = new NewAlbumButtonView({collection: this.albumCollection});
     	$(this.el).find("#newFolder-cont").html(newAlbumButtonView.render().el);
     	//Folder list view will create the multimenu that contains messagelist, newmessageform and folderoptions
     	
     	
-    	
     	var albumListView = new AlbumListView({collection: this.albumCollection, photoContainer: $(this.el).find("#multimenu"), newAlbumButton: newAlbumButtonView, optionsButtonContainer:$(this.el).find("#optionsButton-cont"), profileId:this.options.profileId});
     	$(this.el).find(".well").prepend(albumListView.render().el);
-
     	/*
     	var newMessageFormView = new NewMessageFormView();
     	var folderOptionsView = new FolderOptionsFormView({folder:folder, context: this});

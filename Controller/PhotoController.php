@@ -136,30 +136,43 @@ class PhotoController extends Controller
      
      //Create the mediaItem
      	$mediaItem = new MediaItem();
+     	$em = $this->get('doctrine')->getEntityManager();
+     	$data = array();
+     	
      	$mimeType =$this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\MimeType')->findOneByName($_FILES['file']['type']);
-     	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\Album')->find($_POST['albumId']);
-         	$uploader = $this->get('security.context')->getToken()->getUser()->getProfile(); 
+     	if($mimeType == null){
+     		//Mimetype does not exist. Here we create it, but we can abort the upload
+     		$mimeType = new \Wixet\WixetBundle\Entity\MimeType();
+     		$mimeType->setName($_FILES['file']['type']);
+     		$em->persist($mimeType);
+     		$em->flush();
+     	}
+     	
+     	
+     	$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_POST['albumId']);
+        $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
+         
      	if($album->getProfile()->getId() == $uploader->getId() ){
      
-     	$mediaItem->setAlbum($album);
-     	$mediaItem->setMimeType($mimeType);
-     	$mediaItem->setViews(0);
-     	$mediaItem->setDisabled(false);
-     	$mediaItem->setPublic(false);
-     	$mediaItem->setProfile($uploader);
-     
-     	$mediaItem->setFileSize($_FILES['file']['size']);
-     
-     	$em = $this->get('doctrine')->getEntityManager();
-     	$em->persist($mediaItem);
-     	    	$em->flush();
-     	//
-     	//Add permissions
-     	$ws = $this->get('wixet.permission_manager');
-     	$ws->setPermission($mediaItem,$this->get('security.context')->getToken()->getUser()->getProfile(),true,true,false,false);
-     	//Save file
-     	$mim = $this->get('wixet.media_item_manager');
-     	    	$mim->saveFile($_FILES['file']['tmp_name'], $mediaItem);
+	     	$mediaItem->setMimeType($mimeType);
+	     	$mediaItem->setViews(0);
+	     	$mediaItem->setDisabled(false);
+	     	$mediaItem->setPublic(false);
+	     	$mediaItem->setProfile($uploader);
+	     
+	     	$mediaItem->setFileSize($_FILES['file']['size']);
+	     
+	     	
+	     	$em->persist($mediaItem);
+	     	$em->flush();
+	     	//
+	     	//Add permissions
+	     	$ws = $this->get('wixet.permission_manager');
+	     	$ws->setItemContainer($mediaItem, $album);
+	     	//Not necesary, inherited from itemContainer $ws->setPermissionProfileItem($profile,$mediaItem, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	     	//Save file
+	     	$mim = $this->get('wixet.media_item_manager');
+	       	$mim->saveFile($_FILES['file']['tmp_name'], $mediaItem);
      	}
      	 
      	 

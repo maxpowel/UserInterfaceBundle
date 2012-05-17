@@ -1,22 +1,22 @@
 var ToolbarView = Backbone.View.extend({
-	uploadPhotosWindow: null,
+	/*uploadPhotosWindow: null,
 	totalFileSize: 0,
 	uploader: null,
 	uploading: false,
 	uploadRefreshInterval: null,
 	files: null,
 	fileCounter: 0,
-	percentCont: null,
+	percentCont: null,*/
 	events: {
 			"keypress #quick-search-input": "quickSearch",
 			"blur #quick-search-input": "onBlurQuickSearch",
 			"submit #quick-search-form": "cancelSubmit",
-			"click #uploadPhotos-but": "uploadPhotosForm"
+			//"click #uploadPhotos-but": "uploadPhotosForm"
 	},
 	initialize: function() {
-		this.bind('uploading', this.changeToUploading, this);
-		this.uploader = new UploaderView({context: this});
-		this.percentCont = $(this.el).find("#totalPercent");
+		//this.bind('uploading', this.changeToUploading, this);
+		//this.uploader = new UploaderView({context: this});
+		//this.percentCont = $(this.el).find("#totalPercent");
 	},
   
 	quickSearch: function ( event ){
@@ -32,7 +32,7 @@ var ToolbarView = Backbone.View.extend({
 
 	},
 	
-	uploadFile: function(files,index, albumId){
+	/*uploadFile: function(files,index, albumId){
 	     var fd = new FormData();
 	     var localThis = this;
 	     var aId = albumId;
@@ -108,7 +108,8 @@ var ToolbarView = Backbone.View.extend({
 			this.uploader.reset();
 		    this.uploadPhotosWindow.modal('show');
 		}
-	},
+	},*/
+	
 	onBlurQuickSearch: function(){
 		$("#quick-search-input").val('');
 	},
@@ -117,8 +118,9 @@ var ToolbarView = Backbone.View.extend({
 		return false;
 	},
 	
-	render: function(){		
-    	this.uploadPhotosWindow = $(this.uploader.render().el).modal({backdrop:true, keyboard: true, show:false});
+	render: function(){
+		$(this.el).find("#uploadBut-cont").html(new UploaderView().render().$el);
+    	//this.uploadPhotosWindow = $(this.uploader.render().el).modal({backdrop:true, keyboard: true, show:false});
 	}
 	
 });
