@@ -1,10 +1,10 @@
 var Group = Backbone.Model.extend({
 
-	getMemberList: function(){
+	getMemberList: function(callback){
 		if(this.memberList == null){
-			this.list = new GroupMemberList({id: this.get("id")});
-			this.list.fetch();
-		}
-		return this.memberList;
+			this.memberList = new GroupMemberList();
+			this.memberList.fetch({data:{id: this.get("id")}, success: callback});
+		}else callback(this.memberList)
+		
 	}
 });

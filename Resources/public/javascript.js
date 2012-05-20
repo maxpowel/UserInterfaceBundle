@@ -4,6 +4,19 @@ window.getViewer = function() {
 	return viewer;
 }
 
+core = {}
+core._groupCollection = new GroupList();
+core.getGroups = function(callback){
+	if (core._groupCollection.length == 0){
+		core._groupCollection.fetch({success: function(){
+			callback(core._groupCollection.toArray())
+		}})
+	}else{
+		callback(core._groupCollection.toArray())
+	} 
+	
+}
+
 function startUp(){
 	var app = new AppView();
 	$("#app").html(app.el);

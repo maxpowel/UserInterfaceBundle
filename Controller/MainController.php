@@ -486,6 +486,27 @@ class MainController extends Controller
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
     
+    /**
+    * @Route("/groupProfiles", name="_grouplist_get")
+    */
+    public function getGroupProfilesAction()
+    {
+    	$data = array();
+    	$id = $_GET['id'];
+    	$em = $this->get('doctrine')->getEntityManager();
+    
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$pe = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($id);
+    
+    	if($profile->getId() == $pe->getProfile()->getId()){
+    		foreach($pe->getProfiles() as $pf)
+    			$data[] = array("name"=>$pf->getFirstName()." ".$pf->getLastName(), "id"=> $pf->getId());
+    	}
+    
+    
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
+    
 
     /**
     * @Route("/profile/contactSearch", name="_profile_contact_search")

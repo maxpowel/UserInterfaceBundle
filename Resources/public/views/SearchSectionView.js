@@ -16,7 +16,6 @@ var QueryResultView = Backbone.View.extend({
     		html = html.replace(/\[\/b\]/g, '</strong>')
     	//
 		$(this.el).html(html);
-		console.log(html);
 		$(this.el).css("min-height", "48px");
     	
 		//$(this.el).find("button").
@@ -25,6 +24,7 @@ var QueryResultView = Backbone.View.extend({
     
     addGroupDialog: function(){
     	if(this.dialog == null){
+    		var self = this;
     		this.dialog = $(template.searchView.addGroupDialog());
     		var dialog = this.dialog;
     		dialog.modal();
@@ -35,6 +35,22 @@ var QueryResultView = Backbone.View.extend({
     		
     		dialog.find(".add").click(function(){
     			dialog.modal('hide');
+    			self.$el.find("#addGroup").remove();
+    			$.getJSON('/permission/addGroup/'+self.model.get('id')+'/'+dialog.find("#groupList").val(), function(data){
+    				if(data.error)
+    					alert("Error while inserting user into the group")
+    				else
+    					self.$el.find("#groupName").text(dialog.find("#groupList").text()).show();
+    			})
+    			
+    			
+    		});
+    		
+    		core.getGroups(function(groups){
+    			var select = dialog.find("#groupList");
+    			$.each(groups,function(i,group){
+    					select.append("<option value='"+ group.get('id') +"'>"+ group.get('name') +"</option>")
+    			})
     			
     		});
     	}else{

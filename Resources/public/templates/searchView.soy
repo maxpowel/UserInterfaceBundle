@@ -56,12 +56,7 @@
         <h3>Please select the group</h3>
         </div>
         <div class="modal-body">
-        <p align="center"><select id="select01">
-                <option>something</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+        <p align="center"><select id="groupList">
               </select></p>
         </div>
         <div class="modal-footer">
@@ -95,6 +90,9 @@
 					<a href="#{$type}/{$id}">{$name}</a>
 					{if $group == null}	  
 						<button style="float:right" class="btn btn-success btn-small" id="addGroup">{msg desc="Add to group"}Add to group{/msg}</button>
+						<div id="groupName" style="float:right; display:none" class="alert alert-info">
+        						
+      					</div>
 					{else}
 						<div style="float:right" class="alert alert-info">
         						{$group.name}
@@ -104,6 +102,8 @@
 				
 				{if $city != null}
 				 	<div>{msg desc="City"}City{/msg}: {$city.name}</div>
+				{else}
+					<div>&nbsp;{sp}</div>
 				{/if}
 				
 				{if $favourites != null}

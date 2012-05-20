@@ -642,41 +642,41 @@ template.searchView.resultList = function(opt_data, opt_sb) {
 
 template.searchView.addGroupDialog = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="modal fade"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Please select the group</h3></div><div class="modal-body"><p align="center"><select id="select01"><option>something</option><option>2</option><option>3</option><option>4</option><option>5</option></select></p></div><div class="modal-footer"><a href="javascript:void(0)" class="btn cancel">Cancel</a><a href="javascript:void(0)" class="btn add btn-primary">Add user to group</a></div></div>');
+  output.append('<div class="modal fade"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Please select the group</h3></div><div class="modal-body"><p align="center"><select id="groupList"></select></p></div><div class="modal-footer"><a href="javascript:void(0)" class="btn cancel">Cancel</a><a href="javascript:void(0)" class="btn add btn-primary">Add user to group</a></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.searchView.queryResult = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1124 = opt_data.favourites;
-    var favouriteListLen1124 = favouriteList1124.length;
-    for (var favouriteIndex1124 = 0; favouriteIndex1124 < favouriteListLen1124; favouriteIndex1124++) {
-      var favouriteData1124 = favouriteList1124[favouriteIndex1124];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1124.name), '</li>');
+    var favouriteList1126 = opt_data.favourites;
+    var favouriteListLen1126 = favouriteList1126.length;
+    for (var favouriteIndex1126 = 0; favouriteIndex1126 < favouriteListLen1126; favouriteIndex1126++) {
+      var favouriteData1126 = favouriteList1126[favouriteIndex1126];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1126.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1136 = opt_data.friends;
-    var friendListLen1136 = friendList1136.length;
-    for (var friendIndex1136 = 0; friendIndex1136 < friendListLen1136; friendIndex1136++) {
-      var friendData1136 = friendList1136[friendIndex1136];
-      output.append('<li>', soy.$$escapeHtml(friendData1136.name), '</li>');
+    var friendList1138 = opt_data.friends;
+    var friendListLen1138 = friendList1138.length;
+    for (var friendIndex1138 = 0; friendIndex1138 < friendListLen1138; friendIndex1138++) {
+      var friendData1138 = friendList1138[friendIndex1138];
+      output.append('<li>', soy.$$escapeHtml(friendData1138.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights != null) {
     output.append('<div><pre>');
-    var resList1145 = opt_data.highlights;
-    var resListLen1145 = resList1145.length;
-    for (var resIndex1145 = 0; resIndex1145 < resListLen1145; resIndex1145++) {
-      var resData1145 = resList1145[resIndex1145];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1145.title), '</strong><div>', soy.$$escapeHtml(resData1145.body), '</div></div>');
+    var resList1147 = opt_data.highlights;
+    var resListLen1147 = resList1147.length;
+    for (var resIndex1147 = 0; resIndex1147 < resListLen1147; resIndex1147++) {
+      var resData1147 = resList1147[resIndex1147];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1147.title), '</strong><div>', soy.$$escapeHtml(resData1147.body), '</div></div>');
     }
     output.append('</pre></div>');
   }

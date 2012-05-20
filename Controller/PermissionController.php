@@ -146,4 +146,71 @@ class PermissionController extends Controller
     }
 
 
+    /**
+    * @Route("/addGroup/{profileId}/{groupId}", name="_group_add")
+    */
+    public function addProfileToGroupAction($profileId, $groupId)
+    {	
+    	$owner = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$em = $this->get('doctrine')->getEntityManager();
+    	
+    	$profile = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($profileId);
+    	$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
+    	
+    	$data = array("error" => true);
+    	//Check the ownership of the group
+    	if($owner->getId() == $group->getProfile()->getId()){
+    		$ws = $this->get('wixet.permission_manager');
+    		
+    		//Check if user is in the main group
+    		$mainGroup = $owner->getMainGroup();
+    		$sql = "SELECT count(userprofile_id) as exist from profilegroup_userprofile WHERE profilegroup_id = ". $mainGroup->getId() ." AND userprofile_id = ".$profile->getId();
+    		$statement = $em->getConnection()->query($sql);
+    		$res = $statement->fetch();
+    		if($res['exist'] == 0)
+    			$ws->addProfileToGroup($profile, $mainGroup);
+    		
+    		////
+    		if($group->getId() != $mainGroup->getId()){
+    			$ws->addProfileToGroup($profile, $group);
+    		}
+    		$data = array("error" => false);
+    	}
+    	
+    	
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
+    }
+    
+    /**
+    * @Route("/removeGroup/{profileId}/{groupId}", name="_group_remove")
+    */
+    public function removeProfileToGroupAction($profileId, $groupId)
+    {
+    	$owner = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$em = $this->get('doctrine')->getEntityManager();
+    	 
+    	$profile = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($profileId);
+    	$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
+    	 
+    	$data = array("error" => true);
+    	//Check the ownership of the group
+    	if($owner->getId() == $group->getProfile()->getId()){
+    		$ws = $this->get('wixet.permission_manager');
+    
+    		//If is the main group, this user is removed from all groups of the user
+    		$mainGroup = $owner->getMainGroup();
+    		if($group->getId() != $mainGroup->getId()){
+    			$ws->removeProfileFromGroup($profile, $group);
+    		}else{
+    			$sql = "DELETE from profilegroup_userprofile WHERE profilegroup_id = ". $mainGroup->getId() ." AND userprofile_id = ".$profile->getId();
+    			$statement = $em->getConnection()->query($sql);
+    			$res = $statement->execute();
+    		}
+    		$data = array("error" => false);
+    		
+    	}
+    	 
+    	 
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
+    }
 }
