@@ -17,7 +17,7 @@ class AccountController extends Controller
     /**
      * @Route("/new", name="_account_new")
      */
-    public function newAction()
+    public function newAccountAction()
     {
     	$data = json_decode(file_get_contents('php://input'),true);
     	if($data){
@@ -68,6 +68,8 @@ class AccountController extends Controller
 	    		$album->setPublic(false);
 	    		$messageCollection->setProfile($profile);
 	    		
+
+	    		
 	    		$em->persist($profile);
 	    		$em->persist($album);
 	    		$em->persist($group);
@@ -78,10 +80,16 @@ class AccountController extends Controller
 	    		//Add permissions
 	    		$ws = $this->get('wixet.permission_manager');
 	    		$ws->setItemContainer($album,$album);
+	    		$ws->setItemContainer($profile,$album);
 	    		$ws->setPermissionProfileItem($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermissionProfileItem($profile,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		
 	    		
 	    		$data = array("error"=>false, "id"=>$profile->getId(), "name"=>$profile->getFirstName());
+	    		
+	    		//Update index
+	    		$index = $this->get('wixet.index_manager');
+	    		$index->rebuild();
 	    		
     		}else
     			$data = array("error"=>true, "code"=>$error);

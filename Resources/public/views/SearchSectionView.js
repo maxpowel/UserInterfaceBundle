@@ -12,6 +12,7 @@ var QueryResultView = Backbone.View.extend({
     	var html = template.searchView.queryResult( this.model.toJSON() );
     	
     	//TODO mejorar esto para eliminar los tag script
+    	// si se quiere poner html
     		html = html.replace(/\[b\]/g, '<strong>')
     		html = html.replace(/\[\/b\]/g, '</strong>')
     	//
@@ -95,12 +96,17 @@ var SearchSectionView = Backbone.View.extend({
     },
     
     doSearch: function(){
+    	
     	this.query = new SearchQuery(null, {
     				query: this.searchQuery.val()
     	});
     	this.query.bind('reset', this.addAll, this);
     	this.query.fetch();
+    	
     	$(this.el).find("#resultContainer").show();
+    	
+    	//Avoid redirection on click
+    	return false;
     },
     
     addAll: function(){

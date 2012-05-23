@@ -32,7 +32,7 @@ class PrivateMessageController extends Controller
     	$pmc = $this->get('security.context')->getToken()->getUser()->getProfile()->getPrivateMessagesCollections();
     	$data = array();
     	foreach ($pmc as $collection){
-    		$data[] = array("id"=>$collection->getId(), "name"=> $collection->getTitle());
+    		$data[] = array("id"=>$collection->getId(), "name"=> $collection->getName());
     	}
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
     }
@@ -45,7 +45,7 @@ class PrivateMessageController extends Controller
     {
     	$data = json_decode(file_get_contents('php://input'),true);
     	$md = new \Wixet\WixetBundle\Entity\PrivateMessageCollection();
-    	$md->setTitle($data['name']);
+    	$md->setName($data['name']);
     	$md->setProfile($this->get('security.context')->getToken()->getUser()->getProfile());
     	
     	$em = $this->get('doctrine')->getEntityManager();
@@ -68,7 +68,7 @@ class PrivateMessageController extends Controller
     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
     	
     	if($profile->getId() == $pmc->getProfile()->getId() && strlen($name) > 0){
-    		$pmc->setTitle($name);
+    		$pmc->setName($name);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->flush();
     	}

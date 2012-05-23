@@ -202,9 +202,11 @@ class PermissionController extends Controller
     		if($group->getId() != $mainGroup->getId()){
     			$ws->removeProfileFromGroup($profile, $group);
     		}else{
-    			$sql = "DELETE from profilegroup_userprofile WHERE profilegroup_id = ". $mainGroup->getId() ." AND userprofile_id = ".$profile->getId();
-    			$statement = $em->getConnection()->query($sql);
-    			$res = $statement->execute();
+    			
+    			$groups = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->findBy(array('profile' => $owner->getId()));
+    			foreach($groups as $group){
+    				$ws->removeProfileFromGroup($profile, $group);
+    			}
     		}
     		$data = array("error" => false);
     		

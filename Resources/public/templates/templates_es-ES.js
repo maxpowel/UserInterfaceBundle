@@ -518,7 +518,7 @@ template.preferencesView.groupListEntry = function(opt_data, opt_sb) {
 
 template.preferencesView.editGroup = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<div><h4>Group name<h4></div><div><input type="text" class="span4" value="', soy.$$escapeHtml(opt_data.name), '"></div><br><div><h4>Group members<h4></div><div><select id="memberList" multiple="multiple" size="15" class="span7"></select></div><div><button id="removeSelected-btn" class="btn btn-danger disabled">Remove selected from the group</button></div><br><div><h4>Add members to the group<h4></div><div>Person name: <input type="text" id="personName-txt" class="span4"></div><div><button style="margin-top:4px" id="addMember-btn" class="btn btn-success">Add member to the group</button></div>');
+  output.append('\t<div><h4>Group name<h4></div><div><input type="text" class="span4" value="', soy.$$escapeHtml(opt_data.name), '"></div><br><div><h4>Group members<h4></div><div><select id="memberList" multiple="multiple" size="15" class="span7"></select></div><div><button id="removeSelected-btn" class="btn btn-danger disabled">Remove selected from the group</button></div><br><div><h4>Add members to the group<h4></div><div>Person name: <input type="text" id="personName-txt" class="span4"></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -568,11 +568,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList992 = opt_data.favourites;
-  var favouriteListLen992 = favouriteList992.length;
-  for (var favouriteIndex992 = 0; favouriteIndex992 < favouriteListLen992; favouriteIndex992++) {
-    var favouriteData992 = favouriteList992[favouriteIndex992];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData992.url), '">', soy.$$escapeHtml(favouriteData992.title), '</li>');
+  var favouriteList989 = opt_data.favourites;
+  var favouriteListLen989 = favouriteList989.length;
+  for (var favouriteIndex989 = 0; favouriteIndex989 < favouriteListLen989; favouriteIndex989++) {
+    var favouriteData989 = favouriteList989[favouriteIndex989];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData989.url), '">', soy.$$escapeHtml(favouriteData989.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -581,11 +581,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1001 = opt_data.list;
-  var elementListLen1001 = elementList1001.length;
-  for (var elementIndex1001 = 0; elementIndex1001 < elementListLen1001; elementIndex1001++) {
-    var elementData1001 = elementList1001[elementIndex1001];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1001.title), '</h3></div><p>', soy.$$escapeHtml(elementData1001.body), '</p>');
+  var elementList998 = opt_data.list;
+  var elementListLen998 = elementList998.length;
+  for (var elementIndex998 = 0; elementIndex998 < elementListLen998; elementIndex998++) {
+    var elementData998 = elementList998[elementIndex998];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData998.title), '</h3></div><p>', soy.$$escapeHtml(elementData998.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -652,31 +652,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1126 = opt_data.favourites;
-    var favouriteListLen1126 = favouriteList1126.length;
-    for (var favouriteIndex1126 = 0; favouriteIndex1126 < favouriteListLen1126; favouriteIndex1126++) {
-      var favouriteData1126 = favouriteList1126[favouriteIndex1126];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1126.name), '</li>');
+    var favouriteList1123 = opt_data.favourites;
+    var favouriteListLen1123 = favouriteList1123.length;
+    for (var favouriteIndex1123 = 0; favouriteIndex1123 < favouriteListLen1123; favouriteIndex1123++) {
+      var favouriteData1123 = favouriteList1123[favouriteIndex1123];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1123.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1138 = opt_data.friends;
-    var friendListLen1138 = friendList1138.length;
-    for (var friendIndex1138 = 0; friendIndex1138 < friendListLen1138; friendIndex1138++) {
-      var friendData1138 = friendList1138[friendIndex1138];
-      output.append('<li>', soy.$$escapeHtml(friendData1138.name), '</li>');
+    var friendList1135 = opt_data.friends;
+    var friendListLen1135 = friendList1135.length;
+    for (var friendIndex1135 = 0; friendIndex1135 < friendListLen1135; friendIndex1135++) {
+      var friendData1135 = friendList1135[friendIndex1135];
+      output.append('<li>', soy.$$escapeHtml(friendData1135.name), '</li>');
     }
     output.append('</ul>');
   }
-  if (opt_data.highlights != null) {
+  if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1147 = opt_data.highlights;
-    var resListLen1147 = resList1147.length;
-    for (var resIndex1147 = 0; resIndex1147 < resListLen1147; resIndex1147++) {
-      var resData1147 = resList1147[resIndex1147];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1147.title), '</strong><div>', soy.$$escapeHtml(resData1147.body), '</div></div>');
+    var resList1144 = opt_data.highlights;
+    var resListLen1144 = resList1144.length;
+    for (var resIndex1144 = 0; resIndex1144 < resListLen1144; resIndex1144++) {
+      var resData1144 = resList1144[resIndex1144];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1144.title), '</strong><div>', soy.$$escapeHtml(resData1144.body), '</div></div>');
     }
     output.append('</pre></div>');
   }
