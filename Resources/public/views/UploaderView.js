@@ -151,7 +151,7 @@ var UploadDialogView = Backbone.View.extend({
 		if(this.append)
 			this.$el.find("#albumList").append(option)
 		else{
-			//Selecte the new album in the combo box
+			//Select the new album in the combo box
 			var selected = $("#albumList:selected");
 			if(selected.length)
 				selected.attr("selected", null);
@@ -163,9 +163,22 @@ var UploadDialogView = Backbone.View.extend({
 	},
 	
 	render: function(){
-		html = $(template.appView.uploadDialog());
-		this.setElement(html);
-		html.modal();
+		var diag = $("#uploadDialog");
+		if(diag.length > 0){
+			this.setElement(diag);
+			diag.find("#fileInfo").hide();
+			diag.find("#files").val("");
+			diag.find("tbody").html("");
+			diag.modal('show')
+			
+		}else{
+			html = $(template.appView.uploadDialog());
+			this.setElement(html);
+			html.modal();
+		}
+
+
+		
 		return this;
 	},
 	
