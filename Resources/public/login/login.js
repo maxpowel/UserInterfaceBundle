@@ -14,14 +14,14 @@ $(document).ready(function(){
 	});
 	
 	//Github updates
-	$.getJSON("https://api.github.com/networks/maxpowel/WixetBundle/events", function(data){
-	//$.getJSON("/changes?type=core", function(data){
+	//$.getJSON("https://api.github.com/networks/maxpowel/WixetBundle/events", function(data){
+	$.getJSON("/changes?type=core", function(data){
 		$("#coreDate").text(data[0].created_at);
 		$("#coreDesc").text(data[0].payload.commits[0].message);
 	});
 	
-	$.getJSON("https://api.github.com/networks/maxpowel/UserInterfaceBundle/events", function(data){
-	//$.getJSON("/changes?type=ui", function(data){
+	//$.getJSON("https://api.github.com/networks/maxpowel/UserInterfaceBundle/events", function(data){
+	$.getJSON("/changes?type=ui", function(data){
 		$("#uiDate").text(data[0].created_at);
 		$("#uiDesc").text(data[0].payload.commits[0].message);
 	});
