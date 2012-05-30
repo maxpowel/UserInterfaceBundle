@@ -17,6 +17,7 @@ class PermissionController extends Controller
     
     /**
      * @Route("/", name="_permission_index")
+     * @Method({"GET"})
      */
     public function indexAction()
     {
@@ -53,7 +54,7 @@ class PermissionController extends Controller
     		    								pe.read_denied as readDenied,
     		    								pe.write_granted as writeGranted,
     		    								pe.write_denied as writeDenied,
-    		    								p.id asgroupId,
+    		    								p.id as groupId,
     		    								p.name as groupName,
     		    								o.name as objectType,
     		    								\'group\' as type
@@ -65,6 +66,8 @@ class PermissionController extends Controller
     	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  array_merge($data['userPermissions'],$data['groupPermissions'] )));
     }
+    
+    
     
     /**
     * @Route("/{type}/{id}", name="_permission_delete")
@@ -102,7 +105,7 @@ class PermissionController extends Controller
     	$permissionRaw = array("readGranted"=>$data['readGranted'],
     						   "readDenied"=>$data['readDenied'],
     	                       "writeGranted"=> $data['writeGranted'],
-    	                     "writeDenied"=> $data['writeDenied']);
+    	                       "writeDenied"=> $data['writeDenied']);
     	
     	
     	$em = $this->get('doctrine')->getEntityManager();

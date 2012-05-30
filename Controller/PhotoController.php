@@ -274,10 +274,19 @@ class PhotoController extends Controller
      	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
      	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$id,$profile);
      	if($mediaItem != null){
+     		
+     		$album = $fetcher->getItemContainer($mediaItem);
+     		$data['album']= array("id"=>$album->getId(), "name"=>$album->getName());
+     		
+     		
      		$data['id']=$mediaItem->getId();
      		$data['description'] = $mediaItem->getDescription();
-     		$data['next']= $id + 1;
-     		$data['prev']= $id - 1;
+     		$data['name'] = $mediaItem->getTitle();
+     		$data['next']= $fetcher->getNext($mediaItem, $album, $profile);
+     		$data['prev']= $fetcher->getPrevious($mediaItem, $album, $profile);
+     		     		
+     		$owner = $mediaItem->getProfile();
+     		$data['owner'] = array("id"=> $owner->getId(), "name"=>$owner->getFirstName()." ".$owner->getLastName());
      		
      		$tags = array();
      		$tags[] = array("id"=>45, "value"=>"Alvaro", "left"=>50, "top"=>100);

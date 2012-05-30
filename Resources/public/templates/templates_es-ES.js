@@ -146,7 +146,7 @@ if (typeof template.loginApp == 'undefined') { template.loginApp = {}; }
 
 template.loginApp.login = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<table style="width:150px; padding: 5px;" class="well table table-bordered"><tbody><tr><td colspan="2"><div align="center"><b>Access to my account</b></div></td></tr><tr><td>Username</td><td><input type="text" id="usernameLogin"></td></tr><tr><td>Password</td><td><input type="password" id="passwordLogin"></td></tr><tr><td colspan="2"><div align="center" class="alert block-message alert-error error" style="display:none"><a href="javascript:void(0)" class="close">×</a>The data entered are incorrect</div><div align="center"><button class="btn btn-success" id="login-btn">Login</button></div></td></tr></tbody></table><a href="#newAccount" id="newAccount-btn"><span class="label label-warning">New account</span></a>&nbsp;&nbsp;<a href="#recoverPassword" id="recoverPassword-btn"><span class="label label-important">Recover password</span></a>');
+  output.append('<table style="width:150px; padding: 5px;" class="well table table-bordered"><tbody><tr><td colspan="2"><div align="center"><b>Access to my account</b></div></td></tr><tr><td>Username</td><td><input type="text" id="usernameLogin"></td></tr><tr><td>Password</td><td><input type="password" id="passwordLogin"></td></tr><tr><td colspan="2"><div align="center" class="alert block-message alert-error error" style="display:none"><a href="javascript:void(0)" class="close">×</a>The data entered are incorrect</div><div align="center"><button class="btn btn-success" id="login-btn">Login</button></div></td></tr></tbody></table><a href="#newAccount" id="newAccount-btn"><span class="label label-warning">New account</span></a>&nbsp;&nbsp;<a href="#recoverPassword" id="recoverPassword-btn"><span class="label label-important">Recover password</span></a><br><br><div class="alert alert-info"><div><h3>Last changes</h3></div><div><strong>Wixet core</strong>: <span id="coreDesc"> </span> at <span id="coreDate"> </span></div><div><strong>User interface</strong>: <span id="uiDesc"> </span> at <span id="uiDate"> </span></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -446,6 +446,27 @@ template.notificationView.notification = function(opt_data, opt_sb) {
 };
 
 ;
+// This file was automatically generated from permissionTemplates.soy.
+// Please don't edit this file by hand.
+
+if (typeof template == 'undefined') { var template = {}; }
+if (typeof template.permission == 'undefined') { template.permission = {}; }
+
+
+template.permission.simple = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t<br><br><h3>Permissions</h3><table class="table table-condensed"><thead><th>Type</th><th>Name</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></thead><tbody id="permissionList"></tbody></table><div><h4>Add new permission</h4><input type="text" id="contactSearch" placeholder="Person or group name"></div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.permission.simpleEntry = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t<td>', (opt_data.type == 'group') ? '<img class="thumbnail" src="/img/glyphicons_043_group.png">' : '<img class="thumbnail" src="/img/glyphicons_003_user.png">', '</td><td>', soy.$$escapeHtml(opt_data.name), '</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><button class="btn btn-primary" id="save-btn">Save</button></td><td><button class="btn btn-danger" id="remove-btn">Remove</button></td>');
+  return opt_sb ? '' : output.toString();
+};
+
+;
 // This file was automatically generated from photoSectionView.soy.
 // Please don't edit this file by hand.
 
@@ -455,7 +476,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item" align="center"><img class="photoMain" src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" />', (opt_data.description != null) ? '<div class="carousel-caption"><p>' + soy.$$escapeHtml(opt_data.description) + '</p></div>' : '', '</div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a id="tagDesc" href="#" rel="tooltip" title="Click the photo to add tags"><i class="icon-tags icon-white"></i> Tags</a></li></ul></div></div></div>');
+  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><ul class="breadcrumb"><li><a href="#multimedia">Albums</a> <span class="divider">/</span></li><li><a href="#multimedia/', soy.$$escapeHtml(opt_data.owner.id), '/album/', soy.$$escapeHtml(opt_data.album.id), '">', soy.$$escapeHtml(opt_data.album.name), '</a>', (opt_data.name == null) ? '</li>' : '<span class="divider">/</span></li><li class="active">' + soy.$$escapeHtml(opt_data.name) + '</li>', '</ul><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item" align="center"><img class="photoMain" src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" />', (opt_data.description != null) ? '<div class="carousel-caption"><p>' + soy.$$escapeHtml(opt_data.description) + '</p></div>' : '', '</div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a id="tagDesc" href="javascript:void(0)" rel="tooltip" title="Click the photo to add tags"><i class="icon-tags icon-white"></i> Tags</a></li></ul></div><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a href="javascript:void(0)"><i class="icon-cog icon-white"></i> Options</a></li><li><a href="#">Download</a></li><li><a href="#">Manage permission</a></li><li><a href="#">Set title</a></li></ul></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -568,11 +589,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList989 = opt_data.favourites;
-  var favouriteListLen989 = favouriteList989.length;
-  for (var favouriteIndex989 = 0; favouriteIndex989 < favouriteListLen989; favouriteIndex989++) {
-    var favouriteData989 = favouriteList989[favouriteIndex989];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData989.url), '">', soy.$$escapeHtml(favouriteData989.title), '</li>');
+  var favouriteList1016 = opt_data.favourites;
+  var favouriteListLen1016 = favouriteList1016.length;
+  for (var favouriteIndex1016 = 0; favouriteIndex1016 < favouriteListLen1016; favouriteIndex1016++) {
+    var favouriteData1016 = favouriteList1016[favouriteIndex1016];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1016.url), '">', soy.$$escapeHtml(favouriteData1016.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -581,11 +602,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList998 = opt_data.list;
-  var elementListLen998 = elementList998.length;
-  for (var elementIndex998 = 0; elementIndex998 < elementListLen998; elementIndex998++) {
-    var elementData998 = elementList998[elementIndex998];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData998.title), '</h3></div><p>', soy.$$escapeHtml(elementData998.body), '</p>');
+  var elementList1025 = opt_data.list;
+  var elementListLen1025 = elementList1025.length;
+  for (var elementIndex1025 = 0; elementIndex1025 < elementListLen1025; elementIndex1025++) {
+    var elementData1025 = elementList1025[elementIndex1025];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1025.title), '</h3></div><p>', soy.$$escapeHtml(elementData1025.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -652,31 +673,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1123 = opt_data.favourites;
-    var favouriteListLen1123 = favouriteList1123.length;
-    for (var favouriteIndex1123 = 0; favouriteIndex1123 < favouriteListLen1123; favouriteIndex1123++) {
-      var favouriteData1123 = favouriteList1123[favouriteIndex1123];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1123.name), '</li>');
+    var favouriteList1150 = opt_data.favourites;
+    var favouriteListLen1150 = favouriteList1150.length;
+    for (var favouriteIndex1150 = 0; favouriteIndex1150 < favouriteListLen1150; favouriteIndex1150++) {
+      var favouriteData1150 = favouriteList1150[favouriteIndex1150];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1150.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1135 = opt_data.friends;
-    var friendListLen1135 = friendList1135.length;
-    for (var friendIndex1135 = 0; friendIndex1135 < friendListLen1135; friendIndex1135++) {
-      var friendData1135 = friendList1135[friendIndex1135];
-      output.append('<li>', soy.$$escapeHtml(friendData1135.name), '</li>');
+    var friendList1162 = opt_data.friends;
+    var friendListLen1162 = friendList1162.length;
+    for (var friendIndex1162 = 0; friendIndex1162 < friendListLen1162; friendIndex1162++) {
+      var friendData1162 = friendList1162[friendIndex1162];
+      output.append('<li>', soy.$$escapeHtml(friendData1162.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1144 = opt_data.highlights;
-    var resListLen1144 = resList1144.length;
-    for (var resIndex1144 = 0; resIndex1144 < resListLen1144; resIndex1144++) {
-      var resData1144 = resList1144[resIndex1144];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1144.title), '</strong><div>', soy.$$escapeHtml(resData1144.body), '</div></div>');
+    var resList1171 = opt_data.highlights;
+    var resListLen1171 = resList1171.length;
+    for (var resIndex1171 = 0; resIndex1171 < resListLen1171; resIndex1171++) {
+      var resData1171 = resList1171[resIndex1171];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1171.title), '</strong><div>', soy.$$escapeHtml(resData1171.body), '</div></div>');
     }
     output.append('</pre></div>');
   }

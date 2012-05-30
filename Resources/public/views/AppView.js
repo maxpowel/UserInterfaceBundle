@@ -44,6 +44,7 @@ var AppView = Backbone.View.extend({
 			    "profile/:id":           "loadProfile",
 			    "profile":           "toProfile",
 			    "multimedia/:id":             "loadMultimedia",
+			    "multimedia/:id/album/:albumId": "loadAlbum",
 			    "multimedia":                 "toMultimedia",
 			    "preferences":             "loadPreferences",
 			    "" :"goToStart"
@@ -60,35 +61,27 @@ var AppView = Backbone.View.extend({
 			  loadProfile: function(id) {
 				  app.activeMenuSection("profile");
 				  app.loadView(new ProfileSectionView({userId:id}));
-				  /*
-				  this.activeMenuSection("profile");
-				  
-				  var view = new ProfileSectionView({profileId:id});*/
 			  },
 			  
 			  toProfile: function() {
 				  this.navigate("profile/"+getViewer().get('id'),true);
-				  //this.activeMenuSection("profile");
-				  
-				  //var view = new ProfileSectionView();
 			  },
 			  
 			  loadPreferences: function() {
 				  app.activeMenuSection("preferences");
 				  app.loadView(new PreferencesSectionView());
-				  /*
-				  this.activeMenuSection("profile");
-				  
-				  var view = new ProfileSectionView({profileId:id});*/
+
+			  },
+			  
+			  loadAlbum: function(id, albumId) {
+				  app.activeMenuSection("multimedia");
+				  app.loadView(new MultimediaSectionView({profileId:id, albumId: albumId}));
 			  },
 			  
 			  loadMultimedia: function(id) {
 				  app.activeMenuSection("multimedia");
 				  app.loadView(new MultimediaSectionView({profileId:id}));
-				  /*
-				  this.activeMenuSection("profile");
-				  
-				  var view = new ProfileSectionView({profileId:id});*/
+
 			  },
 			  
 			  toMultimedia: function() {
@@ -98,10 +91,6 @@ var AppView = Backbone.View.extend({
 			  loadPhoto: function(id) {
 				  app.activeMenuSection("multimedia");
 				  app.loadView(new PhotoSectionView({photoId:id}));
-				  /*
-				  this.activeMenuSection("profile");
-				  
-				  var view = new ProfileSectionView({profileId:id});*/
 			  },
 			  
 			  loadAgenda: function(year, month) {
@@ -128,32 +117,8 @@ var AppView = Backbone.View.extend({
 			this.toolbar = new ToolbarView({router: controller, el: $(this.el).find("#navbar")});
 			this.toolbar.render();
 			Backbone.history.start();
-			
-			//var template = _.template( this.template, this.options);
-			//$(this.el).html(template);
 	},
 
-	//Estos estan en toolbar
-	/*quickSearch: function ( event ){
-		text = $(event.currentTarget).val();
-		
-		if(event.keyCode == 13){
-			this.options.router.navigate("search/"+text,true);
-			$("#quick-search-result").removeClass('open');
-		}else{
-			//Autocomplete
-			$("#quick-search-result").addClass('open');
-		}
-
-	},
-	
-	onBlurQuickSearch: function(){
-		$("#quick-search-input").val('');
-	},
-	
-	cancelSubmit: function(){
-		return false;
-	},*/
 	
 	render: function(){
 		$(this.el).html(template.appView.app());

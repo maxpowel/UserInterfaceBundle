@@ -4,11 +4,24 @@
  * Photo section
  * @param id
  * @param description
+ * @param name
+ * @param album
+ * @param owner
  */
 {template .photo}
 <div class="row-fluid">
 	<div class="span9" id="photoContainer">
-	
+	<ul class="breadcrumb">
+        <li><a href="#multimedia">Albums</a> <span class="divider">/</span></li>
+        <li><a href="#multimedia/{$owner.id}/album/{$album.id}">{$album.name}</a> 
+        {if $name == null}
+        	</li>
+        {else}
+        	<span class="divider">/</span></li>
+        	<li class="active">{$name}</li>
+        {/if}
+        	
+      </ul>
 	 
     				
 	    <div id="photo" class="carousel">
@@ -36,7 +49,17 @@
 	<div class="span3">
 		<div class="well" style="padding: 8px 0;">
     	  <ul id="tagList" class="nav nav-list">
-          		<li class="active"><a id="tagDesc" href="#" rel="tooltip" title="{msg desc="Add tag description"}Click the photo to add tags{/msg}"><i class="icon-tags icon-white"></i> Tags</a></li>
+          		<li class="active"><a id="tagDesc" href="javascript:void(0)" rel="tooltip" title="{msg desc="Add tag description"}Click the photo to add tags{/msg}"><i class="icon-tags icon-white"></i> Tags</a></li>
+        	</ul> 
+        </div>
+        
+        
+        <div class="well" style="padding: 8px 0;">
+    	  <ul id="tagList" class="nav nav-list">
+          		<li class="active"><a href="javascript:void(0)"><i class="icon-cog icon-white"></i> Options</a></li>
+          		<li><a href="#">Download</a></li>
+          		<li><a href="#">Manage permission</a></li>
+          		<li><a href="#">Set title</a></li>
         	</ul> 
         </div>
 	</div>

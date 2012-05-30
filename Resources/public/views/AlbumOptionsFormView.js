@@ -39,6 +39,7 @@ var AlbumOptionsFormView = Backbone.View.extend({
     },
     render: function() {
     	$(this.el).html(template.multimediaView.albumOptions({name:this.options.folder.get('name')}));
+    	this.$el.append(new PermissionManagerSimpleView({model: this.options.folder}).render().el)
 		
     	
 

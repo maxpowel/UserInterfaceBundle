@@ -104,7 +104,7 @@ class MultimediaController extends Controller
 		$fetcher = $this->get('wixet.fetcher');
 		$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_GET['folder']);
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-		$collection = $fetcher->getCollection($album,$profile);
+		$collection = $fetcher->getCollection($album,$profile,"Wixet\WixetBundle\Entity\MediaItem");
 		 
 		$data['total'] =$collection->getSize();
 		foreach($collection->getRaw($offset,$pageSize) as $item){

@@ -28,9 +28,7 @@ var UploaderView = Backbone.View.extend({
 			}
 		});
 		dialog.render();
-		/*html = $(template.appView.uploadDialog());
-		html.modal();
-		console.log("hoa")*/
+
 		
 		return false;//Avoid button click in the form
 	},
@@ -62,9 +60,7 @@ var UploaderView = Backbone.View.extend({
     
     
     updateProgress: function(newSize){
-    	console.log(newSize)
-    	console.log(this.totalUploaded);
-    	console.log(this.totalFileSize);
+    	//TODO parece que se muestra mal....
     	this.totalPercentCont.text(Math.round((this.totalUploaded + newSize) * 100 / this.totalFileSize));
     	
     }, 

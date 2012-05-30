@@ -33,13 +33,16 @@ var AlbumListView = Backbone.View.extend({
     	  var photoCon = this.photoContainer;
     	  var albumButton = this.newAlbumButton;
     	  var profileId = this.profileId;
+    	  var albumId = this.options.albumId;
           this.options.collection.each(function(folder,i){
         	  var view = new AlbumView({model: folder, photoContainer: photoCon, newAlbumButton: albumButton});
         	  
         	  cont.append(view.render().el);
         	  view.bind('loaded', self.albumLoaded, self);
-        	  
-        	  if(i == 0){
+        	  if(albumId != null){
+        		  if(folder.get('id') == albumId)
+            		  view.loadAlbum();
+          	  }else if(i == 0){
         		  view.loadAlbum();
         	  }
           });    	  

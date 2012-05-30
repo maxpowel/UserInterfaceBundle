@@ -1,0 +1,67 @@
+{namespace template.permission}
+
+/**
+ * Simple permission form
+ */
+{template .simple}
+	<br><br>
+	<h3>Permissions</h3>
+    <table class="table table-condensed">
+    	<thead>
+    		<th>Type</th>
+    		<th>Name</th>
+    		<th>Read Granted</th>
+    		<th>Read Denied</th>
+    		<th>Write Granted</th>
+    		<th>Write Denied</th>
+    		<th></th>
+    		<th></th>
+    	</thead>
+    	<tbody id="permissionList">
+    		
+    	</tbody>
+    </table>   
+    <div>
+    	<h4>Add new permission</h4>
+    	<input type="text" id="contactSearch" placeholder="Person or group name">
+    </div>
+
+			
+{/template}
+
+/**
+ * Simple permission entry
+ * @param type
+ * @param name
+ */
+{template .simpleEntry}
+	<td>
+		{if $type == 'group'}
+			<img class="thumbnail" src="/img/glyphicons_043_group.png">
+		{else}
+			<img class="thumbnail" src="/img/glyphicons_003_user.png">
+		{/if}
+		
+	</td>
+	<td>
+		{$name}
+	</td>
+	<td>
+		<input type="checkbox">
+	</td>
+	<td>
+		<input type="checkbox">
+	</td>
+	<td>
+		<input type="checkbox">
+	</td>
+	<td>
+		<input type="checkbox">
+	</td>
+	<td>
+		<button class="btn btn-primary" id="save-btn">Save</button>
+	</td>
+	<td>
+		<button class="btn btn-danger" id="remove-btn">Remove</button>
+	</td>
+{/template}
