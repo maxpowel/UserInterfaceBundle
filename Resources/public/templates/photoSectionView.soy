@@ -12,14 +12,10 @@
 <div class="row-fluid">
 	<div class="span9" id="photoContainer">
 	<ul class="breadcrumb">
-        <li><a href="#multimedia">Albums</a> <span class="divider">/</span></li>
+        <li><a href="#multimedia">{msg desc="Albums"}Albums{/msg}</a> <span class="divider">/</span></li>
         <li><a href="#multimedia/{$owner.id}/album/{$album.id}">{$album.name}</a> 
-        {if $name == null}
-        	</li>
-        {else}
         	<span class="divider">/</span></li>
-        	<li class="active">{$name}</li>
-        {/if}
+        	<li class="active" id="photoTitleTop" style="display:none">{if $name == null}{$name}{/if}</li>
         	
       </ul>
 	 
@@ -28,12 +24,10 @@
 		    <!-- Carousel items -->
 		    <div class="carousel-inner">
 		    <div class="active imgtag item" align="center">
-		    	    <img class="photoMain" src="/photo/normal/{$id}" />
-		    	    {if $description != null }
-					    <div class="carousel-caption">
+		    	    <img mediaItemId="{$id}" class="photoMain" src="/photo/normal/{$id}" />
+					    <div class="carousel-caption" style="display: none">
                   			<p>{$description}</p>
                 		</div>
-					{/if} 
 
 
 		    </div>
@@ -53,15 +47,28 @@
         	</ul> 
         </div>
         
-        
         <div class="well" style="padding: 8px 0;">
     	  <ul id="tagList" class="nav nav-list">
           		<li class="active"><a href="javascript:void(0)"><i class="icon-cog icon-white"></i> Options</a></li>
-          		<li><a href="#">Download</a></li>
-          		<li><a href="#">Manage permission</a></li>
-          		<li><a href="#">Set title</a></li>
+          		<li><a href="photo/original/{$id}">{msg desc="Download"}Download{/msg}</a></li>
+          		<li><a href="#">{msg desc="Manage permission"}Manage permission{/msg}</a></li>
+          		<li><a href="javascript:void(0)" id="setTitle">{msg desc="Set title"}Set title{/msg}</a></li>
         	</ul> 
         </div>
 	</div>
+	
+	<div class="modal fade hide" id="setTitleModal">
+    	<div class="modal-header">
+    		<h3>{msg desc="Set a title to your photo"}Set a title or description to your photo{/msg}</h3>
+    	</div>
+    	<div class="modal-body">
+    		<p>{msg desc="Photo title"}Photo title{/msg}: <input type="text" {if $name != null}value="{$name}"{/if} id="newTitle"></p>
+    		<p>{msg desc="Photo description"}Description{/msg}: <input type="text" {if $description != null}value="{$description}"{/if} id="newDescription"></p>
+    	</div>
+    	<div class="modal-footer">
+    		<a href="#" class="btn" data-dismiss="modal">{msg desc="Close"}Close{/msg}</a>
+    		<a href="#" id="saveModalChanges" class="btn btn-primary" data-dismiss="modal">{msg desc="Save"}Save{/msg}</a>
+    	</div>
+    </div>
 </div>
 {/template}

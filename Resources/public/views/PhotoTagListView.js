@@ -89,7 +89,7 @@ var PhotoTagListView = Backbone.View.extend({
     		
 
     	}
-
+    	var photo = this.photo;
     	autocomplete.typeahead({
     			source: "/autocomplete/contacts",
     			onSelect: function(item){
@@ -97,17 +97,15 @@ var PhotoTagListView = Backbone.View.extend({
     				var posicionLocal = {x: posicion.x, y: posicion.y};
     				var tag = new PhotoTag();
 
-    				tag.save({profileId: item.id, value:item.value, left: posicionLocal.x, top: posicionLocal.y},{
+    				tag.save({mediaItemId: photo.attr("mediaItemId"),profileId: item.id, value:item.value, left: posicionLocal.x, top: posicionLocal.y},{
     						success:function(){
     							tagList.add(tag);    							
     						}
     				});
-    				
-    				
-    				
-    				
-    				
     				indicador.hide();
+    			},
+    			onBlur: function(){
+    				tagger.hide();
     			}
     	});
     	tagger.hide();

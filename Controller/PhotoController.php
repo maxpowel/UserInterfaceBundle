@@ -3,6 +3,7 @@
 namespace Wixet\UserInterfaceBundle\Controller;
 
 use Wixet\WixetBundle\Entity\MediaItemComment;
+use Wixet\WixetBundle\Entity\MediaItemTag;
 
 use Symfony\Component\BrowserKit\Response;
 
@@ -106,9 +107,29 @@ class PhotoController extends Controller
 	*/
 	public function postTagAction()
 	{
-		
 		$data = json_decode(file_get_contents('php://input'),true);
-		$data['id'] = rand(0, 100);
+		
+		$viewer = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$fetcher = $this->get('wixet.fetcher');
+		$photo = $fetcher->getWritable("Wixet\WixetBundle\Entity\MediaItem",$data['mediaItemId'],$viewer);
+		$taggedPerson = $fetcher->getPassive("Wixet\WixetBundle\Entity\UserProfile",$data['profileId'],$viewer);
+		
+		if($photo && $taggedPerson){
+			$tag = new MediaItemTag();
+			$tag->setPosition(array("left"=> $data['left'] ,"top"=> $data['top']));
+			$tag->setProfile($taggedPerson);
+			$tag->setOwner($viewer);
+			$tag->setMediaItem($photo);
+			
+			$em = $this->get('doctrine')->getEntityManager();
+			$em->persist($tag);
+			$em->flush();
+			
+			$data['id'] = $tag->getId();
+		}else
+			$data= array("error"=>"Denied");
+		
+		
 	
 	
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
@@ -120,7 +141,19 @@ class PhotoController extends Controller
 	*/
 	public function deleteTagAction($id)
 	{
-		$data = array();
+		
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		$tag = $em->getRepository('Wixet\WixetBundle\Entity\MediaItemTag')->find($id); 
+
+		$data = array("error"=>"false");
+		if($tag->getProfile()->getId() == $profile->getId() || $tag->getOwner()->getId() == $profile->getId()){
+			$em->remove($tag);
+			$em->flush();
+
+		}else
+			$data= array("error"=>"Denied");
+		
 	
 	
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
@@ -223,14 +256,14 @@ class PhotoController extends Controller
      }
      
      /**
-     * @Route("/original", name="_original_get")
+     * @Route("/original/{id}", name="_original_get")
      */
-     public function getOriginalPhotoAction()
+     public function getOriginalPhotoAction($id)
      {
      	 
      	$fetcher = $this->get('wixet.fetcher');
      	$profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
-     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+     	$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$id,$profile);
      	if($mediaItem != null){
      		$mim = $this->get('wixet.media_item_manager');
      		$mim->printMediaItemOriginal($mediaItem);
@@ -265,6 +298,7 @@ class PhotoController extends Controller
      
      /**
      * @Route("/{id}", name="_photo_data")
+     * @Method({"GET"})
      */
      public function getPhotoDataAction($id)
      {
@@ -288,9 +322,14 @@ class PhotoController extends Controller
      		$owner = $mediaItem->getProfile();
      		$data['owner'] = array("id"=> $owner->getId(), "name"=>$owner->getFirstName()." ".$owner->getLastName());
      		
+     		
      		$tags = array();
-     		$tags[] = array("id"=>45, "value"=>"Alvaro", "left"=>50, "top"=>100);
-     		$tags[] = array("id"=>60, "value"=>"Powel", "left"=>0, "top"=>130);
+     		foreach($mediaItem->getTags() as $tag){
+     			$pf = $tag->getProfile();
+     			$position = $tag->getPosition();
+	     		$tags[] = array("id"=>$tag->getId(), "value"=>$pf->getFirstName()." ".$pf->getLastName(), "left"=>$position['left'], "top"=>$position['top']);
+     		}
+     		
      		$data['tags'] = $tags;
      
      	}else{
@@ -303,4 +342,30 @@ class PhotoController extends Controller
      	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
      }
      
+     /**
+     * @Route("/", name="_photo_data_update")
+     * @Method({"PUT"})
+     */
+     public function putPhotoDataAction()
+     {
+     	 
+     	$data = array();
+     	$data = json_decode(file_get_contents('php://input'),true);
+     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+     	$em = $this->get('doctrine')->getEntityManager();
+     	$photo = $em->getRepository('Wixet\WixetBundle\Entity\MediaItem')->find($data['id']);
+     	
+     	
+     	if($photo->getProfile()->getId() == $profile->getId()){
+     		 $photo->setTitle($data['name']);
+     		 $photo->setDescription($data['description']);
+     		 $em->flush();
+     	}else{
+     		$data['error'] = "Access denied";
+     	}
+     	 
+     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+     }
+     
 }
+
