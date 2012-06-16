@@ -92,7 +92,7 @@ var SearchSectionView = Backbone.View.extend({
     },
 
     initialize: function() {
-
+    	this.searchQuery = this.options.query;
     },
     
     doSearch: function(){
@@ -159,6 +159,9 @@ var SearchSectionView = Backbone.View.extend({
         this.nextButton = $(this.el).find("#nextPage-btn").parent();
         this.previousButton = $(this.el).find("#previousPage-btn").parent();
         
+        if(this.searchQuery != null){
+        	this.doSearch();
+        }
 		return this;
     },
     nextPage: function(){

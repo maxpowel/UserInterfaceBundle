@@ -58,8 +58,14 @@ class MainController extends Controller
 	{
 		$data = array();
 		 
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		
 		$index = $this->get('wixet.index_manager');
-		$index->rebuild();
+		$index->rebuild("contacts");
+		
+		$qm = $this->get('wixet.query_manager');
+		$qm->contactSearch($profile,"pp");
+		
 		//To avoid ArgvInput error: no argv index found
 		/*$_SERVER['argv'] = array();
 		 
@@ -74,7 +80,7 @@ class MainController extends Controller
 		$command->run($input,$output);*/
 		///////////
 		 
-		$em = $this->get('doctrine')->getEntityManager();
+		//$em = $this->get('doctrine')->getEntityManager();
 		/*$command = $this->getApplication()->find('index:rebuild');
 		 $input = new ArrayInput();
 		$output = null;
@@ -213,7 +219,7 @@ class MainController extends Controller
 
 		//Update index
 		$index = $this->get('wixet.index_manager');
-		$index->rebuild();
+		$index->rebuild("extensions");
 
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
@@ -266,7 +272,7 @@ class MainController extends Controller
 
 		//Update index
 		$index = $this->get('wixet.index_manager');
-		$index->rebuild();
+		$index->rebuild("extensions");
 		 
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
@@ -292,7 +298,7 @@ class MainController extends Controller
 
 		//Update index
 		$index = $this->get('wixet.index_manager');
-		$index->rebuild();
+		$index->rebuild("extensions");
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
 	 

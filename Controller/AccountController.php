@@ -89,7 +89,7 @@ class AccountController extends Controller
 	    		
 	    		//Update index
 	    		$index = $this->get('wixet.index_manager');
-	    		$index->rebuild();
+	    		$index->rebuild("extensions");
 	    		
     		}else
     			$data = array("error"=>true, "code"=>$error);

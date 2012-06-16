@@ -170,8 +170,12 @@ class PermissionController extends Controller
     		$sql = "SELECT count(userprofile_id) as exist from profilegroup_userprofile WHERE profilegroup_id = ". $mainGroup->getId() ." AND userprofile_id = ".$profile->getId();
     		$statement = $em->getConnection()->query($sql);
     		$res = $statement->fetch();
-    		if($res['exist'] == 0)
+    		if($res['exist'] == 0){
     			$ws->addProfileToGroup($profile, $mainGroup);
+    			//Rebuild index if is the main group
+    			$index = $this->get('wixet.index_manager');
+    			$index->rebuild("contacts");
+    		}
     		
     		////
     		if($group->getId() != $mainGroup->getId()){
@@ -179,7 +183,7 @@ class PermissionController extends Controller
     		}
     		$data = array("error" => false);
     	}
-    	
+
     	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
     }
@@ -202,19 +206,21 @@ class PermissionController extends Controller
     
     		//If is the main group, this user is removed from all groups of the user
     		$mainGroup = $owner->getMainGroup();
-    		if($group->getId() != $mainGroup->getId()){
-    			$ws->removeProfileFromGroup($profile, $group);
-    		}else{
-    			
+    		$ws->removeProfileFromGroup($profile, $group);
+    		if($group->getId() == $mainGroup->getId()){
     			$groups = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->findBy(array('profile' => $owner->getId()));
     			foreach($groups as $group){
     				$ws->removeProfileFromGroup($profile, $group);
     			}
+    			//Rebuild index if is the main group
+    			$index = $this->get('wixet.index_manager');
+    			$index->rebuild("contacts");
     		}
     		$data = array("error" => false);
     		
     	}
     	 
+    	
     	 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
     }

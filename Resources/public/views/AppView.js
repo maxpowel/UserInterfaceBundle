@@ -37,6 +37,7 @@ var AppView = Backbone.View.extend({
 			  routes: {
 			    "start":                 "loadStart",
 			    "photo/:id":					"loadPhoto",
+			    "search/:query":                 "loadSearchQuery",
 			    "search":                 "loadSearch",
 			    "messages":                 "loadMessages",
 			    "agenda/:year/:month":   "loadAgenda",
@@ -103,6 +104,11 @@ var AppView = Backbone.View.extend({
 			  loadSearch: function() {
 				  app.activeMenuSection("search");
 				  app.loadView(new SearchSectionView());
+			  },
+			  
+			  loadSearchQuery: function(query) {
+				  app.activeMenuSection("search");
+				  app.loadView(new SearchSectionView({query: query}));
 			  },
 			  
 			  loadMessages: function() {

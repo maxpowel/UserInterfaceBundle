@@ -48,8 +48,10 @@ class AutocompleteController extends Controller
 	{
 		
 		$data = array();
-		foreach($this->get('security.context')->getToken()->getUser()->getProfile()->getMainGroup()->getProfiles() as $profile){
-			$data[] = array("id"=>$profile->getId(),"value"=>$profile->getFirstName()." ".$profile->getLastName());
+		$qm = $this->get('wixet.query_manager');
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		foreach($qm->contactSearch($profile, $_GET['q']) as $contact){
+			$data[] = array("id"=>$contact->getId(),"value"=>$contact->getFirstName()." ".$contact->getLastName());
 		}
 			
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
