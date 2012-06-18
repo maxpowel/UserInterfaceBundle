@@ -14,9 +14,9 @@ var StartSectionView = Backbone.View.extend({
     },
     
     render: function(){
-    	var params = this.options;
-    	params.thumbnail = window.getViewer().get('thumbnail');
-    	$(this.el).html(template.section.start( params ));
+    	//var params = this.options;
+    	//params.thumbnail = window.getViewer().get('thumbnail');
+    	$(this.el).html(template.section.start( {id: getViewer().get('id')} ));
     	
     	var newnessList = new NewnessListView({ collection: this.newnessCollection, isOwner:true});
     	var meetingList = new MeetingListView({ collection: this.meetingCollection, el: $(this.el).find("#meetings")});

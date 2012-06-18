@@ -36,7 +36,6 @@ var NewnessView = Backbone.View.extend({
       
     render: function() {
     	//TODO hacer que esto cambie
-
     	$(this.el).html(template.newnessView.newness(this.model.toJSON()));
     	this.commentInput = $(this.el).find("#comment");
     	

@@ -216,22 +216,46 @@ class PhotoController extends Controller
      }
      
      /**
-     * @Route("/profile", name="_profile_get")
+     * @Route("/profile/{id}", name="_profile_get")
      */
-     public function getThumbnailProfileAction()
+     public function getThumbnailProfileAction($id)
      {
      
-	     $fetcher = $this->get('wixet.fetcher');
-	     $profile = $uploader = $this->get('security.context')->getToken()->getUser()->getProfile();
-	     $mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+	     //$fetcher = $this->get('wixet.fetcher');
+	     //$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+	     //$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+	     //$mediaItem = $this->get('security.context')->getToken()->getUser()->getProfile()->getMainMediaItem();
+	     
+     	//Profile photo is public
+     	$em = $this->get('doctrine')->getEntityManager();
+     	 $mediaItem = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($id)->getMainMediaItem();
 	     if($mediaItem != null){
      		$mim = $this->get('wixet.media_item_manager');
      		$mim->printProfileThumbnail($mediaItem);
+     	}     
+     
+     	return new \Symfony\Component\HttpFoundation\Response();
+     }
+     
+     /**
+     * @Route("/public/{id}", name="_public_get")
+     */
+     public function getThumbnailPublicProfileAction($id)
+     {
+     	 
+     	//$fetcher = $this->get('wixet.fetcher');
+     	//$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+     	//$mediaItem = $fetcher->get('Wixet\WixetBundle\Entity\MediaItem',$_GET['id'],$profile);
+     	//$mediaItem = $this->get('security.context')->getToken()->getUser()->getProfile()->getMainMediaItem();
+     
+     	//Profile photo is public
+     	$em = $this->get('doctrine')->getEntityManager();
+     	$mediaItem = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($id)->getMainMediaItem();
+     	if($mediaItem != null){
+     		$mim = $this->get('wixet.media_item_manager');
+     		$mim->printPublicProfileThumbnail($mediaItem);
      	}
-      
-      
-     
-     
+     	 
      	return new \Symfony\Component\HttpFoundation\Response();
      }
      

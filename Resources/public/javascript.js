@@ -1,7 +1,7 @@
 window.viewer = null;
 
 window.getViewer = function() {
-	return viewer;
+	return core._viewer;
 }
 
 core = {}
@@ -36,8 +36,8 @@ function startUp(){
 $(document).ready(function(){
 	//Starts the magic	
 	//window.viewer = new User({id:57, thumbnail:"http://placehold.it/90x90"});
-	window.viewer = new User();
-	window.viewer.fetch({success:function(){
+	core._viewer = new User();
+	core._viewer.fetch({success:function(){
 		startUp();
 	}});
 	

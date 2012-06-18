@@ -8,9 +8,24 @@ var PhotoSectionView = Backbone.View.extend({
         "click .right": "nextPhoto",
         "click .left": "prevPhoto",
         "click #setTitle": "setTitle",
+        "click #setPhoto": "setPhotoProfile",
         "click #saveModalChanges": "saveModalWindowData"
     },
     
+    setPhotoProfile: function(){
+    	var self = this
+    	viewer = getViewer();
+    	viewer.save({mainMediaItem: this.photoId},
+    		{
+    			success: function(){
+    				self.$el.find("#photoSuccess").show();
+    			},
+    			error: function(){
+    				alert("Error");
+    			}
+    		}
+    	);
+    },
     nextPhoto: function(){
     	if(this.nextPhoto != null)
     		location.href="#photo/"+this.nextPhoto;

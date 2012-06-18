@@ -87,12 +87,13 @@ var ProfileSectionView = Backbone.View.extend({
 		params.lastName = user.get("lastName");
 		params.id = user.get("id");
 		*/
+
     	$(this.el).html(template.section.profile());
     	
     	var isOwner = viewer.get("id") == this.userId;
 
     	if(isOwner){
-    		$(this.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});
+    		$(this.el).find(".thumbnail").attr({src: "photo/public/"+viewer.get("id")});
     		$(this.el).find("#profileTitle").text( viewer.get("firstName") +" "+ viewer.get("lastName") );
 			this.user = viewer;
 			this.renderProfile();
@@ -101,7 +102,7 @@ var ProfileSectionView = Backbone.View.extend({
     		var user = new User({id: this.userId});
     		var localThis = this;
     		user.fetch({success:function(){
-    			$(localThis.el).find(".thumbnail").attr({src: "http://placehold.it/170x150"});
+    			$(localThis.el).find(".thumbnail").attr({src: "photo/profile/"+viewer.get("id")});
         		$(localThis.el).find("#profileTitle").text( user.get("firstName") +" "+ user.get("lastName") );
     			localThis.user = user;
     			localThis.renderProfile();

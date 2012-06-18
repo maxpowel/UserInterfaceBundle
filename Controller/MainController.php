@@ -162,6 +162,7 @@ class MainController extends Controller
 			$data['firstName'] = $profile->getFirstName();
 			$data['lastName'] = $profile->getLastName();
 			$data['isOwner'] = true;
+			//$data['mainMediaItem'] = $profile->getMainMediaItem()->getId();
 		}else{
 			$data['id'] = 0;
 		}
@@ -182,10 +183,38 @@ class MainController extends Controller
 		 
 		$em = $this->get('doctrine')->getEntityManager();
 		 
-		$profile->setFirstName($data['firstName']);
-		$profile->setLastName($data['lastName']);
+		if($profile->getFirstName() != $data['firstName'] || $profile->getLastName() != $data['lastName']){
+			$profile->setFirstName($data['firstName']);
+			$profile->setLastName($data['lastName']);
 		 
-		$em->flush();
+			$em->flush();
+			//Rebuild index
+		}
+		
+		//Main photo changed
+		if(isset($data['mainMediaItem'])){
+			$fetcher = $this->get('wixet.fetcher');
+			$md = $fetcher->get("Wixet\WixetBundle\Entity\MediaItem",$data['mainMediaItem'],$profile);
+			//Only if the user has access
+			if($md){
+				$mainMd = $profile->getMainMediaItem();
+				if($mainMd != null && $mainMd->getId() != $md->getId()){
+					$mim = $this->get('wixet.media_item_manager');
+					$mim->destroyProfileThumbnail($profile, $mainMd);
+					$mim->doProfileThumbnail($profile, $md);
+					$profile->setMainMediaItem($md);
+					$em->flush();
+				}else if($mainMd == null){
+					$mim = $this->get('wixet.media_item_manager');
+					$mim->doProfileThumbnail($profile, $md);
+					$profile->setMainMediaItem($md);
+					$em->flush();
+				}
+			}else{
+				$data['mediaItemId'] = $md->getId();
+			}
+		}
+		
 		 
 		 
 
@@ -324,11 +353,11 @@ class MainController extends Controller
 		$ws = $this->get('wixet.fetcher');
 		 
 		$update = $em->getRepository('Wixet\WixetBundle\Entity\ProfileUpdate')->find($data['updateId']);
-
 		//Only can comment between friends
 		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$update->getProfile()->getId(),$profile);
 		//If the user are not granted to view the profile, $friend is null
 		if($friend != null){
+			
 			$comment = new ProfileUpdateComment();
 			$comment->setAuthor($profile);
 			$comment->setBody($data['body']);
@@ -336,6 +365,7 @@ class MainController extends Controller
 			$em->persist($comment);
 			$em->flush();
 			$data['id'] = $comment->getId();
+			$data['authorId'] = $profile->getId();
 			$data['authorName'] = $profile->getFirstName()." ".$profile->getLastName();
 			$data['date'] = $comment->getCreated()->format('Y-m-d H:i:s');
 		}else $data = array("error"=>"Not allowed");
@@ -371,7 +401,7 @@ class MainController extends Controller
 			foreach ($updateList as $update){
 				$author = $update->getAuthor();
 				 
-				$element = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+				$element = array("id"=>$update->getId(), "authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
 				 
 				//Comments
 				$comments = $update->getComments();
@@ -380,7 +410,7 @@ class MainController extends Controller
 				$comments = array();
 				foreach ($commentList as $comment){
 					$author = $comment->getAuthor();
-					$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorName" => $author->getFirstName()." ".$author->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'));
+					$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorId"=> $author->getId(), "authorName" => $author->getFirstName()." ".$author->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'));
 				}
 				$element['comments'] = $comments;
 				$data[] = $element;
@@ -413,7 +443,7 @@ class MainController extends Controller
 		*/
 		 
 		$id = isset($_GET['id'])?$_GET['id']:$profile->getId();
-		 
+
 		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile);
 		//If the user are not granted to view the profile, $friend is null
 		if($friend != null){
@@ -427,7 +457,7 @@ class MainController extends Controller
 			$em->flush();
 			 
 			$author = $update->getAuthor();
-			$data = array("id"=>$update->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+			$data = array("id"=>$update->getId(),"authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
 
 		}
 		 
@@ -459,12 +489,27 @@ class MainController extends Controller
 	 */
 	public function getPersonalInfoAction()
 	{
+		//TODO añadir más campos
+		$data = array();
+		$viewer = $this->get('security.context')->getToken()->getUser()->getProfile();
+		if(isset($_GET['id'])){
+			$ws = $this->get('wixet.fetcher');
+			//Only can get it if you are allowed
+			$profile = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$_GET['id'],$viewer);
+		}else
+		$profile = $viewer;
+		 
+		if($profile){
+			$data['id'] = $profile->getId();
+			$data['name'] = $profile->getFirstName()." ". $profile->getLastName();
+			$data['city'] = "";
+			//$data['mainMediaItem'] = $profile->getMainMediaItem()->getId();
+		}else{
+			$data['id'] = 0;
+		}
+		 
 
-		 
-		 
-		$models = array("name"=>"Alvaro", "city"=>"Palencia");
-		 
-		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $models));
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
 
 
