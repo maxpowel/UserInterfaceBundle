@@ -1,8 +1,7 @@
 var SecurityView = Backbone.View.extend({
     
 	events: {
-    	"click #manageGroups-btn":  "loadGroups",
-    	"click #newPermission-btn":  "addPermission",
+    	"click #manageGroups-btn":  "loadGroups"
     },
     initialize: function() {
     	this.permissions = new PermissionList();
@@ -21,9 +20,6 @@ var SecurityView = Backbone.View.extend({
     	$(this.el).html(menu.render().el);
     },
     
-    addPermission: function(){
-    	alert("Not available, please go to the photo/album and add permission from there")
-    },
     
     addAll: function() {
     	

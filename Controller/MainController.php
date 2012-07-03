@@ -60,12 +60,19 @@ class MainController extends Controller
 		 
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
 		
-		$index = $this->get('wixet.index_manager');
+		$ws = $this->get('wixet.permission_manager');
+		$permission = array("readGranted"=>true, "readDenied"=> false, "writeGranted"=> true, "writeDenied"=> false);
+		$ic = $profile->getMainItemContainer();
+		$ws->setPermission($profile, $ic, $permission);
+		
+		$fetched = $this->fetcher->get("Wixet\WixetBundle\Entity\MediaItem", $this->md->getId(), $this->viewerProfile);
+		
+		/*$index = $this->get('wixet.index_manager');
 		$index->rebuild("contacts");
 		
 		$qm = $this->get('wixet.query_manager');
 		$qm->contactSearch($profile,"pp");
-		
+		*/
 		//To avoid ArgvInput error: no argv index found
 		/*$_SERVER['argv'] = array();
 		 
@@ -189,6 +196,10 @@ class MainController extends Controller
 		 
 			$em->flush();
 			//Rebuild index
+			//TODO esto se limitará en un futuro
+			$index = $this->get('wixet.index_manager');
+			$index->rebuild("extensions");
+			$index->rebuild("contacts");
 		}
 		
 		//Main photo changed

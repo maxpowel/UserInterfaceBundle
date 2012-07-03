@@ -176,8 +176,12 @@ class PrivateMessageController extends Controller
     	$em = $this->get('doctrine')->getEntityManager();
     	$author = $this->get('security.context')->getToken()->getUser()->getProfile();
     	
-    	if(isset($data['profile_id'])){
-    		$receiver = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($data['profile_id']);
+    	if(isset($data['receiver_id'])){
+    		if($data['receiver_type'] == "profile"){
+    			$receiver = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($data['receiver_id']);
+    		}else{
+    			
+    		}
     		$msg->setConversationId(uniqid());
     	}else{
     		//When replying a message, the profile_id is not required. The profile_id is obtained by using the info in other messages

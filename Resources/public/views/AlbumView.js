@@ -27,10 +27,17 @@ var AlbumView = Backbone.View.extend({
     	$(this.el).unbind().remove();
     },
     loadAlbum: function(){
-    	var albumOptions = new AlbumOptionsButtonView({album: this.model});
-    	var photoList = new PhotoListView({album:this.model, optionsBut: albumOptions});
+    	if(this.options.newAlbumButton != null){ //Viewer is the owner
+    		var albumOptions = new AlbumOptionsButtonView({album: this.model});
+        	var photoList = new PhotoListView({album:this.model, optionsBut: albumOptions});
+        	
+        	
+        	var menu = new MultimenuView({original:photoList, subsections:[albumOptions,this.options.newAlbumButton], el: this.photoContainer});
+    	}else{
+    		var photoList = new PhotoListView({album:this.model, optionsBut: null});
+        	var menu = new MultimenuView({original:photoList, subsections:[], el: this.photoContainer});
+    	}
     	
-    	var menu = new MultimenuView({original:photoList, subsections:[albumOptions,this.options.newAlbumButton], el: this.photoContainer});
     	menu.render();
     	this.trigger("loaded",this.el);
     }

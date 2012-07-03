@@ -5,8 +5,24 @@ var AlbumOptionsFormView = Backbone.View.extend({
     	"click #remove-folder-btn": "removeAlbum",
     },
     initialize: function() {
-
+    	this.folder = this.options.folder;
+    	this.permissions = new PermissionList();
+    	this.permissions.url = this.permissions.url+"ItemContainer/"+this.folder.get("id");
+    	this.permissions.bind('add',   this.addOnePermission, this);
+        this.permissions.bind('reset', this.addAllPermissions, this);
     	
+    },
+    addAllPermissions: function(){
+    	this.permissionContainer = this.$el.find("#permissionsBody");
+    	var self = this;
+    	this.permissions.each(function(permission){
+      	  self.addOnePermission(permission,self);
+        });
+    	//console.log(permission.get('id'))
+    },
+    
+    addOnePermission: function(permission){
+    	this.permissionContainer.append(new PermissionSimpleEntryView({model: permission}).render().el)
     },
     
     saveAlbum: function(){
@@ -40,7 +56,18 @@ var AlbumOptionsFormView = Backbone.View.extend({
     render: function() {
     	$(this.el).html(template.multimediaView.albumOptions({name:this.options.folder.get('name')}));
     	this.$el.append(new PermissionManagerSimpleView({model: this.options.folder}).render().el)
-		
+    	//Permissions
+		this.permissions.fetch();
+    	var self = this
+    	this.$el.find("#newPermissionEntity").typeahead({
+			source: "/autocomplete/contactsGroups",
+			onSelect: function(item){
+				self.permissions.add(new Permission({isNew: true, read_granted:1, read_denied:0, write_granted:1, write_denied:0, object_id: self.folder.get("id") ,type: item.data, object_type: "ItemContainer", entity_id: item.id, name: item.value}));
+				
+			}
+
+    	});
+    	///
     	
 
       return this;

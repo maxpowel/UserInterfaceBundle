@@ -1,6 +1,7 @@
 var PhotoSectionView = Backbone.View.extend({
     className: "container-fluid",
 
+    permissionsFetched: false,
     modalWindow: null,
     
     events: {
@@ -9,9 +10,37 @@ var PhotoSectionView = Backbone.View.extend({
         "click .left": "prevPhoto",
         "click #setTitle": "setTitle",
         "click #setPhoto": "setPhotoProfile",
-        "click #saveModalChanges": "saveModalWindowData"
+        "click #saveModalChanges": "saveModalWindowData",
+        "click #managePermission": "managePermission",
+        "click #backToPhoto:": "managePermission"
     },
     
+    managePermission: function(){
+    	
+    	if($("#carouselContainer").is(":visible")){
+    		$("#carouselContainer").hide();
+    		$("#permissionContainer").fadeIn();
+    	}else{
+    		$("#permissionContainer").hide();
+    		$("#carouselContainer").fadeIn();
+    		
+    	}
+    	
+    	if(this.permissionsFetched == false){
+	    	this.permissions.fetch();
+	    	var self = this
+	    	this.permissionsFetched = true
+	    	this.$el.find("#newPermissionEntity").typeahead({
+				source: "/autocomplete/contactsGroups",
+				onSelect: function(item){
+					self.permissions.add(new Permission({isNew: true, read_granted:1, read_denied:0, write_granted:1, write_denied:0, object_id: self.photoId ,type: item.data, object_type: "MediaItem", entity_id: item.id, name: item.value}));
+					
+				}
+
+	    	});
+    	}
+    	
+    },
     setPhotoProfile: function(){
     	var self = this
     	viewer = getViewer();
@@ -35,9 +64,29 @@ var PhotoSectionView = Backbone.View.extend({
     		location.href="#photo/"+this.prevPhoto;
     },
     
+    addAllPermissions: function(){
+    	this.permissionContainer = this.$el.find("#permissionsBody");
+    	var self = this;
+    	this.permissions.each(function(permission){
+      	  self.addOnePermission(permission,self);
+        });
+    	//console.log(permission.get('id'))
+    },
+    
+    addOnePermission: function(permission){
+    	this.permissionContainer.append(new PermissionSimpleEntryView({model: permission}).render().el)
+    },
+    
     initialize: function() {
     	this.photoId = this.options.photoId;
-
+    	this.permissions = new PermissionList();
+    	this.permissions.url = this.permissions.url+"MediaItem/"+this.photoId;
+    	//
+    	this.permissions.bind('add',   this.addOnePermission, this);
+        this.permissions.bind('reset', this.addAllPermissions, this);
+    	//
+    	
+    	
     },
     
     saveModalWindowData: function(){
@@ -82,7 +131,7 @@ var PhotoSectionView = Backbone.View.extend({
     	
     		self.nextPhoto = data.next;
     		self.prevPhoto = data.prev;
-    		$(self.el).find("#photoContainer").append(commentList.render().el);
+    		$(self.el).find("#commentContainer").append(commentList.render().el);
     		
     		var photo = $(self.el).find("#photoContainer").find("img");
     		var photoTagger = new PhotoTagListView({tags: data.tags,photo: photo, el: $(self.el).find("#tagList")});

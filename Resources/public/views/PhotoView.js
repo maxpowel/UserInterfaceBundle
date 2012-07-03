@@ -10,11 +10,13 @@ var PhotoView = Backbone.View.extend({
 	
     initialize: function() {
     	//this.render();
+    	this.isOwner = this.options.isOwner;
+    	
     },
     
       
     render: function() {
-    	$(this.el).html(template.multimediaView.photo( this.model.toJSON()) );
+    	$(this.el).html(template.multimediaView.photo( {id: this.model.get("id"), isOwner: this.isOwner}) );
     	//$(this.el).css("padding-top","65px");
       return this;
     },

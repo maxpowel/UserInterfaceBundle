@@ -6,25 +6,26 @@
 {template .simple}
 	<br><br>
 	<h3>Permissions</h3>
-    <table class="table table-condensed">
-    	<thead>
-    		<th>Type</th>
-    		<th>Name</th>
-    		<th>Read Granted</th>
-    		<th>Read Denied</th>
-    		<th>Write Granted</th>
-    		<th>Write Denied</th>
-    		<th></th>
-    		<th></th>
-    	</thead>
-    	<tbody id="permissionList">
-    		
-    	</tbody>
-    </table>   
-    <div>
-    	<h4>Add new permission</h4>
-    	<input type="text" id="contactSearch" placeholder="Person or group name">
-    </div>
+	<table class="table table-striped table-bordered table-condensed">
+    		<thead>
+    			<tr>
+    				<th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th>
+    			</tr>
+    		</thead>
+    		<tbody id="permissionsBody">
+    		<tr>
+    				<td></td>
+    				<td>{msg desc="New permission for"}New permission for{/msg}<br><input placeholder="{msg desc="Group or person name"}Group or person name{/msg}" id="newPermissionEntity" type="text" class="span"></td>
+    				<td></td>
+    				<td></td>
+    				<td></td>
+    				<td></td>
+    				<td></td>
+    				<td></td>
+    		</tr>
+    			
+    		</tbody>
+    	</table>
 
 			
 {/template}
@@ -33,6 +34,11 @@
  * Simple permission entry
  * @param type
  * @param name
+ * @param read_granted
+ * @param read_denied
+ * @param write_granted
+ * @param write_denied
+ * @param isNew
  */
 {template .simpleEntry}
 	<td>
@@ -47,21 +53,21 @@
 		{$name}
 	</td>
 	<td>
-		<input type="checkbox">
+		<input type="checkbox" class="perm rg" {if $read_granted == 1}checked="checked"{/if}>
 	</td>
 	<td>
-		<input type="checkbox">
+		<input type="checkbox" class="perm rd" {if $read_denied == 1}checked="checked"{/if}>
 	</td>
 	<td>
-		<input type="checkbox">
+		<input type="checkbox" class="perm wg" {if $write_granted == 1}checked="checked"{/if}>
 	</td>
 	<td>
-		<input type="checkbox">
+		<input type="checkbox" class="perm wd" {if $write_denied == 1}checked="checked"{/if}>
 	</td>
 	<td>
-		<button class="btn btn-primary" id="save-btn">Save</button>
+		<button  rel="tooltip" title="Changes saved" class="btn btn-success" id="save-btn">Save</button>
 	</td>
 	<td>
-		<button class="btn btn-danger" id="remove-btn">Remove</button>
+		<button class="btn btn-danger {if $isNew != null}disabled{/if}" id="remove-btn">Remove</button>
 	</td>
 {/template}

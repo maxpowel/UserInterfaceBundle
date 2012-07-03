@@ -72,6 +72,7 @@ var UploaderView = Backbone.View.extend({
     uploadFinished: function(albumId){
 		//Return to normal upload button
 		this.$el.find("#uploading-lbl").hide();
+		this.$el.find("#uploaded-lbl").find("#albumLink").attr({href:"#multimedia/"+getViewer().get("id")+"/album/"+albumId})
 		this.$el.find("#uploaded-lbl").show();
 		//TODO edit link albumLink from uploaded-lbl to aim the album instead multimedia
     },
@@ -183,8 +184,10 @@ var UploadDialogView = Backbone.View.extend({
 		this.$el.find("#albumName-txt").val("");
 		if(form.is(":visible"))
 			form.hide();
-		else
+		else{
 			form.show();
+			form.find("#albumName-txt").focus();
+		}
 	},
 	
 	createAlbum: function() {

@@ -1,6 +1,7 @@
 {namespace template.section}
 /**
  * Profile section
+ * @param id
  */
 {template .profile}
 <div class="row-fluid">
@@ -37,7 +38,7 @@
 			    	<li class="active"><a id="newness-pill" href="javascript:void(0)">{msg desc="Newness in profile"}Newness{/msg}</a></li>
 			    	<li><a id="aboutMe-pill" href="javascript:void(0)">{msg desc="About me in profile"}About me{/msg}</a></li>
 			    	<li><a id="sendMessage-pill" href="javascript:void(0)">{msg desc="Send message in profile"}Send message{/msg}</a></li>
-			    	<li><a id="albums-pill" href="javascript:void(0)">{msg desc="Albums in profile"}Albums{/msg}</a></li>
+			    	<li><a id="albums-pill" href="#multimedia/{$id}">{msg desc="Albums in profile"}Albums{/msg}</a></li>
 				</ul>
     		</div>
         

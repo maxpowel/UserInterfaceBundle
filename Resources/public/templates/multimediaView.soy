@@ -3,12 +3,15 @@
 /**
  * Photo list
  * @param folder
+ * @param owner
  */
 {template .photoList}
 			<div><h3 id="folderName">{$folder}</h3></div>
         	<div align="right" class="breadcrumb">
 
-				<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check photo"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All photos"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">{msg desc="Remove checked photos"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">{msg desc="Move checked photos"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
+				{if $owner == true}
+					<div style="float:left; margin-top:20px; margin-left:20px">{msg desc="Check photo"}Check{/msg} <a id="check-all" href="javascript:void(0)">{msg desc="All photos"}All{/msg}</a> <a id="check-none" href="javascript:void(0)">{msg desc="None"}None{/msg}</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">{msg desc="Remove checked photos"}Remove checked{/msg}</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">{msg desc="Move checked photos"}Move checked{/msg}</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>
+				{/if}
 	
 				<div style="width:200px;float:right;">
 				{msg desc="page"}Page{/msg} <span id="start-page"></span> {msg desc="n of n pages"}of{/msg} <span id="last-page"></span>
@@ -34,12 +37,16 @@
 /**
  * Photo
  * @param id
+ * @param isOwner
  */
 {template .photo}
 <a class="thumbnail" href="#photo/{$id}">
           <img alt="" src="/photo/thumbnail/{$id}">
         </a>
-        <span class="span" style="margin-left:0px;"><input type="checkbox" class="ckbox"></span>
+        <span class="span" style="margin-left:0px;">
+        {if $isOwner == true}
+        	<input type="checkbox" class="ckbox"></span>
+        {/if}
 {/template}
 
 

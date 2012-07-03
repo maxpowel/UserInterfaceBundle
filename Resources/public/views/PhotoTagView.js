@@ -19,15 +19,16 @@ var PhotoTagView = Backbone.View.extend({
     	
     	$(this.el).hover(function(){
     			//box.css({top: self.model.get("top") - (box.width()/2) + offset, left:  self.model.get("left") - (box.width()/2), position:"absolute"});
-
-    			box.show();
-    			box.position({
-      			  my: "center",
-      			  at: "left top",
-      			  of: photo,
-      			  offset: self.model.get("left")+" "+self.model.get("top"),
-      			  collision: "fit"
-      			});
+    			if($("#carouselContainer").is(":visible")){
+	    			box.show();
+	    			box.position({
+	      			  my: "center",
+	      			  at: "left top",
+	      			  of: photo,
+	      			  offset: self.model.get("left")+" "+self.model.get("top"),
+	      			  collision: "fit"
+	      			});
+    			}
 			},
 			function(){
 				box.hide();

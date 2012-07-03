@@ -4,6 +4,8 @@ namespace Wixet\UserInterfaceBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Wixet\WixetBundle\Entity\GroupPermission;
+use Wixet\WixetBundle\Entity\ProfilePermission;
 
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,6 +23,7 @@ class PermissionController extends Controller
      */
     public function indexAction()
     {
+    	/* DPRECATED */
     	//$data = json_decode(file_get_contents('php://input'),true);
     	$data= array();
     	$em = $this->get('doctrine')->getEntityManager();
@@ -68,13 +71,49 @@ class PermissionController extends Controller
     }
     
     
+    /**
+    * Get all permission for one object
+    * @Route("/{objectType}/{objectId}", name="_permission_get")
+    * @Method({"GET"})
+    */
+    public function getPermissionsAction($objectType, $objectId)
+    {
+    	$em = $this->get('doctrine')->getEntityManager();
+    	$repository = "Wixet\WixetBundle\Entity\\".$objectType;
+    	 
+    	$obj = $em->getRepository($repository)->find($objectId);
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	 
+
+    	//Only the owner can get the permissions
+    	$perms = array();
+    	$ot = $em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>$repository));
+    	
+    	if($obj != null && $obj->getProfile()->getId() == $profile->getId()){
+    		$query = $em->createQuery('SELECT ot.name as object_type, p.object_id, p.id, pr.id as entity_id, pr.first_name, pr.last_name, p.read_granted, p.read_denied, p.write_granted, p.write_denied FROM Wixet\WixetBundle\Entity\ProfilePermission p JOIN p.profile pr JOIN p.objectType ot WHERE p.object_id = ?1 AND p.objectType = ?2');
+    		$query->setParameter(1, $obj->getId());
+    		$query->setParameter(2, $ot);
+    		$perms['profile'] = $query->getArrayResult();
+    		
+    		$query = $em->createQuery('SELECT ot.name as object_type, p.object_id, p.id, pr.id as entity_id, pr.name, p.read_granted, p.read_denied, p.write_granted, p.write_denied FROM Wixet\WixetBundle\Entity\GroupPermission p JOIN p.group pr JOIN p.objectType ot WHERE p.object_id = ?1 AND p.objectType = ?2');
+    		$query->setParameter(1, $obj->getId());
+    		$query->setParameter(2, $ot);
+    		$perms['group'] = $query->getArrayResult();
+
+    	}
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $perms ));
+    }
+
     
     /**
+     * DEPRECATED
+    * Remove profile/group permission using internal id 
     * @Route("/{type}/{id}", name="_permission_delete")
     * @Method({"DELETE"})
     */
     public function deleteAction($type, $id)
     {
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  array("error"=>$error) ));
     	$em = $this->get('doctrine')->getEntityManager();
     	$repository = "";
     	if($type == "profile")
@@ -96,16 +135,49 @@ class PermissionController extends Controller
     }
     
     /**
-    * @Route("/{type}/{id}", name="_permission_put")
-    * @Method({"PUT"})
+    * Manage permission 
+    * @Route("/{entityType}/{entityId}/{itemType}/{itemId}", name="_permission_manager")
     */
-    public function putAction($type, $id)
+    public function putAction($entityType, $entityId, $itemType, $itemId)
     {
+    	
+    	
     	$data = json_decode(file_get_contents('php://input'),true);
-    	$permissionRaw = array("readGranted"=>$data['readGranted'],
-    						   "readDenied"=>$data['readDenied'],
-    	                       "writeGranted"=> $data['writeGranted'],
-    	                       "writeDenied"=> $data['writeDenied']);
+    	$permissionRaw = array("readGranted"=>(int)$data['read_granted'],
+    	    						   "readDenied"=>(int)$data['read_denied'],
+    	    	                       "writeGranted"=> (int)$data['write_granted'],
+    	    	                       "writeDenied"=> (int)$data['write_denied']);
+    	
+    	$entity = null;
+    	$em = $this->get('doctrine')->getEntityManager();
+    	if($entityType == "group")
+    		$entity = $em->getRepository("Wixet\WixetBundle\Entity\ProfileGroup")->find($entityId);
+    	else
+    		$entity = $em->getRepository("Wixet\WixetBundle\Entity\UserProfile")->find($entityId);
+    	
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	
+    	if(strpos($itemType,"\\") != false)
+    		$item = $em->getRepository($itemType)->find($itemId);
+    	else
+    		$item = $em->getRepository("Wixet\WixetBundle\Entity\\".$itemType)->find($itemId);
+    	
+
+    	//Only the owner can set permission
+    	if($profile->getId() == $item->getProfile()->getId()){
+    		$ws = $this->get('wixet.permission_manager');
+    		$ws->setPermission($entity,$item,$permissionRaw);
+    		
+    	}
+    	
+    	
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
+    	
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	$permissionRaw = array("readGranted"=>(int)$data['read_granted'],
+    						   "readDenied"=>(int)$data['read_denied'],
+    	                       "writeGranted"=> (int)$data['write_granted'],
+    	                       "writeDenied"=> (int)$data['write_denied']);
     	
     	
     	$em = $this->get('doctrine')->getEntityManager();
@@ -119,37 +191,111 @@ class PermissionController extends Controller
     	 
     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
     	 
-    	$error = true;
+    	
     	if($profile->getId() == $permission->getOwner()->getId()){
     		
     		$item = $em->getRepository($permission->getObjectType()->getName())->find($permission->getObjectId());
     		
     		
-    		//TODO completar esto
+    		//TODO hacer que esto lo gestione permission manager
     		$ws = $this->get('wixet.permission_manager');
     		$objectType = $permission->getObjectType()->getName();
     		//TODO cambiar Wixet\WixetBundle\Entity\ItemContainer por una variable de configuración
     		if($type == "profile" && $objectType == "Wixet\WixetBundle\Entity\ItemContainer"){
-    			//Updaten profile/album
-    			$ws->setPermissionProfileItem($permission->getProfile(), $item, $permissionRaw);
+    			//Update profile/album
+    			$ws->setPermissionProfileItemContainer($permission->getProfile(), $item, $permissionRaw);
     		}elseif($type == "profile" && $objectType != "Wixet\WixetBundle\Entity\ItemContainer"){
     			//Update profile/item
-    			$ws->setPermissionProfileItemContainer($permission->getProfile(), $item, $permissionRaw);
+    			$ws->setPermissionProfileItem($permission->getProfile(), $item, $permissionRaw);
     		}elseif($type == "group" && $objectType == "Wixet\WixetBundle\Entity\ItemContainer"){
     			//Update group/album
-    			$ws->setPermissionProfileItem($permission->getGroup(), $item, $permissionRaw);
+    			$ws->setPermissionGroupItemContainer($permission->getGroup(), $item, $permissionRaw);
     		}elseif($type == "group" && $objectType != "Wixet\WixetBundle\Entity\ItemContainer"){
     			//Update group/item
     			$ws->setPermissionGroupItem($permission->getGroup(), $item, $permissionRaw);
     		}
     		
-    		$error = false;
     	}
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  array("error"=>$error) ));
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
     }
 
 
     /**
+     * DEPRECATED
+    * Create a permission for a profile/group
+    * @Route("/{entityType}/{id}/{itemType}/{itemId}", name="_permission_post")
+    * @Method({"POST"})
+    */
+    public function postPermissionAction($entityType, $entityId, $itemType, $itemId)
+    {
+    	return $this->putAction($entityType, $entityId, $itemType, $itemId);
+    	$data = json_decode(file_get_contents('php://input'),true);
+    	$permissionRaw = array("readGranted"=>(int)$data['read_granted'],
+    	    	    						   "readDenied"=>(int)$data['read_denied'],
+    	    	    	                       "writeGranted"=> (int)$data['write_granted'],
+    	    	    	                       "writeDenied"=> (int)$data['write_denied']);
+    	
+    	$em = $this->get('doctrine')->getEntityManager();
+    	$repository = "Wixet\WixetBundle\Entity\\".$data['object_type'];
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	
+    	
+    	 
+    	
+    	$obj = $em->getRepository($repository)->find($data['object_id']);
+    	//Only the owner can set permissions
+    	if($obj->getProfile()->getId() == $profile->getId()){
+    		if($type == "profile")
+    			$receiver = $em->getRepository("Wixet\WixetBundle\Entity\UserProfile")->find($data['entity_id']);
+    		else{
+    			$receiver = $em->getRepository("Wixet\WixetBundle\Entity\ProfileGroup")->find($data['entity_id']);
+    			if($receiver->getProfile()->getId() != $profile->getId()){
+    				throw new \Exception("Only the owner of the group can set permissions to the group");
+    			}
+    		}
+    		
+    		//TODO hacer que esto lo gestione permission manager
+    		$ws = $this->get('wixet.permission_manager');
+    		$objectType = $data['object_type'];
+    		//TODO cambiar Wixet\WixetBundle\Entity\ItemContainer por una variable de configuración
+    		if($type == "profile" && $objectType == "ItemContainer"){
+    			//Update profile/album
+    			$ws->setPermissionProfileItemContainer($receiver, $obj, $permissionRaw);
+    		}elseif($type == "profile" && $objectType != "ItemContainer"){
+    			//Update profile/item
+    			$ws->setPermissionProfileItem($receiver, $obj, $permissionRaw);
+    		}elseif($type == "group" && $objectType == "ItemContainer"){
+    			//Update group/album
+    			$ws->setPermissionGroupItemContainer($receiver, $obj, $permissionRaw);
+    		}elseif($type == "group" && $objectType != "ItemContainer"){
+    			//Update group/item
+    			$ws->setPermissionGroupItem($receiver, $obj, $permissionRaw);
+    		}
+    		
+    		//Get the permission to return
+    		$ot = $em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>$repository));
+    		
+    		if($type == "profile"){
+	    		$query = $em->createQuery('SELECT ot.name as object_type, p.object_id, p.id, pr.id as profile_id, pr.first_name, pr.last_name, p.read_granted, p.read_denied, p.write_granted, p.write_denied FROM Wixet\WixetBundle\Entity\ProfilePermission p JOIN p.profile pr JOIN p.objectType ot WHERE p.object_id = ?1 AND p.objectType = ?2 AND p.profile = ?3');
+	    		$query->setParameter(1, $obj->getId());
+	    		$query->setParameter(2, $ot);
+	    		$query->setParameter(3, $receiver);
+	    		$data = $query->getArrayResult();
+    		}else{
+    			$query = $em->createQuery('SELECT ot.name as object_type, p.object_id, p.id, pr.id as group_id, pr.name, p.read_granted, p.read_denied, p.write_granted, p.write_denied FROM Wixet\WixetBundle\Entity\GroupPermission p JOIN p.group pr JOIN p.objectType ot WHERE p.object_id = ?1 AND p.objectType = ?2 AND p.group = ?3');
+    			$query->setParameter(1, $obj->getId());
+    			$query->setParameter(2, $ot);
+    			$query->setParameter(3, $receiver);
+    			$data = $query->getArrayResult();
+    		}
+
+    		
+    	}
+    	
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data[0] ));
+    }
+    /**
+    * Add a profile to a group 
     * @Route("/addGroup/{profileId}/{groupId}", name="_group_add")
     */
     public function addProfileToGroupAction($profileId, $groupId)
@@ -189,6 +335,7 @@ class PermissionController extends Controller
     }
     
     /**
+    * Remove a profile from a group 
     * @Route("/removeGroup/{profileId}/{groupId}", name="_group_remove")
     */
     public function removeProfileToGroupAction($profileId, $groupId)
@@ -212,6 +359,8 @@ class PermissionController extends Controller
     			foreach($groups as $group){
     				$ws->removeProfileFromGroup($profile, $group);
     			}
+    			//Unbind user
+    			$ws->unbind($owner, $profile);
     			//Rebuild index if is the main group
     			$index = $this->get('wixet.index_manager');
     			$index->rebuild("contacts");

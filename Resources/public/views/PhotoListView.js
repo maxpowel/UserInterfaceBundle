@@ -22,12 +22,14 @@ var PhotoListView = Backbone.View.extend({
       this.collection = new PhotoList(null,{folderId:this.options.album.get('id')});
       this.collection.bind('reset', this.addAll, this);
       this.optionsBut = this.options.optionsBut;
-      
+      this.isOwner = this.optionsBut != null;
     },
     
     render: function(){
-    	$(this.el).html(template.multimediaView.photoList( {folder: this.options.album.get('name')}));
-    	$(this.el).find("#optButCont").html(this.optionsBut.render().el);
+    	$(this.el).html(template.multimediaView.photoList( {folder: this.options.album.get('name'), owner: this.isOwner}));
+    	if(this.optionsBut != null){ //Viewer is the owner
+    		$(this.el).find("#optButCont").html(this.optionsBut.render().el);
+    	}
 
         this.startPageContainer = $(this.el).find("#start-page");
         
@@ -45,13 +47,12 @@ var PhotoListView = Backbone.View.extend({
         	$(this.el).find("#last-page").text(this.totalPages);
         	this.startPageContainer.text(this.collection.getPage());
         	this.checkNavButtons();
-        	this.collection.each(this.addOne);
+        	this.collection.each(this.addOne, this);
         }
     },
     
     addOne: function(photo) {
-
-      var view = new PhotoView({model: photo, actionButtons: [$("#move-btn"),$("#remove-btn")] });
+      var view = new PhotoView({model: photo, actionButtons: [$("#move-btn"),$("#remove-btn")], isOwner: this.isOwner });
       //var view = new MessageView({model: message, actionButtons: [$("#move-btn"),$("#remove-btn")] });
       this.$("#photo-list").append(view.render().el);
     },

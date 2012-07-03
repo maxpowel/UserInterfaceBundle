@@ -88,7 +88,7 @@ var ProfileSectionView = Backbone.View.extend({
 		params.id = user.get("id");
 		*/
 
-    	$(this.el).html(template.section.profile());
+    	$(this.el).html(template.section.profile({id: viewer.get('id')}));
     	
     	var isOwner = viewer.get("id") == this.userId;
 

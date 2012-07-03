@@ -15,21 +15,25 @@ var NewMessageFormView = Backbone.View.extend({
     
     render: function() {
     	
+    	var self = this;
     	$(this.el).html(template.messagesView.newMessage(this.options));
-    	var to = $(this.el).find("#to");
-    	$(this.el).find("#to").autocomplete("/datos",
-    			{    minChars: 2,
-	            	 formatItem: function(data, i, n) {
-	            		 
-	            		 //return "hola";
-	            		 
-	            		 
-	                     return "<div style='height:40px'><img style='float:left' src='" + data[2] + "'/> <a style='margin-left: 10px' href='javascript:void(0)'>" + data[0]+"</a></div>";
-	             }
+    	var to = $(this.el).find("#toList");
+    	
+    	var text = $(this.el).find("#toText");
+    	var hiddenInput = $(this.el).find("#to");
+    	to.typeahead({
+    		//TODO support for groups
+			source: "/autocomplete/contacts",
+			onSelect: function(item){
+				text.text(item.value);
+				hiddenInput.val(item.id);
+				hiddenInput.attr({rtype: item.data});
+				$(self.el).find("#sendMessage-btn").removeClass("disabled");
+				
+			}
 
-    			}).result(function(event, item) {
-    				to.attr({to:"cojer id del item"});
-    			});
+    	});
+    	
     	
 
       return this;
@@ -39,14 +43,16 @@ var NewMessageFormView = Backbone.View.extend({
     	$(this.el).find("#sentSuccess").hide();
     },
     sendMessage: function(){
-    	var data = {body: $(this.el).find("#body").val(), profile_id: $(this.el).find("#to").val(), subject: $(this.el).find("#subject").val()};
-    	var message = new Message();
-    	var localThis = this;
-    	message.save(data,{success:function(){
-    		$(localThis.el).find("#sentSuccess").show();
-    		$(localThis.el).find("#body").val("");
-    		$(localThis.el).find("#subject").val("");
-    	}});
+    	if(!$(this.el).find("#sendMessage-btn").hasClass("disabled")){
+	    	var data = {body: $(this.el).find("#body").val(), receiver_id: $(this.el).find("#to").val(), receiver_type:$(this.el).find("#to").attr("rType"),  subject: $(this.el).find("#subject").val()};
+	    	var message = new Message();
+	    	var localThis = this;
+	    	message.save(data,{success:function(){
+	    		$(localThis.el).find("#sentSuccess").show();
+	    		$(localThis.el).find("#body").val("");
+	    		$(localThis.el).find("#subject").val("");
+	    	}});
+    	}
     },
     
     attachFileForm: function(){

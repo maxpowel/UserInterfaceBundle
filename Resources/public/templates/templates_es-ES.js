@@ -266,7 +266,7 @@ template.messagesView.conversationEntry = function(opt_data, opt_sb) {
 
 template.messagesView.newMessage = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<br><br>', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<div class="alert-message success" id="sentSuccess" style="display:none"><a href="javascript:void(0)" id="success-close" class="close">×</a><p>Message succesfully sent</p></div><table class="table table-bordered"><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input type="text" id="to" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input value="' + soy.$$escapeHtml(opt_data.to.id) + '" type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row show-grid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn btn-primary" id="sendMessage-btn">Send</button></div></div>');
+  output.append('<br><br>', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<div class="block-message alert-success" id="sentSuccess" style="display:none"><a href="javascript:void(0)" id="success-close" class="close">×</a><p>Message succesfully sent</p></div><table class="table table-bordered"><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input value="" type="hidden" id="to" class="xlarge"/><div id="toText"></div><input type="text" id="toList" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input value="' + soy.$$escapeHtml(opt_data.to.id) + '" type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row show-grid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn btn-primary ', (opt_data.to == null) ? 'disabled' : '', '" id="sendMessage-btn">Send</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -343,14 +343,14 @@ if (typeof template.multimediaView == 'undefined') { template.multimediaView = {
 
 template.multimediaView.photoList = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3 id="folderName">', soy.$$escapeHtml(opt_data.folder), '</h3></div><div align="right" class="breadcrumb"><div style="float:left; margin-top:20px; margin-left:20px">Check <a id="check-all" href="javascript:void(0)">All</a> <a id="check-none" href="javascript:void(0)">None</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">Remove checked</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">Move checked</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div><div style="width:200px;float:right;">Page <span id="start-page"></span> of <span id="last-page"></span></div><div class="pagination" style="width:205px"><ul><li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← Previous</a></li><li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">Next page →</a></li></ul></div></div><div><ul class="thumbnails" id="photo-list"></ul></div>');
+  output.append('\t\t\t<div><h3 id="folderName">', soy.$$escapeHtml(opt_data.folder), '</h3></div><div align="right" class="breadcrumb">', (opt_data.owner == true) ? '<div style="float:left; margin-top:20px; margin-left:20px">Check <a id="check-all" href="javascript:void(0)">All</a> <a id="check-none" href="javascript:void(0)">None</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">Remove checked</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">Move checked</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>' : '', '<div style="width:200px;float:right;">Page <span id="start-page"></span> of <span id="last-page"></span></div><div class="pagination" style="width:205px"><ul><li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← Previous</a></li><li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">Next page →</a></li></ul></div></div><div><ul class="thumbnails" id="photo-list"></ul></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.multimediaView.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<a class="thumbnail" href="#photo/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="/photo/thumbnail/', soy.$$escapeHtml(opt_data.id), '"></a><span class="span" style="margin-left:0px;"><input type="checkbox" class="ckbox"></span>');
+  output.append('<a class="thumbnail" href="#photo/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="/photo/thumbnail/', soy.$$escapeHtml(opt_data.id), '"></a><span class="span" style="margin-left:0px;">', (opt_data.isOwner == true) ? '<input type="checkbox" class="ckbox"></span>' : '');
   return opt_sb ? '' : output.toString();
 };
 
@@ -455,14 +455,14 @@ if (typeof template.permission == 'undefined') { template.permission = {}; }
 
 template.permission.simple = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<br><br><h3>Permissions</h3><table class="table table-condensed"><thead><th>Type</th><th>Name</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></thead><tbody id="permissionList"></tbody></table><div><h4>Add new permission</h4><input type="text" id="contactSearch" placeholder="Person or group name"></div>');
+  output.append('\t<br><br><h3>Permissions</h3><table class="table table-striped table-bordered table-condensed"><thead><tr><th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionsBody"><tr><td></td><td>New permission for<br><input placeholder="Group or person name" id="newPermissionEntity" type="text" class="span"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.permission.simpleEntry = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<td>', (opt_data.type == 'group') ? '<img class="thumbnail" src="/img/glyphicons_043_group.png">' : '<img class="thumbnail" src="/img/glyphicons_003_user.png">', '</td><td>', soy.$$escapeHtml(opt_data.name), '</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><button class="btn btn-primary" id="save-btn">Save</button></td><td><button class="btn btn-danger" id="remove-btn">Remove</button></td>');
+  output.append('\t<td>', (opt_data.type == 'group') ? '<img class="thumbnail" src="/img/glyphicons_043_group.png">' : '<img class="thumbnail" src="/img/glyphicons_003_user.png">', '</td><td>', soy.$$escapeHtml(opt_data.name), '</td><td><input type="checkbox" class="perm rg" ', (opt_data.read_granted == 1) ? 'checked="checked"' : '', '></td><td><input type="checkbox" class="perm rd" ', (opt_data.read_denied == 1) ? 'checked="checked"' : '', '></td><td><input type="checkbox" class="perm wg" ', (opt_data.write_granted == 1) ? 'checked="checked"' : '', '></td><td><input type="checkbox" class="perm wd" ', (opt_data.write_denied == 1) ? 'checked="checked"' : '', '></td><td><button  rel="tooltip" title="Changes saved" class="btn btn-success" id="save-btn">Save</button></td><td><button class="btn btn-danger ', (opt_data.isNew != null) ? 'disabled' : '', '" id="remove-btn">Remove</button></td>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -476,7 +476,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.photo = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><ul class="breadcrumb"><li><a href="#multimedia">Albums</a> <span class="divider">/</span></li><li><a href="#multimedia/', soy.$$escapeHtml(opt_data.owner.id), '/album/', soy.$$escapeHtml(opt_data.album.id), '">', soy.$$escapeHtml(opt_data.album.name), '</a><span class="divider">/</span></li><li class="active" id="photoTitleTop" style="display:none">', (opt_data.name == null) ? soy.$$escapeHtml(opt_data.name) : '', '</li></ul><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item" align="center"><img mediaItemId="', soy.$$escapeHtml(opt_data.id), '" class="photoMain" src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" /><div class="carousel-caption" style="display: none"><p>', soy.$$escapeHtml(opt_data.description), '</p></div></div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a id="tagDesc" href="javascript:void(0)" rel="tooltip" title="Click the photo to add tags"><i class="icon-tags icon-white"></i> Tags</a></li></ul></div><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a href="javascript:void(0)"><i class="icon-cog icon-white"></i> Options</a></li><li><a href="javascript:void(0)" id="setPhoto">Set as photo profile</a><div id="photoSuccess" class="alert alert-block alert-success fade in" style="display:none"><button data-dismiss="alert" class="btn close" type="button">×</button>Main photo changed</div></li><li><a href="photo/original/', soy.$$escapeHtml(opt_data.id), '">Download</a></li><li><a href="#">Manage permission</a></li><li><a href="javascript:void(0)" id="setTitle">Set title</a></li></ul></div></div><div class="modal fade hide" id="setTitleModal"><div class="modal-header"><h3>Set a title or description to your photo</h3></div><div class="modal-body"><p>Photo title: <input type="text" ', (opt_data.name != null) ? 'value="' + soy.$$escapeHtml(opt_data.name) + '"' : '', ' id="newTitle"></p><p>Description: <input type="text" ', (opt_data.description != null) ? 'value="' + soy.$$escapeHtml(opt_data.description) + '"' : '', ' id="newDescription"></p></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a><a href="#" id="saveModalChanges" class="btn btn-primary" data-dismiss="modal">Save</a></div></div></div>');
+  output.append('<div class="row-fluid"><div class="span9" id="photoContainer"><ul class="breadcrumb"><li><a href="#multimedia">Albums</a> <span class="divider">/</span></li><li><a href="#multimedia/', soy.$$escapeHtml(opt_data.owner.id), '/album/', soy.$$escapeHtml(opt_data.album.id), '">', soy.$$escapeHtml(opt_data.album.name), '</a><span class="divider">/</span></li><li class="active" id="photoTitleTop" style="display:none">', (opt_data.name == null) ? soy.$$escapeHtml(opt_data.name) : '', '</li></ul><div id="carouselContainer"><div id="photo" class="carousel"><!-- Carousel items --><div class="carousel-inner"><div class="active imgtag item" align="center"><img mediaItemId="', soy.$$escapeHtml(opt_data.id), '" class="photoMain" src="/photo/normal/', soy.$$escapeHtml(opt_data.id), '" /><div class="carousel-caption" style="display: none"><p>', soy.$$escapeHtml(opt_data.description), '</p></div></div></div><!-- Carousel nav --><a class="carousel-control left" href="#photo" data-slide="prev">&lsaquo;</a><a class="carousel-control right" href="#photo" data-slide="next">&rsaquo;</a></div><div id="commentContainer"></div></div><div id="permissionContainer" style="display:none"><button class="btn btn-primary" id="backToPhoto" style="margin:10px">Back</button><table class="table table-striped table-bordered table-condensed"><thead><tr><th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionsBody"><tr><td></td><td>New permission for<br><input placeholder="Group or person name" id="newPermissionEntity" type="text" class="span"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="span3"><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a id="tagDesc" href="javascript:void(0)" rel="tooltip" title="Click the photo to add tags"><i class="icon-tags icon-white"></i> Tags</a></li></ul></div><div class="well" style="padding: 8px 0;"><ul id="tagList" class="nav nav-list"><li class="active"><a href="javascript:void(0)"><i class="icon-cog icon-white"></i> Options</a></li><li><a href="javascript:void(0)" id="setPhoto">Set as photo profile</a><div id="photoSuccess" class="alert alert-block alert-success fade in" style="display:none"><button data-dismiss="alert" class="btn close" type="button">×</button>Main photo changed</div></li><li><a href="photo/original/', soy.$$escapeHtml(opt_data.id), '">Download</a></li><li><a href="javascript:void(0)" id="managePermission">Manage permission</a></li><li><a href="javascript:void(0)" id="setTitle">Set title</a></li></ul></div></div><div class="modal fade hide" id="setTitleModal"><div class="modal-header"><h3>Set a title or description to your photo</h3></div><div class="modal-body"><p>Photo title: <input type="text" ', (opt_data.name != null) ? 'value="' + soy.$$escapeHtml(opt_data.name) + '"' : '', ' id="newTitle"></p><p>Description: <input type="text" ', (opt_data.description != null) ? 'value="' + soy.$$escapeHtml(opt_data.description) + '"' : '', ' id="newDescription"></p></div><div class="modal-footer"><a href="#" class="btn" data-dismiss="modal">Close</a><a href="#" id="saveModalChanges" class="btn btn-primary" data-dismiss="modal">Save</a></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -525,7 +525,7 @@ template.preferencesView.aboutMe = function(opt_data, opt_sb) {
 
 template.preferencesView.security = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><div><button class="btn btn-primary" id="newPermission-btn">New permission</button></button></div><br><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionTable"></tbody><tr style="display:none"><td><select><option>aaa</option></td><td><select><option>Name</option></td><td><select><option>Type</option></td><td><select><option>id</option></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><button class="btn btn-primary" id="save-btn">Save</button></td><td><button class="btn btn-danger" id="delete-btn">Delete</button></td></tr></table></div>');
+  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th></tr></thead><tbody id="permissionTable"></tbody></table></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -553,7 +553,7 @@ template.preferencesView.manageGroups = function(opt_data, opt_sb) {
 
 template.preferencesView.permissionRow = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<td>', soy.$$escapeHtml(opt_data.permission.type), '</td><td>', (opt_data.permission.type == 'profile') ? soy.$$escapeHtml(opt_data.permission.firstName) + ' ' + soy.$$escapeHtml(opt_data.permission.lastName) : soy.$$escapeHtml(opt_data.permission.groupName), '<td>', soy.$$escapeHtml(opt_data.permission.objectType), '</td><td>', soy.$$escapeHtml(opt_data.permission.objectId), '</td><td><input id="readGranted" type="checkbox" ', (opt_data.permission.readGranted == 1) ? ' checked ' : '', ' ></td><td><input id="readDenied" type="checkbox" ', (opt_data.permission.readDenied == 1) ? ' checked ' : '', ' ></td><td><input id="writeGranted" type="checkbox" ', (opt_data.permission.writeGranted == 1) ? ' checked ' : '', ' ></td><td><input id="writeDenied" type="checkbox" ', (opt_data.permission.writeDenied == 1) ? ' checked ' : '', ' ></td><td><button class="btn btn-primary" id="save-btn">Save</button></td><td><button class="btn btn-danger" id="delete-btn">Delete</button></td>');
+  output.append('<td>', soy.$$escapeHtml(opt_data.permission.type), '</td><td>', (opt_data.permission.type == 'profile') ? soy.$$escapeHtml(opt_data.permission.firstName) + ' ' + soy.$$escapeHtml(opt_data.permission.lastName) : soy.$$escapeHtml(opt_data.permission.groupName), '<td>', soy.$$escapeHtml(opt_data.permission.objectType), '</td><td>', soy.$$escapeHtml(opt_data.permission.objectId), '</td><td><input id="readGranted" type="checkbox" ', (opt_data.permission.readGranted == 1) ? ' checked ' : '', ' ></td><td><input id="readDenied" type="checkbox" ', (opt_data.permission.readDenied == 1) ? ' checked ' : '', ' ></td><td><input id="writeGranted" type="checkbox" ', (opt_data.permission.writeGranted == 1) ? ' checked ' : '', ' ></td><td><input id="writeDenied" type="checkbox" ', (opt_data.permission.writeDenied == 1) ? ' checked ' : '', ' ></td>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -567,7 +567,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.profile = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="span6"><div class="content" id="newness"><div><h2 id="profileTitle"></h2></div><div align="center"><ul class="nav nav-pills" style="width: 400px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="javascript:void(0)">Albums</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div><div class="span3"><div class="well"><h5>Last photos</h5><div id="lastPhotos-cont"></div><h5>Friends</h5><div id="friends-cont"></div></div></div></div>');
+  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="span6"><div class="content" id="newness"><div><h2 id="profileTitle"></h2></div><div align="center"><ul class="nav nav-pills" style="width: 400px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="#multimedia/', soy.$$escapeHtml(opt_data.id), '">Albums</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div><div class="span3"><div class="well"><h5>Last photos</h5><div id="lastPhotos-cont"></div><h5>Friends</h5><div id="friends-cont"></div></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -589,11 +589,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList1057 = opt_data.favourites;
-  var favouriteListLen1057 = favouriteList1057.length;
-  for (var favouriteIndex1057 = 0; favouriteIndex1057 < favouriteListLen1057; favouriteIndex1057++) {
-    var favouriteData1057 = favouriteList1057[favouriteIndex1057];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1057.url), '">', soy.$$escapeHtml(favouriteData1057.title), '</li>');
+  var favouriteList1087 = opt_data.favourites;
+  var favouriteListLen1087 = favouriteList1087.length;
+  for (var favouriteIndex1087 = 0; favouriteIndex1087 < favouriteListLen1087; favouriteIndex1087++) {
+    var favouriteData1087 = favouriteList1087[favouriteIndex1087];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1087.url), '">', soy.$$escapeHtml(favouriteData1087.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -602,11 +602,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1066 = opt_data.list;
-  var elementListLen1066 = elementList1066.length;
-  for (var elementIndex1066 = 0; elementIndex1066 < elementListLen1066; elementIndex1066++) {
-    var elementData1066 = elementList1066[elementIndex1066];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1066.title), '</h3></div><p>', soy.$$escapeHtml(elementData1066.body), '</p>');
+  var elementList1096 = opt_data.list;
+  var elementListLen1096 = elementList1096.length;
+  for (var elementIndex1096 = 0; elementIndex1096 < elementListLen1096; elementIndex1096++) {
+    var elementData1096 = elementList1096[elementIndex1096];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1096.title), '</h3></div><p>', soy.$$escapeHtml(elementData1096.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -673,31 +673,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1191 = opt_data.favourites;
-    var favouriteListLen1191 = favouriteList1191.length;
-    for (var favouriteIndex1191 = 0; favouriteIndex1191 < favouriteListLen1191; favouriteIndex1191++) {
-      var favouriteData1191 = favouriteList1191[favouriteIndex1191];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1191.name), '</li>');
+    var favouriteList1221 = opt_data.favourites;
+    var favouriteListLen1221 = favouriteList1221.length;
+    for (var favouriteIndex1221 = 0; favouriteIndex1221 < favouriteListLen1221; favouriteIndex1221++) {
+      var favouriteData1221 = favouriteList1221[favouriteIndex1221];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1221.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1203 = opt_data.friends;
-    var friendListLen1203 = friendList1203.length;
-    for (var friendIndex1203 = 0; friendIndex1203 < friendListLen1203; friendIndex1203++) {
-      var friendData1203 = friendList1203[friendIndex1203];
-      output.append('<li>', soy.$$escapeHtml(friendData1203.name), '</li>');
+    var friendList1233 = opt_data.friends;
+    var friendListLen1233 = friendList1233.length;
+    for (var friendIndex1233 = 0; friendIndex1233 < friendListLen1233; friendIndex1233++) {
+      var friendData1233 = friendList1233[friendIndex1233];
+      output.append('<li>', soy.$$escapeHtml(friendData1233.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1212 = opt_data.highlights;
-    var resListLen1212 = resList1212.length;
-    for (var resIndex1212 = 0; resIndex1212 < resListLen1212; resIndex1212++) {
-      var resData1212 = resList1212[resIndex1212];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1212.title), '</strong><div>', soy.$$escapeHtml(resData1212.body), '</div></div>');
+    var resList1242 = opt_data.highlights;
+    var resListLen1242 = resList1242.length;
+    for (var resIndex1242 = 0; resIndex1242 < resListLen1242; resIndex1242++) {
+      var resData1242 = resList1242[resIndex1242];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1242.title), '</strong><div>', soy.$$escapeHtml(resData1242.body), '</div></div>');
     }
     output.append('</pre></div>');
   }

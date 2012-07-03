@@ -14,8 +14,11 @@ var MultimediaSectionView = Backbone.View.extend({
     	/*var newMessageButtonView = new NewMessageButtonView();
     	$(this.el).find("#newButton-cont").html(newMessageButtonView.render().el);
     	*/
-    	var newAlbumButtonView = new NewAlbumButtonView({collection: this.albumCollection});
-    	$(this.el).find("#newFolder-cont").html(newAlbumButtonView.render().el);
+    	var newAlbumButtonView = null;
+    	if(this.options.profileId == getViewer().get('id')){
+    		var newAlbumButtonView = new NewAlbumButtonView({collection: this.albumCollection});
+    		$(this.el).find("#newFolder-cont").html(newAlbumButtonView.render().el);
+    	}
     	//Folder list view will create the multimenu that contains messagelist, newmessageform and folderoptions
     	
     	
