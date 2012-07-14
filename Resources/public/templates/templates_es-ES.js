@@ -441,7 +441,21 @@ if (typeof template.notificationView == 'undefined') { template.notificationView
 
 template.notificationView.notification = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<li><a href="#', soy.$$escapeHtml(opt_data.endUrl), '">', soy.$$escapeHtml(opt_data.text), '</a></li><hr>');
+  output.append('\t');
+  switch (opt_data.type) {
+    case 'Wixet\\WixetBundle\\Entity\\PrivateMessage':
+      output.append('<a href="#messages">', soy.$$escapeHtml(opt_data.total), ' Private messages</a>');
+      break;
+    default:
+      output.append('<a href="#">', soy.$$escapeHtml(opt_data.total), ' ', soy.$$escapeHtml(opt_data.type), '</a>');
+  }
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.notificationView.list = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t<h5>Notifications</h5><ul id="notificationList"></ul>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -525,7 +539,7 @@ template.preferencesView.aboutMe = function(opt_data, opt_sb) {
 
 template.preferencesView.security = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th></tr></thead><tbody id="permissionTable"></tbody></table></div>');
+  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><h3>>Profile permissions></h3><p>Remember, the profile inherits the main album permissions. Here are only shown the explicit permissions of the profile</p><table class="table table-striped table-bordered table-condensed"><thead><tr><th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionsBody"><tr><td></td><td>New permission for<br><input placeholder="Group or person name" id="newPermissionEntity" type="text" class="span"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><h3>All permissions list</h3><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th></tr></thead><tbody id="permissionTable"></tbody></table></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -589,11 +603,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList1087 = opt_data.favourites;
-  var favouriteListLen1087 = favouriteList1087.length;
-  for (var favouriteIndex1087 = 0; favouriteIndex1087 < favouriteListLen1087; favouriteIndex1087++) {
-    var favouriteData1087 = favouriteList1087[favouriteIndex1087];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1087.url), '">', soy.$$escapeHtml(favouriteData1087.title), '</li>');
+  var favouriteList1111 = opt_data.favourites;
+  var favouriteListLen1111 = favouriteList1111.length;
+  for (var favouriteIndex1111 = 0; favouriteIndex1111 < favouriteListLen1111; favouriteIndex1111++) {
+    var favouriteData1111 = favouriteList1111[favouriteIndex1111];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1111.url), '">', soy.$$escapeHtml(favouriteData1111.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -602,11 +616,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1096 = opt_data.list;
-  var elementListLen1096 = elementList1096.length;
-  for (var elementIndex1096 = 0; elementIndex1096 < elementListLen1096; elementIndex1096++) {
-    var elementData1096 = elementList1096[elementIndex1096];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1096.title), '</h3></div><p>', soy.$$escapeHtml(elementData1096.body), '</p>');
+  var elementList1120 = opt_data.list;
+  var elementListLen1120 = elementList1120.length;
+  for (var elementIndex1120 = 0; elementIndex1120 < elementListLen1120; elementIndex1120++) {
+    var elementData1120 = elementList1120[elementIndex1120];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1120.title), '</h3></div><p>', soy.$$escapeHtml(elementData1120.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -673,31 +687,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1221 = opt_data.favourites;
-    var favouriteListLen1221 = favouriteList1221.length;
-    for (var favouriteIndex1221 = 0; favouriteIndex1221 < favouriteListLen1221; favouriteIndex1221++) {
-      var favouriteData1221 = favouriteList1221[favouriteIndex1221];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1221.name), '</li>');
+    var favouriteList1245 = opt_data.favourites;
+    var favouriteListLen1245 = favouriteList1245.length;
+    for (var favouriteIndex1245 = 0; favouriteIndex1245 < favouriteListLen1245; favouriteIndex1245++) {
+      var favouriteData1245 = favouriteList1245[favouriteIndex1245];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1245.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1233 = opt_data.friends;
-    var friendListLen1233 = friendList1233.length;
-    for (var friendIndex1233 = 0; friendIndex1233 < friendListLen1233; friendIndex1233++) {
-      var friendData1233 = friendList1233[friendIndex1233];
-      output.append('<li>', soy.$$escapeHtml(friendData1233.name), '</li>');
+    var friendList1257 = opt_data.friends;
+    var friendListLen1257 = friendList1257.length;
+    for (var friendIndex1257 = 0; friendIndex1257 < friendListLen1257; friendIndex1257++) {
+      var friendData1257 = friendList1257[friendIndex1257];
+      output.append('<li>', soy.$$escapeHtml(friendData1257.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1242 = opt_data.highlights;
-    var resListLen1242 = resList1242.length;
-    for (var resIndex1242 = 0; resIndex1242 < resListLen1242; resIndex1242++) {
-      var resData1242 = resList1242[resIndex1242];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1242.title), '</strong><div>', soy.$$escapeHtml(resData1242.body), '</div></div>');
+    var resList1266 = opt_data.highlights;
+    var resListLen1266 = resList1266.length;
+    for (var resIndex1266 = 0; resIndex1266 < resListLen1266; resIndex1266++) {
+      var resData1266 = resList1266[resIndex1266];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1266.title), '</strong><div>', soy.$$escapeHtml(resData1266.body), '</div></div>');
     }
     output.append('</pre></div>');
   }
@@ -715,7 +729,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.start = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="photo/public/', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a></div><h5>Notifications</h5><ul id="notification"></ul><h5>Agenda</h5><ul class="agenda-short-list" id="agendaTask-list"></ul></div></div><div class="span6"><div class="content" id="multimenu"></div></div><div class="span3"><div class="well"><h5>Suggestions</h5><div id="contact-suggestion"></div><br><h5>Meetings</h5><div>Start a new meeting to organize an event</div><br><div id="meetings"><div><button class="btn btn-success" id="doMeeting-but">Create meeting</button></div><br><ul id="meeting-list"></ul><div><button id="allMeetings-but" class="btn btn-info small">All</button></div></div><br><h5>Find friends</h5><div>Send invitations to your friends or search them in other social networks</div><br><div><button class="btn btn-danger">Send invitations</button></div><br><div><button class="btn btn-primary">Search in other networks</button></div><br></div></div>');
+  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="photo/public/', soy.$$escapeHtml(opt_data.id), '" class="thumbnail"></a></div><div id="notifications"></div><h5>Agenda</h5><ul class="agenda-short-list" id="agendaTask-list"></ul></div></div><div class="span6"><div class="content" id="multimenu"></div></div><div class="span3"><div class="well"><h5>Suggestions</h5><div id="contact-suggestion"></div><br><h5>Meetings</h5><div>Start a new meeting to organize an event</div><br><div id="meetings"><div><button class="btn btn-success" id="doMeeting-but">Create meeting</button></div><br><ul id="meeting-list"></ul><div><button id="allMeetings-but" class="btn btn-info small">All</button></div></div><br><h5>Find friends</h5><div>Send invitations to your friends or search them in other social networks</div><br><div><button class="btn btn-danger">Send invitations</button></div><br><div><button class="btn btn-primary">Search in other networks</button></div><br></div></div>');
   return opt_sb ? '' : output.toString();
 };
 

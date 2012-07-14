@@ -2,13 +2,28 @@
 
 /**
  * Notification entry in the start section
- * @param endUrl
- * @param text
+ * @param type
+ * @param total
  */
 {template .notification}
-<li><a href="#{$endUrl}">{$text}</a></li>
-<hr>
+	{switch $type}
+	  {case 'Wixet\\WixetBundle\\Entity\\PrivateMessage'}
+	     <a href="#messages">{$total} Private messages</a>
+	  
+	    
+	  {default}
+	  	<a href="#">{$total} {$type}</a>	
+	{/switch}
+	
 {/template}
 
 
-
+/**
+ * Notification list
+ */
+{template .list}
+	<h5>{msg desc="Notification in start section"}Notifications{/msg}</h5>
+          		<ul id="notificationList">
+            
+          		</ul>
+{/template}

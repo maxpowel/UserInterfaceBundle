@@ -15,7 +15,7 @@ var AlbumView = Backbone.View.extend({
     
     modelChanged: function(){
     	$(this.el).find("a").text(this.model.get('name'));
-    	this.messageContainer.find("#folderName").text(this.model.get('name'));
+    	this.photoContainer.find("#folderName").text(this.model.get('name'));
     },
     render: function() {
     	$(this.el).html(template.multimediaView.album( {name: this.model.get('name')} ) );

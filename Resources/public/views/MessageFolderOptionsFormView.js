@@ -27,7 +27,9 @@ var MessageFolderOptionsFormView = Backbone.View.extend({
 	    	var remWin = this.removeWindow;
 	    	this.removeWindow.modal({backdrop:true, keyboard: true});
 	    	this.removeWindow.find(".remove").click(function(){
-	    		folder.destroy();
+	    		folder.destroy({wait: true, error: function(){
+	    			alert("Folder cannot be remove because is not empty or is your main folder")
+	    		}});
 	    		remWin.modal('hide');
 	    	});
 	    	this.removeWindow.find(".cancel").click(function(){

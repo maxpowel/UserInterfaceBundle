@@ -1,7 +1,7 @@
 var NewnessListView = Backbone.View.extend({
     
-    //el: '#newness',
 	newnessContainer: null,
+	profileId: null,
 	input: null,
 	page: 1,
     events: {
@@ -13,6 +13,7 @@ var NewnessListView = Backbone.View.extend({
     initialize: function() {
       this.collection.bind('add',   this.addOne, this);
       this.collection.bind('reset', this.addAll, this);
+      this.profileId = this.options.profileId;
       //this.options.collection.bind('all',   this.render, this);
 
     },
@@ -26,7 +27,7 @@ var NewnessListView = Backbone.View.extend({
     	return this;
     },
     loadMoreNewness: function(){
-    	this.collection.fetch({ data:{page: this.page}});
+    	this.collection.fetch({ data:{page: this.page, id: this.profileId}});
     	this.page = this.page + 1;
     },
     createOnEnter: function(e) {

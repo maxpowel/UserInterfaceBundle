@@ -56,17 +56,29 @@ class MainController extends Controller
 	 */
 	public function testAction()
 	{
+		
+		
 		$data = array();
 		 
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
 		
+		/*
+		$entityManager = $this->get('doctrine')->getEntityManager();
+		$objectType = new \Wixet\WixetBundle\Entity\ObjectType();
+		$objectType->setName("sadfsda".rand(1,100));
+		$entityManager->persist($objectType);
+		$entityManager->flush();
+		*/
+		//$cosa = new Cosa();
+		
+		/*
 		$ws = $this->get('wixet.permission_manager');
 		$permission = array("readGranted"=>true, "readDenied"=> false, "writeGranted"=> true, "writeDenied"=> false);
 		$ic = $profile->getMainItemContainer();
 		$ws->setPermission($profile, $ic, $permission);
 		
 		$fetched = $this->fetcher->get("Wixet\WixetBundle\Entity\MediaItem", $this->md->getId(), $this->viewerProfile);
-		
+		*/
 		/*$index = $this->get('wixet.index_manager');
 		$index->rebuild("contacts");
 		
@@ -149,6 +161,23 @@ class MainController extends Controller
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
 
+	
+	/**
+	* @Route("/notification", name="_notification_list")
+	*/
+	public function eventListAction()
+	{
+		//TODO cache this event list
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		
+		$query = $em->createQuery('SELECT ot.name as type, count(e.id) as total FROM Wixet\WixetBundle\Entity\Event e JOIN e.objectType ot WHERE e.profile = :profile GROUP BY ot.name');
+		$query->setParameter('profile', $profile);
+		$data = $query->getArrayResult();
+		
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
 	/**
 	 * @Route("/user", name="_user_get")
 	 * @Method({"GET"})
@@ -365,7 +394,7 @@ class MainController extends Controller
 		 
 		$update = $em->getRepository('Wixet\WixetBundle\Entity\ProfileUpdate')->find($data['updateId']);
 		//Only can comment between friends
-		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$update->getProfile()->getId(),$profile);
+		$friend = $ws->getWritable("Wixet\WixetBundle\Entity\UserProfile",$update->getProfile()->getId(),$profile, true);
 		//If the user are not granted to view the profile, $friend is null
 		if($friend != null){
 			
@@ -455,7 +484,7 @@ class MainController extends Controller
 		 
 		$id = isset($_GET['id'])?$_GET['id']:$profile->getId();
 
-		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile);
+		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile, true);
 		//If the user are not granted to view the profile, $friend is null
 		if($friend != null){
 			$data = json_decode(file_get_contents('php://input'),true);
@@ -675,6 +704,37 @@ class MainController extends Controller
 		}else
 		$data = array("error"=>true, "msg"=>"access denied");
 		 
+		//$data = array();
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	* @Route("/vote/{vote}/{objectType}/{objectId}", name="_vote_item")
+	*/
+	public function voteItemAction($vote, $objectType, $objectId)
+	{
+		$data = array();
+		
+		$em = $this->get('doctrine')->getEntityManager();
+		$ws = $this->get('wixet.fetcher');
+	
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$item = $ws->get($objectType,$objectId,$profile);
+		
+		if($item != null){
+			$vote = new \Wixet\WixetBundle\Entity\Vote();
+			$vote->setProfile($profile);
+			$vote->setObjectId($item->getId());
+			$vote->setObjectType($em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>$objectType)));
+			$vote->setLike($vote==1?true:false);
+			$em->persist($vote);
+			$em->flush();
+			//TODO cache votes
+			
+		}
+		
+		$data = array("error"=>true, "msg"=>"access denied");
+			
 		//$data = array();
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}

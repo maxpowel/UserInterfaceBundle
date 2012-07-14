@@ -81,6 +81,57 @@ class MultimediaController extends Controller
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
 	
+	/**
+	* @Route("/album", name="_put_post")
+	* @Method({"PUT"})
+	*/
+	public function updateAlbumAction()
+	{
+		$em = $this->get('doctrine')->getEntityManager();
+		$data = json_decode(file_get_contents('php://input'),true);
+		$ic = $em->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_GET['id']);
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		
+		if($ic->getProfile()->getId() == $profile->getId()){
+			$ic->setName($data['name']);
+			$em->flush();
+		}
+		
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	* @Route("/album", name="_delete_post")
+	* @Method({"DELETE"})
+	*/
+	public function deleteAlbumAction()
+	{
+		$em = $this->get('doctrine')->getEntityManager();
+		$data = json_decode(file_get_contents('php://input'),true);
+		$ic = $em->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_GET['id']);
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+	
+		//Check if the album is empty
+		$query = $em->createQuery('SELECT count(p.id) as total FROM Wixet\WixetBundle\Entity\ItemContainerHasItems p WHERE p.itemContainer = :itemContainer');
+		$query->setParameter("itemContainer", $ic);
+		$res = $query->getSingleResult();
+		
+		if($res['total'] > 0){
+			throw new \Exception("Itemcontainer is not empty");
+		}else{
+		
+			if($ic->getProfile()->getId() == $profile->getId()){
+				//Unprotect item
+				$ws = $this->get('wixet.permission_manager');
+				$ws->unprotect($ic);
+				$em->remove($ic);
+				$em->flush();
+			}
+		}
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
 	
 	/**
 	 * @Route("/photo", name="_photo_get")

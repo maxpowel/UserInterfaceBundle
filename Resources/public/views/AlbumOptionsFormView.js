@@ -27,7 +27,6 @@ var AlbumOptionsFormView = Backbone.View.extend({
     
     saveAlbum: function(){
     	var name = $.trim($(this.el).find("#folderName-input").val());
-    	console.log(name);
     	if(name.length > 0){
     		this.options.folder.set({name:name});
     		this.options.folder.save();
@@ -43,7 +42,9 @@ var AlbumOptionsFormView = Backbone.View.extend({
 	    	var remWin = this.removeWindow;
 	    	this.removeWindow.modal({backdrop:true, keyboard: true});
 	    	this.removeWindow.find(".remove").click(function(){
-	    		folder.destroy();
+	    		folder.destroy({wait: true, error: function(){
+	    			alert("Album cannot be removed because is not empty");
+	    		}});
 	    		remWin.modal('hide');
 	    	});
 	    	this.removeWindow.find(".cancel").click(function(){

@@ -81,8 +81,9 @@ class AccountController extends Controller
 	    		$ws = $this->get('wixet.permission_manager');
 	    		$ws->setItemContainer($album,$album);
 	    		$ws->setItemContainer($profile,$album);
-	    		$ws->setPermissionProfileItem($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
-	    		$ws->setPermissionProfileItem($profile,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermission($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermission($profile,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermission($group,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		
 	    		
 	    		$data = array("error"=>false, "id"=>$profile->getId(), "name"=>$profile->getFirstName());

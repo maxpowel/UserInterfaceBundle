@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class PrivateMessageController extends Controller
 {   
-        /**
+   /**
     * @Route("/messageFolder", name="_messageFolder_get")
     * @Method({"GET"})
     */
@@ -84,11 +84,25 @@ class PrivateMessageController extends Controller
     {
     	$pmc = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\PrivateMessageCollection')->find($_GET['id']);
     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$em = $this->getDoctrine()->getEntityManager();
     	
-    	if($profile->getId() == $pmc->getProfile()->getId() && strlen($name) > 0){
-    		$em = $this->getDoctrine()->getEntityManager();
-    		$em->remove($pmc);
-    		$em->flush();
+    	//Check if folder is empty
+    	$query = $em->createQuery('SELECT count(p.id) as total FROM Wixet\WixetBundle\Entity\PrivateMessage p WHERE p.private_message_collection = :pmc');
+    	$query->setParameter("pmc", $pmc);
+    	$res = $query->getSingleResult();
+    	
+    	if($res['total'] > 0){
+    		throw new \Exception("Folder is not empty");
+    	}else{
+	    	if($profile->getId() == $pmc->getProfile()->getId()){
+	    		//Is the main album?
+	    		if($profile->getMainPrivateMessageCollection()->getId() == $pmc->getId()){
+	    			throw new \Exception("Main message collection cannot be removed");
+	    		}else{
+		    		$em->remove($pmc);
+		    		$em->flush();
+	    		}
+	    	}
     	}
 
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => array()));
@@ -100,13 +114,21 @@ class PrivateMessageController extends Controller
     */
     public function getMessageAction()
     {
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	/* Remove events */
+    	$query = $em->createQuery('DELETE FROM Wixet\WixetBundle\Entity\Event e WHERE e.profile = :profile AND e.objectType = :objectType')
+    	->setParameter('profile', $profile)
+    	->setParameter('objectType', $em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>"Wixet\WixetBundle\Entity\PrivateMessage")));
+    	$query->execute();
+    	/***************/
     	$pageSize = 10;
     	$offset = isset($_GET['page'])? ($_GET['page']-1)*$pageSize: 0;
     	$data = array();
     	
     	$pmc = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\PrivateMessageCollection')->find($_GET['folder']);
-    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	$em = $this->getDoctrine()->getEntityManager();
+    	
     	
     	//Ensure that the user is the owner
 		if($profile->getId() == $pmc->getProfile()->getId()){
@@ -177,7 +199,11 @@ class PrivateMessageController extends Controller
     	$author = $this->get('security.context')->getToken()->getUser()->getProfile();
     	
     	if(isset($data['receiver_id'])){
-    		if($data['receiver_type'] == "profile"){
+    		$type = "profile";
+    		if(isset($data['receiver_type']))
+    			$type = $data['receiver_type'];
+    		
+    		if($type == "profile"){
     			$receiver = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($data['receiver_id']);
     		}else{
     			

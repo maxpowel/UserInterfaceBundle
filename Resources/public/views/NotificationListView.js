@@ -1,22 +1,14 @@
-var NotificationListView = Backbone.View.extend({
+var NotificationListView = ListView.extend({
     
-    el: '#notification',
-    
-    
-    initialize: function() {
-
-      this.options.collection.bind('reset', this.addAll, this);
-
-      this.options.collection.fetch();
+    addOne: function(notification){
+    	this.list.append(new NotificationView({model:notification}).render().el);
+    	
     },
     
-    
-    addAll: function() {
-      var container = $(this.el);
-      this.options.collection.each(function(notification){
-    	  
-    	  var view = new NotificationView({model: notification, endUrl: notification.get("endUrl"), text: notification.get("text") });
-          container.append(view.render().el);
-      });
+    render: function(){
+    	$(this.el).html(template.notificationView.list());
+    	this.list = $(this.el).find("#notificationList");
+    	this.options.collection.fetch();
+    	return this;
     }
 });

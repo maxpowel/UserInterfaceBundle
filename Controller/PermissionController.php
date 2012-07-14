@@ -106,7 +106,7 @@ class PermissionController extends Controller
 
     
     /**
-     * DEPRECATED
+     * DEPRECATED and should not be used
     * Remove profile/group permission using internal id 
     * @Route("/{type}/{id}", name="_permission_delete")
     * @Method({"DELETE"})
@@ -149,11 +149,14 @@ class PermissionController extends Controller
     	    	                       "writeDenied"=> (int)$data['write_denied']);
     	
     	$entity = null;
+    	$checkOwner = false;
     	$em = $this->get('doctrine')->getEntityManager();
     	if($entityType == "group")
     		$entity = $em->getRepository("Wixet\WixetBundle\Entity\ProfileGroup")->find($entityId);
-    	else
+    	else{
+    		$checkOwner = true;//Check that the owner is not modifying the permissios for his own items. By this way, the user cant deny acces to his own items
     		$entity = $em->getRepository("Wixet\WixetBundle\Entity\UserProfile")->find($entityId);
+    	}
     	
     	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
     	
@@ -166,57 +169,20 @@ class PermissionController extends Controller
     	//Only the owner can set permission
     	if($profile->getId() == $item->getProfile()->getId()){
     		$ws = $this->get('wixet.permission_manager');
-    		$ws->setPermission($entity,$item,$permissionRaw);
+    		if($checkOwner){
+    			//To avoid deny access to own items 
+    			if($entity->getId() == $item->getProfile()->getId()){
+    				throw new \Exception("Owner permissions cannot be changed");
+    			}else
+    				$ws->setPermission($entity,$item,$permissionRaw);
+    		}else
+    			$ws->setPermission($entity,$item,$permissionRaw);
     		
     	}
     	
     	
     	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
-    	
-    	$data = json_decode(file_get_contents('php://input'),true);
-    	$permissionRaw = array("readGranted"=>(int)$data['read_granted'],
-    						   "readDenied"=>(int)$data['read_denied'],
-    	                       "writeGranted"=> (int)$data['write_granted'],
-    	                       "writeDenied"=> (int)$data['write_denied']);
-    	
-    	
-    	$em = $this->get('doctrine')->getEntityManager();
-    	$repository = "";
-    	if($type == "profile")
-    		$repository = "Wixet\WixetBundle\Entity\ProfilePermission";
-    	else
-    		$repository = "Wixet\WixetBundle\Entity\GroupPermission";
-    	 
-    	$permission = $em->getRepository($repository)->find($id);
-    	 
-    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-    	 
-    	
-    	if($profile->getId() == $permission->getOwner()->getId()){
-    		
-    		$item = $em->getRepository($permission->getObjectType()->getName())->find($permission->getObjectId());
-    		
-    		
-    		//TODO hacer que esto lo gestione permission manager
-    		$ws = $this->get('wixet.permission_manager');
-    		$objectType = $permission->getObjectType()->getName();
-    		//TODO cambiar Wixet\WixetBundle\Entity\ItemContainer por una variable de configuración
-    		if($type == "profile" && $objectType == "Wixet\WixetBundle\Entity\ItemContainer"){
-    			//Update profile/album
-    			$ws->setPermissionProfileItemContainer($permission->getProfile(), $item, $permissionRaw);
-    		}elseif($type == "profile" && $objectType != "Wixet\WixetBundle\Entity\ItemContainer"){
-    			//Update profile/item
-    			$ws->setPermissionProfileItem($permission->getProfile(), $item, $permissionRaw);
-    		}elseif($type == "group" && $objectType == "Wixet\WixetBundle\Entity\ItemContainer"){
-    			//Update group/album
-    			$ws->setPermissionGroupItemContainer($permission->getGroup(), $item, $permissionRaw);
-    		}elseif($type == "group" && $objectType != "Wixet\WixetBundle\Entity\ItemContainer"){
-    			//Update group/item
-    			$ws->setPermissionGroupItem($permission->getGroup(), $item, $permissionRaw);
-    		}
-    		
-    	}
-    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' =>  $data ));
+
     }
 
 
