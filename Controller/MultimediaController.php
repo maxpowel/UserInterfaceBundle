@@ -38,7 +38,7 @@ class MultimediaController extends Controller
 			$owner = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($_GET['profile']);
 		}
 		
-		$itemContainer = $owner->getMainItemContainer();
+		$itemContainer = $owner->getRootItemContainer();
 		
 		
 		$collection = $fetcher->getCollection($itemContainer, $profile, "Wixet\WixetBundle\Entity\ItemContainer");
@@ -69,11 +69,11 @@ class MultimediaController extends Controller
 		$em->flush();
 		 
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-		$mainItemContainer = $profile->getMainItemContainer();
+		$rootItemContainer = $profile->getRootItemContainer();
 		
 		//Add permissions
 		$ws = $this->get('wixet.permission_manager');
-		$ws->setItemContainer($md,$mainItemContainer);
+		$ws->setItemContainer($md,$rootItemContainer);
 		$ws->setPermissionProfileItem($profile,$md, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 		
 		 

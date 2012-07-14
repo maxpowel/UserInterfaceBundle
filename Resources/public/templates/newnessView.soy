@@ -6,6 +6,10 @@
  * @param date 
  * @param body
  * @param authorId
+ * @param likes
+ * @param dlikes
+ * @param likeit
+ * @param dlikeit
  */
 {template .newness}
 <div style="min-height: 48px">
@@ -17,7 +21,31 @@
 			<div style="margin-left:60px">
 				<div><a href="#">{$authorName}</a> - {$date}</div>
 				<div>{$body}</div>
-				<div style="padding:10px"><a href="javascript:void(0)" id="doComment">{msg desc="Newness comment"}Comment{/msg}</a> - <a href="#">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="#">{msg desc="User dislikes the newness"}I don't like it{/msg}</a></div>
+				<div style="padding:10px"><a href="javascript:void(0)" id="doComment">{msg desc="Newness comment"}Comment{/msg}</a>
+				<span id="likeForm" {if $likeit > 0 or $dlikeit > 0 }style="display: none"{/if}>
+					 - <a href="javascript:void(0)" id="like">{msg desc="User likes the newness"}I like it{/msg}</a> - <a href="javascript:void(0)" id="dlike">{msg desc="User dislikes the newness"}I don't like it{/msg}</a>
+				</span> 
+				
+				
+				
+				</div>
+				<div>
+					<div id="likeit" class="alert alert-success" {if $likeit == 0 or $likeit == null}style="display: none"{/if}>
+				        <button id="cancelLike"  data-dismiss="alert" class="close btn" type="button">×</button>
+				        {msg desc="User likes the newness"}I like it{/msg}
+				    </div>
+				    
+				    <div id="dlikeit" class="alert alert-error"  {if $dlikeit == 0 or $likeit == null}style="display: none"{/if}>
+				        <button id="cancelDlike" data-dismiss="alert" class="close btn" type="button">×</button>
+				        {msg desc="User dislikes the newness"}I don't like it{/msg}
+				    </div>
+				    
+					
+						<div id="totalLikes" {if $likes == 0 or $likes == null}style="display:none"{/if}><span>{if $likes == null}0{else}{$likes}{/if}</span> people like this</div>					
+					
+						<div id="totalDlikes" {if $dlikes == 0 or $dlikes == null}style="display:none"{/if}><span>{if $dlikes == null}0{else}{$dlikes}{/if}</span> people don't like this</div>
+ 
+				</div>
 				<input style="display: none;" type="text" id="comment" class="span5" placeholder="{msg desc="Write a comment"}Write your comment and push enter{/msg}">
 				<table style="margin-left:10px" width="100%" style="border:0" class="table table-striped">
 				<tbody id="comments">

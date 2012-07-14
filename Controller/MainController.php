@@ -422,6 +422,8 @@ class MainController extends Controller
 	{
 		$data = array();
 		 
+		$em = $this->get('doctrine')->getEntityManager();
+		
 		$ws = $this->get('wixet.fetcher');
 		$pageSize = 20;
 		$offset = ($_GET['page']-1)*$pageSize;
@@ -434,14 +436,36 @@ class MainController extends Controller
 		$friend = $ws->get("Wixet\WixetBundle\Entity\UserProfile",$id,$profile);
 		//If the user are not granted to view the profile, $friend is null
 		if($friend != null){
+			$ot = $em->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => 'Wixet\WixetBundle\Entity\ProfileUpdate'));
+			if($ot == null){
+				$ot = new \Wixet\WixetBundle\Entity\ObjectType();
+				$ot->setName('Wixet\WixetBundle\Entity\Update');
+				$em->persist($ot);
+				$em->flush();
+			}
 			//Extralazy association
 			$updates = $friend->getUpdates();
 			$updateList = $updates->slice($offset, $pageSize);
 
 			foreach ($updateList as $update){
+				
+				//get likes
+				$q = $em->createQuery("SELECT SUM(p.ylike) as likes, SUM(p.dlike) as dlikes FROM Wixet\WixetBundle\Entity\Vote p WHERE p.objectType = :ot AND p.object_id = :object_id")
+				->setParameter('ot', $ot)
+				->setParameter('object_id', $update->getId());
+				$likes = $q->getSingleResult();
+				///////
+				// I like it?
+				$q = $em->createQuery("SELECT SUM(p.ylike) as likes, SUM(p.dlike) as dlikes FROM Wixet\WixetBundle\Entity\Vote p WHERE p.objectType = :ot AND p.object_id = :object_id AND p.profile = :profile")
+				->setParameter('ot', $ot)
+				->setParameter('object_id', $update->getId())
+				->setParameter('profile', $profile);
+				$ilike = $q->getSingleResult();
+				//
+				
 				$author = $update->getAuthor();
 				 
-				$element = array("id"=>$update->getId(), "authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+				$element = array("id"=>$update->getId(), "authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody(), "likes"=>$likes['likes'] ,"dlikes"=> $likes['dlikes'], "likeit"=>$ilike['likes'] ,"dlikeit"=> $ilike['dlikes'], );
 				 
 				//Comments
 				$comments = $update->getComments();
@@ -450,6 +474,7 @@ class MainController extends Controller
 				$comments = array();
 				foreach ($commentList as $comment){
 					$author = $comment->getAuthor();
+		
 					$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorId"=> $author->getId(), "authorName" => $author->getFirstName()." ".$author->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'));
 				}
 				$element['comments'] = $comments;
@@ -475,6 +500,7 @@ class MainController extends Controller
 		 
 		$data = array();
 		$ws = $this->get('wixet.fetcher');
+		$pm = $this->get('wixet.permission_manager');
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
 		/*
 		 * TODO: Add this permission on account creation
@@ -496,8 +522,16 @@ class MainController extends Controller
 			$em->persist($update);
 			$em->flush();
 			 
+			$rootContainer = $profile->getRootItemContainer();
+			$pm->setItemContainer($update,$rootContainer);
 			$author = $update->getAuthor();
 			$data = array("id"=>$update->getId(),"authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+
+			//Add permission to main group
+			$permission = array("readGranted"=>true, "readDenied"=> false, "writeGranted"=> true, "writeDenied"=> false);
+			$pm->setPermission($profile->getMainGroup(), $update, $permission);
+			//$pm->setPermission($profile, $update, $permission);
+			
 
 		}
 		 
@@ -710,6 +744,7 @@ class MainController extends Controller
 	
 	/**
 	* @Route("/vote/{vote}/{objectType}/{objectId}", name="_vote_item")
+	* @Method({"POST"})
 	*/
 	public function voteItemAction($vote, $objectType, $objectId)
 	{
@@ -717,23 +752,86 @@ class MainController extends Controller
 		
 		$em = $this->get('doctrine')->getEntityManager();
 		$ws = $this->get('wixet.fetcher');
-	
-		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
-		$item = $ws->get($objectType,$objectId,$profile);
 		
+		$objectType = "Wixet\WixetBundle\Entity\\".$objectType;
+		
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		
+		$item = $ws->get($objectType,$objectId,$profile);
+
 		if($item != null){
-			$vote = new \Wixet\WixetBundle\Entity\Vote();
-			$vote->setProfile($profile);
-			$vote->setObjectId($item->getId());
-			$vote->setObjectType($em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>$objectType)));
-			$vote->setLike($vote==1?true:false);
-			$em->persist($vote);
+			
+			$ot = $em->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => $objectType));
+			if($ot == null){
+				$ot = new \Wixet\WixetBundle\Entity\ObjectType();
+				$ot->setName($objecType);
+				$em->persist($ot);
+				$em->flush();
+			}
+			
+			$voteObj = new \Wixet\WixetBundle\Entity\Vote();
+			$voteObj->setProfile($profile);
+			$voteObj->setObjectId($item->getId());
+			$voteObj->setObjectType($ot);
+			if($vote == 1){
+				$voteObj->setLike(true);
+				$voteObj->setDontlike(false);
+			}else{
+				$voteObj->setLike(false);
+				$voteObj->setDontlike(true);
+			}
+			
+			$em->persist($voteObj);
 			$em->flush();
 			//TODO cache votes
+			$data = array("error"=>false);
+		}
+		else
+			$data = array("error"=>true, "msg"=>"access denied");
 			
+		//$data = array();
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	* @Route("/vote/{vote}/{objectType}/{objectId}", name="_unvote_item")
+	* @Method({"DELETE"})
+	*/
+	public function unVoteItemAction($vote, $objectType, $objectId)
+	{
+		$data = array();
+	
+		$em = $this->get('doctrine')->getEntityManager();
+		$ws = $this->get('wixet.fetcher');
+	
+		$objectType = "Wixet\WixetBundle\Entity\\".$objectType;
+	
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		
+		$ot = $em->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => $objectType));
+		if($ot == null){
+			$ot = new \Wixet\WixetBundle\Entity\ObjectType();
+			$ot->setName($objecType);
+			$em->persist($ot);
+			$em->flush();
 		}
 		
-		$data = array("error"=>true, "msg"=>"access denied");
+		$like = false;
+		$dlike = false;
+		if($vote == 1){
+			$like = true;
+		}else{
+			$dlike = true;
+		}
+		
+		$query = $em->createQuery('DELETE FROM Wixet\WixetBundle\Entity\Vote v WHERE v.profile = :profile AND v.objectType = :objectType AND v.object_id = :object_id AND v.ylike = :like AND v.dlike = :dlike');
+		$query->setParameter('profile', $profile);
+		$query->setParameter('objectType', $ot);
+		$query->setParameter('object_id', $objectId);
+		$query->setParameter('like', $like);
+		$query->setParameter('dlike', $dlike);
+		$data = $query->execute();
+		
 			
 		//$data = array();
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));

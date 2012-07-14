@@ -84,7 +84,7 @@ var NewAccountView = Backbone.View.extend({
 					}
 	    		},
 	    		error: function(){
-	    			console.log("Ha sucedido un error. Refresca la página por favor");
+	    			alert("Ha sucedido un error");
 	    		}});
 				
 				

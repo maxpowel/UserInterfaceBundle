@@ -1,7 +1,11 @@
 var NewnessView = Backbone.View.extend({
 	events:{
 		"keypress #comment": "commentOnEnter",
-		"click #doComment": "showCommentForm"
+		"click #doComment": "showCommentForm",
+		"click #like": "doLike",
+		"click #dlike": "doDlike",
+		"click #cancelLike" : "cancelLike",
+		"click #cancelDlike" : "cancelDlike" 
 	},
     initialize: function() {
     	//this.model.bind('destroy', this.remove, this);
@@ -35,9 +39,16 @@ var NewnessView = Backbone.View.extend({
      },*/
       
     render: function() {
-    	//TODO hacer que esto cambie
     	$(this.el).html(template.newnessView.newness(this.model.toJSON()));
     	this.commentInput = $(this.el).find("#comment");
+    	
+    	//Like buttons
+    	this.likeForm = $(this.el).find("#likeForm");
+    	this.likeit = $(this.el).find("#likeit");
+    	this.dlikeit = $(this.el).find("#dlikeit");
+    	this.totalLikes = $(this.el).find("#totalLikes");
+    	this.totalDlikes = $(this.el).find("#totalDlikes");
+    	/////////////
     	
     	//this.commentList.fetch({data:{id: this.model.get('id') }});
     	this.commentListContainer = $(this.el).find("#comments");
@@ -73,5 +84,82 @@ var NewnessView = Backbone.View.extend({
         this.commentInput.val('');
         this.commentInput.hide();
       },
+      
+      doLike: function(){
+    	  var vote = new Vote();
+    	  var self = this;
+    	  vote.save({vote:1, objectType:"ProfileUpdate", object_id:this.model.get("id")},{
+    		  wait: true,
+    		  success: function(){
+    			  self.likeForm.hide();
+    			  self.likeit.show();
+    			  var nLikes = parseInt(self.totalLikes.find("span").text()) + 1;
+    			  self.totalLikes.find("span").text(nLikes);
+    			  self.totalLikes.show();
+    			  
+    		  },error: function(){
+    			  alert("Error");
+    		  }
+    		  
+    	  });
+      },
+      
+      doDlike: function(){
+    	  var vote = new Vote();
+    	  var self = this;
+    	  vote.save({vote:0, objectType:"ProfileUpdate", object_id:this.model.get("id")},{
+    		  wait: true,
+    		  success: function(){
+    			  self.likeForm.hide();
+    			  self.dlikeit.show();
+    			  var nDlikes = parseInt(self.totalDlikes.find("span").text()) + 1;
+    			  self.totalDlikes.find("span").text(nDlikes);
+    			  self.totalDlikes.show();
+    		  },error: function(){
+    			  alert("Error");
+    		  }
+    		  
+    	  });
+      },
+      
+      cancelLike: function(){
+    	  var vote = new Vote({id: 1, vote:1, objectType:"ProfileUpdate", object_id:this.model.get("id")});
+    	  var self = this;
+    	  //Assign and id to make delete request
+    	  vote.destroy({
+    		  wait: true,
+    		  success: function(){
+    			  self.likeForm.show();
+    			  self.likeit.hide();
+    			  var nLikes = parseInt(self.totalLikes.find("span").text()) - 1;
+    			  self.totalLikes.find("span").text(nLikes);
+    			  if(nLikes == 0)
+    				  self.totalLikes.hide();
+    		  },error: function(){
+    			  alert("Error");
+    		  }
+    		  
+    	  });
+      },
+      
+      cancelDlike: function(){
+    	  var vote = new Vote({id: 0, vote:0, objectType:"ProfileUpdate", object_id:this.model.get("id")});
+    	  var self = this;
+    	  //Assign and id to make delete request
+    	  vote.destroy({
+    		  wait: true,
+    		  success: function(){
+    			  self.likeForm.show();
+    			  self.dlikeit.hide();
+    			  var nDlikes = parseInt(self.totalDlikes.find("span").text()) - 1;
+    			  self.totalDlikes.find("span").text(nDlikes);
+    			  if(nDlikes == 0)
+    				  self.totalDlikes.hide();
+    		  },error: function(){
+    			  alert("Error");
+    		  }
+    		  
+    	  });
+      }
       
 });

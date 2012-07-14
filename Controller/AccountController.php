@@ -44,6 +44,9 @@ class AccountController extends Controller
 	    		//
 	    		$album = new \Wixet\WixetBundle\Entity\ItemContainer();
 	    		$album->setName("Fotos");
+	    		
+	    		$root = new \Wixet\WixetBundle\Entity\ItemContainer();
+	    		$root->setName("Root");
 	    		//
 	    		$messageCollection = new \Wixet\WixetBundle\Entity\PrivateMessageCollection();
 	    		$messageCollection->setName("Recibidos"); 
@@ -61,6 +64,7 @@ class AccountController extends Controller
 	    		
 	    		$group->setProfile($profile);
 	    		$profile->setMainItemContainer($album);
+	    		$profile->setRootItemContainer($root);
 	    		$profile->setMainGroup($group);
 	    		$profile->setMainPrivateMessageCollection($messageCollection);
 	    		
@@ -68,8 +72,10 @@ class AccountController extends Controller
 	    		$album->setPublic(false);
 	    		$messageCollection->setProfile($profile);
 	    		
-
+	    		$root->setProfile($profile);
 	    		
+
+	    		$em->persist($root);
 	    		$em->persist($profile);
 	    		$em->persist($album);
 	    		$em->persist($group);
@@ -79,8 +85,10 @@ class AccountController extends Controller
 	    		
 	    		//Add permissions
 	    		$ws = $this->get('wixet.permission_manager');
-	    		$ws->setItemContainer($album,$album);
-	    		$ws->setItemContainer($profile,$album);
+	    		$ws->setItemContainer($album,$root);
+	    		$ws->setItemContainer($profile,$root);
+	    		
+	    		$ws->setPermission($profile,$root, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($profile,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($group,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));

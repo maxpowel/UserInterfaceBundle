@@ -343,7 +343,7 @@ if (typeof template.multimediaView == 'undefined') { template.multimediaView = {
 
 template.multimediaView.photoList = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3 id="folderName">', soy.$$escapeHtml(opt_data.folder), '</h3></div><div align="right" class="breadcrumb">', (opt_data.owner == true) ? '<div style="float:left; margin-top:20px; margin-left:20px">Check <a id="check-all" href="javascript:void(0)">All</a> <a id="check-none" href="javascript:void(0)">None</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-error btn-small disabled" id="remove-btn">Remove checked</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">Move checked</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>' : '', '<div style="width:200px;float:right;">Page <span id="start-page"></span> of <span id="last-page"></span></div><div class="pagination" style="width:205px"><ul><li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← Previous</a></li><li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">Next page →</a></li></ul></div></div><div><ul class="thumbnails" id="photo-list"></ul></div>');
+  output.append('\t\t\t<div><h3 id="folderName">', soy.$$escapeHtml(opt_data.folder), '</h3></div><div align="right" class="breadcrumb">', (opt_data.owner == true) ? '<div style="float:left; margin-top:20px; margin-left:20px">Check <a id="check-all" href="javascript:void(0)">All</a> <a id="check-none" href="javascript:void(0)">None</a>&nbsp;&nbsp;&nbsp;<button class="btn btn-danger btn-small disabled" id="remove-btn">Remove checked</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-small disabled" id="move-btn">Move checked</button>&nbsp;&nbsp;&nbsp;<span id="optButCont"></span></div>' : '', '<div style="width:200px;float:right;">Page <span id="start-page"></span> of <span id="last-page"></span></div><div class="pagination" style="width:205px"><ul><li class="prev disabled"><a href="javascript:void(0)" id="previousPage-btn">← Previous</a></li><li class="next disabled"><a href="javascript:void(0)" id="nextPage-btn">Next page →</a></li></ul></div></div><div><ul class="thumbnails" id="photo-list"></ul></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -357,7 +357,7 @@ template.multimediaView.photo = function(opt_data, opt_sb) {
 
 template.multimediaView.albumOptions = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<h3>Options</h3><table><tbody><tr><td>Album name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row show-grid"><div class="span"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span"><button id="remove-folder-btn" class="btn btn-error">Remove album</button></div></div>');
+  output.append('\t<h3>Options</h3><table><tbody><tr><td>Album name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row show-grid"><div class="span"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span"><button id="remove-folder-btn" class="btn btn-danger">Remove album</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -413,7 +413,7 @@ if (typeof template.newnessView == 'undefined') { template.newnessView = {}; }
 
 template.newnessView.newness = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="photo/profile/', soy.$$escapeHtml(opt_data.authorId), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a> - <a href="#">I like it</a> - <a href="#">I don\'t like it</a></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table style="margin-left:10px" width="100%" style="border:0" class="table table-striped"><tbody id="comments"></tbody></table></div></div><hr>');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="photo/profile/', soy.$$escapeHtml(opt_data.authorId), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a><span id="likeForm" ', (opt_data.likeit > 0 || opt_data.dlikeit > 0) ? 'style="display: none"' : '', '>- <a href="javascript:void(0)" id="like">I like it</a> - <a href="javascript:void(0)" id="dlike">I don\'t like it</a></span></div><div><div id="likeit" class="alert alert-success" ', (opt_data.likeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelLike"  data-dismiss="alert" class="close btn" type="button">×</button>I like it</div><div id="dlikeit" class="alert alert-error"  ', (opt_data.dlikeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelDlike" data-dismiss="alert" class="close btn" type="button">×</button>I don\'t like it</div><div id="totalLikes" ', (opt_data.likes == 0 || opt_data.likes == null) ? 'style="display:none"' : '', '><span>', (opt_data.likes == null) ? '0' : soy.$$escapeHtml(opt_data.likes), '</span> people like this</div><div id="totalDlikes" ', (opt_data.dlikes == 0 || opt_data.dlikes == null) ? 'style="display:none"' : '', '><span>', (opt_data.dlikes == null) ? '0' : soy.$$escapeHtml(opt_data.dlikes), '</span> people don\'t like this</div></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table style="margin-left:10px" width="100%" style="border:0" class="table table-striped"><tbody id="comments"></tbody></table></div></div><hr>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -603,11 +603,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList1111 = opt_data.favourites;
-  var favouriteListLen1111 = favouriteList1111.length;
-  for (var favouriteIndex1111 = 0; favouriteIndex1111 < favouriteListLen1111; favouriteIndex1111++) {
-    var favouriteData1111 = favouriteList1111[favouriteIndex1111];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1111.url), '">', soy.$$escapeHtml(favouriteData1111.title), '</li>');
+  var favouriteList1149 = opt_data.favourites;
+  var favouriteListLen1149 = favouriteList1149.length;
+  for (var favouriteIndex1149 = 0; favouriteIndex1149 < favouriteListLen1149; favouriteIndex1149++) {
+    var favouriteData1149 = favouriteList1149[favouriteIndex1149];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1149.url), '">', soy.$$escapeHtml(favouriteData1149.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -616,11 +616,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1120 = opt_data.list;
-  var elementListLen1120 = elementList1120.length;
-  for (var elementIndex1120 = 0; elementIndex1120 < elementListLen1120; elementIndex1120++) {
-    var elementData1120 = elementList1120[elementIndex1120];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1120.title), '</h3></div><p>', soy.$$escapeHtml(elementData1120.body), '</p>');
+  var elementList1158 = opt_data.list;
+  var elementListLen1158 = elementList1158.length;
+  for (var elementIndex1158 = 0; elementIndex1158 < elementListLen1158; elementIndex1158++) {
+    var elementData1158 = elementList1158[elementIndex1158];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1158.title), '</h3></div><p>', soy.$$escapeHtml(elementData1158.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -687,31 +687,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1245 = opt_data.favourites;
-    var favouriteListLen1245 = favouriteList1245.length;
-    for (var favouriteIndex1245 = 0; favouriteIndex1245 < favouriteListLen1245; favouriteIndex1245++) {
-      var favouriteData1245 = favouriteList1245[favouriteIndex1245];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1245.name), '</li>');
+    var favouriteList1283 = opt_data.favourites;
+    var favouriteListLen1283 = favouriteList1283.length;
+    for (var favouriteIndex1283 = 0; favouriteIndex1283 < favouriteListLen1283; favouriteIndex1283++) {
+      var favouriteData1283 = favouriteList1283[favouriteIndex1283];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1283.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1257 = opt_data.friends;
-    var friendListLen1257 = friendList1257.length;
-    for (var friendIndex1257 = 0; friendIndex1257 < friendListLen1257; friendIndex1257++) {
-      var friendData1257 = friendList1257[friendIndex1257];
-      output.append('<li>', soy.$$escapeHtml(friendData1257.name), '</li>');
+    var friendList1295 = opt_data.friends;
+    var friendListLen1295 = friendList1295.length;
+    for (var friendIndex1295 = 0; friendIndex1295 < friendListLen1295; friendIndex1295++) {
+      var friendData1295 = friendList1295[friendIndex1295];
+      output.append('<li>', soy.$$escapeHtml(friendData1295.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1266 = opt_data.highlights;
-    var resListLen1266 = resList1266.length;
-    for (var resIndex1266 = 0; resIndex1266 < resListLen1266; resIndex1266++) {
-      var resData1266 = resList1266[resIndex1266];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1266.title), '</strong><div>', soy.$$escapeHtml(resData1266.body), '</div></div>');
+    var resList1304 = opt_data.highlights;
+    var resListLen1304 = resList1304.length;
+    for (var resIndex1304 = 0; resIndex1304 < resListLen1304; resIndex1304++) {
+      var resData1304 = resList1304[resIndex1304];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1304.title), '</strong><div>', soy.$$escapeHtml(resData1304.body), '</div></div>');
     }
     output.append('</pre></div>');
   }
