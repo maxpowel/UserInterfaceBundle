@@ -4,8 +4,15 @@ var NewnessListView = Backbone.View.extend({
 	profileId: null,
 	input: null,
 	page: 1,
+	linkEnabled: false,
     events: {
-    	"keypress #new-share":  "createOnEnter",
+    //	"keypress #new-share":  "createOnEnter",
+    		"focus #fakeContent input": "toogleRealContent",
+    		"click .closeAllowed": "removeAllowed",
+    		"click #addLink": "addLink",
+    		"click #closeUpdate": "toogleRealContent",
+    		
+    	
     	"click #more-newness":  "loadMoreNewness"
     },
     
@@ -54,6 +61,34 @@ var NewnessListView = Backbone.View.extend({
     addOne: function(newness) {
       var view = new NewnessView({model: newness});
       this.newnessContainer.prepend(view.render().el);
-    }
+    },
+    
+    removeAllowed: function(event){
+		$(event.target).parent().parent().remove();
+		
+	},
+	toogleRealContent: function(){
+		var fakeContent = this.$el.find("#fakeContent");
+		
+		if(fakeContent.is(":visible")){
+					this.$el.find("#fakeContent").hide();
+					this.$el.find("#content").show().find("textarea").focus();
+		}else{
+				this.$el.find("#fakeContent").show();
+				this.$el.find("#content").hide();
+		}
+	},
+	
+	addLink: function(){
+			var form = this.$el.find("#addLinkForm");
+			if(form.is(":visible")){
+				form.hide()
+				this.$el.find(".updateAction").css({ 'opacity' : 1 });
+			}else{
+				form.show().find("input").focus();
+				this.$el.find(".updateAction").css({ 'opacity' : 0.25 });
+				this.$el.find("#addLink").css({ 'opacity' : 1 });
+			}
+	}
 });
 

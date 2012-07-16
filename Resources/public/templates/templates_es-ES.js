@@ -47,7 +47,7 @@ template.appView.multimenu = function(opt_data, opt_sb) {
   var subsectionListLen68 = subsectionList68.length;
   for (var subsectionIndex68 = 0; subsectionIndex68 < subsectionListLen68; subsectionIndex68++) {
     var subsectionData68 = subsectionList68[subsectionIndex68];
-    output.append('<div style="display:none" id="', soy.$$escapeHtml(subsectionData68.subSectionId), '" class="submenu"><button style="margin-left:11px" class="btn span6 btn-', soy.$$escapeHtml(subsectionData68.buttonClass), ' back-but">Back</button><br><br><div class="subSection-content"></div></div>');
+    output.append('<div style="display:none" id="', soy.$$escapeHtml(subsectionData68.subSectionId), '" class="submenu"><button style="margin-left:11px" class="btn span btn-', soy.$$escapeHtml(subsectionData68.buttonClass), ' back-but">Back</button><br><br><div class="subSection-content"></div></div>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -266,14 +266,14 @@ template.messagesView.conversationEntry = function(opt_data, opt_sb) {
 
 template.messagesView.newMessage = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<br><br>', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<div class="block-message alert-success" id="sentSuccess" style="display:none"><a href="javascript:void(0)" id="success-close" class="close">×</a><p>Message succesfully sent</p></div><table class="table table-bordered"><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input value="" type="hidden" id="to" class="xlarge"/><div id="toText"></div><input type="text" id="toList" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input value="' + soy.$$escapeHtml(opt_data.to.id) + '" type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row show-grid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn btn-primary ', (opt_data.to == null) ? 'disabled' : '', '" id="sendMessage-btn">Send</button></div></div>');
+  output.append('<br><br>', (opt_data.to == null) ? '<h3>New message</h3>' : '', '<div class="block-message alert-success" id="sentSuccess" style="display:none"><a href="javascript:void(0)" id="success-close" class="close">×</a><p>Message succesfully sent</p></div><table class="table table-bordered"><tbody><tr>', (opt_data.to == null) ? '<td>Send to</td><td><input value="" type="hidden" id="to" class="xlarge"/><div id="toText"></div><input type="text" id="toList" class="xlarge"/></td>' : '<td>Send to</td><td>' + soy.$$escapeHtml(opt_data.to.name) + '<input value="' + soy.$$escapeHtml(opt_data.to.id) + '" type="hidden" id="to" class="xlarge"/></td>', '</tr><tr><td>Subject</td><td><input type="text" class="xlarge" id="subject"/></td></tr><tr><td>Body</td><td><textarea class="xlarge" id="body"></textarea></td></tr><tbody></table><div class="row-fluid"><div class="span2"><button class="btn" id="attachFile-btn">Attach file</button></div><div class="span2"><button class="btn btn-primary ', (opt_data.to == null) ? 'disabled' : '', '" id="sendMessage-btn">Send</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.messagesView.folderOptions = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<br><br><h3>Options</h3><table class="table table-bordered"><tbody><tr><td>Folder name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row show-grid"><div class="span"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span"><button id="remove-folder-btn" class="btn btn-error">Remove folder</button></div></div>');
+  output.append('\t<br><br><h3>Options</h3><table class="table table-bordered"><tbody><tr><td>Folder name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row-fluid"><div class="span2"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span2"><button id="remove-folder-btn" class="btn btn-danger">Remove folder</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -287,7 +287,7 @@ template.messagesView.newFolder = function(opt_data, opt_sb) {
 
 template.messagesView.removeFolderAsk = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="modal hide fade" style="display: none;"><div class="modal-header"><h3>Remove folder</h3></div><div class="modal-body">Are you really sure you want to delete the folder ', soy.$$escapeHtml(opt_data.folder), '?</div><div class="modal-footer"><button class="btn remove btn-secondary">Remove</button><button class="btn cancel btn-primary">Cancel</button></div></div>');
+  output.append('<div class="modal hide fade" style="display: none;"><div class="modal-header"><h3>Remove folder</h3></div><div class="modal-body">Are you really sure you want to delete the folder ', soy.$$escapeHtml(opt_data.folder), '?</div><div class="modal-footer"><button class="btn remove btn-danger">Remove</button><button class="btn cancel btn-primary">Cancel</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -357,7 +357,7 @@ template.multimediaView.photo = function(opt_data, opt_sb) {
 
 template.multimediaView.albumOptions = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t<h3>Options</h3><table><tbody><tr><td>Album name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row show-grid"><div class="span"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span"><button id="remove-folder-btn" class="btn btn-danger">Remove album</button></div></div>');
+  output.append('\t<h3>Options</h3><table><tbody><tr><td>Album name</td><td><input value="', soy.$$escapeHtml(opt_data.name), '" type="text" id="folderName-input" class="xlarge"/></td></tr><tbody></table><div class="row-fluid"><div class="span2"><button class="btn" id="save-folder-btn">Save changes</button></div><div class="span2"><button id="remove-folder-btn" class="btn btn-danger">Remove album</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -371,7 +371,7 @@ template.multimediaView.newAlbum = function(opt_data, opt_sb) {
 
 template.multimediaView.removeAlbumAsk = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="modal hide fade" style="display: none;"><div class="modal-header"><h3>Remove album</h3></div><div class="modal-body">Are you really sure you want to delete the album ', soy.$$escapeHtml(opt_data.folder), '?</div><div class="modal-footer"><button class="btn remove btn-secondary">Remove</button><button class="btn cancel btn-primary">Cancel</button></div></div>');
+  output.append('<div class="modal hide fade" style="display: none;"><div class="modal-header"><h3>Remove album</h3></div><div class="modal-body">Are you really sure you want to delete the album ', soy.$$escapeHtml(opt_data.folder), '?</div><div class="modal-footer"><button class="btn remove btn-danger">Remove</button><button class="btn cancel btn-primary">Cancel</button></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -413,7 +413,7 @@ if (typeof template.newnessView == 'undefined') { template.newnessView = {}; }
 
 template.newnessView.newness = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="photo/profile/', soy.$$escapeHtml(opt_data.authorId), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a><span id="likeForm" ', (opt_data.likeit > 0 || opt_data.dlikeit > 0) ? 'style="display: none"' : '', '>- <a href="javascript:void(0)" id="like">I like it</a> - <a href="javascript:void(0)" id="dlike">I don\'t like it</a></span></div><div><div id="likeit" class="alert alert-success" ', (opt_data.likeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelLike"  data-dismiss="alert" class="close btn" type="button">×</button>I like it</div><div id="dlikeit" class="alert alert-error"  ', (opt_data.dlikeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelDlike" data-dismiss="alert" class="close btn" type="button">×</button>I don\'t like it</div><div id="totalLikes" ', (opt_data.likes == 0 || opt_data.likes == null) ? 'style="display:none"' : '', '><span>', (opt_data.likes == null) ? '0' : soy.$$escapeHtml(opt_data.likes), '</span> people like this</div><div id="totalDlikes" ', (opt_data.dlikes == 0 || opt_data.dlikes == null) ? 'style="display:none"' : '', '><span>', (opt_data.dlikes == null) ? '0' : soy.$$escapeHtml(opt_data.dlikes), '</span> people don\'t like this</div></div><input style="display: none;" type="text" id="comment" class="span5" placeholder="Write your comment and push enter"><table style="margin-left:10px" width="100%" style="border:0" class="table table-striped"><tbody id="comments"></tbody></table></div></div><hr>');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#as"><img alt="" src="photo/profile/', soy.$$escapeHtml(opt_data.authorId), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#">', soy.$$escapeHtml(opt_data.authorName), '</a> - ', soy.$$escapeHtml(opt_data.date), '</div><div>', soy.$$escapeHtml(opt_data.body), '</div><div style="padding:10px"><a href="javascript:void(0)" id="doComment">Comment</a><span id="likeForm" ', (opt_data.likeit > 0 || opt_data.dlikeit > 0) ? 'style="display: none"' : '', '>- <a href="javascript:void(0)" id="like">I like it</a> - <a href="javascript:void(0)" id="dlike">I don\'t like it</a></span></div><div><div id="likeit" class="alert alert-success" ', (opt_data.likeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelLike"  data-dismiss="alert" class="close" type="button">×</button>I like it</div><div id="dlikeit" class="alert alert-error"  ', (opt_data.dlikeit == 0 || opt_data.likeit == null) ? 'style="display: none"' : '', '><button id="cancelDlike" data-dismiss="alert" class="close" type="button">×</button>I don\'t like it</div><div id="totalLikes" ', (opt_data.likes == 0 || opt_data.likes == null) ? 'style="display:none"' : '', '><span>', (opt_data.likes == null) ? '0' : soy.$$escapeHtml(opt_data.likes), '</span> people like this</div><div id="totalDlikes" ', (opt_data.dlikes == 0 || opt_data.dlikes == null) ? 'style="display:none"' : '', '><span>', (opt_data.dlikes == null) ? '0' : soy.$$escapeHtml(opt_data.dlikes), '</span> people don\'t like this</div></div><input style="display: none;" type="text" id="comment" class="span10" placeholder="Write your comment and push enter"><table style="margin-left:10px" width="100%" style="border:0" class="table table-striped"><tbody id="comments"></tbody></table></div></div><hr>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -427,7 +427,14 @@ template.newnessView.newnessComment = function(opt_data, opt_sb) {
 
 template.newnessView.newnessList = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="hero-unit" style="padding: 20px 40px 40px">', (opt_data.isOwner == true) ? '<h3>Share something</h3>' : '<h3>Share something with ' + soy.$$escapeHtml(opt_data.name) + '</h3>', '<input type="text" class="span5" id="new-share" placeholder="Write here and push enter"></div><div id="newness-container"></div><button class="btn span6" style="margin-left:10px" id="more-newness">More</button>');
+  output.append('<div class="well span12" id="update">', (opt_data.isOwner == true) ? '<h3>Share something</h3>' : '<h3>Share something with ' + soy.$$escapeHtml(opt_data.name) + '</h3>', '<br><div id="fakeContent"><input class="span12" type="text" /></div><div id="content" style="display:none"><button class="close" id="closeUpdate" style="margin-top: -25px;">&times;</button><textarea class="span12" rows="10" cols="20"></textarea><table class="table table-bordered table-striped"><tbody><tr><td><div id="addLinkForm" style="display:none; float:left" class="span7"><input type="text" placeholder="Write here your link" class="span"> <button class="btn btn-success">Add</button></div><span style="float:right"><a class="updateAction" href="javascript:void(0)" id="addPhoto" style="padding:5px"><img src="img/glyphicons/png/glyphicons_011_camera.png"></a><a class="updateAction" href="javascript:void(0)" id="addVideo" style="padding:5px"><img src="img/glyphicons/png/glyphicons_008_film.png"></a><a class="updateAction" href="javascript:void(0)" id="addMusic" style="padding:5px"><img src="img/glyphicons/png/glyphicons_017_music.png"></a><a class="updateAction" href="javascript:void(0)" id="addLink" style="padding:5px"><img src="img/glyphicons/png/glyphicons_050_link.png"></a><a class="updateAction" href="javascript:void(0)" id="addEvent" style="padding:5px"><img src="img/glyphicons/png/glyphicons_045_calendar.png"></a></span></td></tr><tr><td><p>Permitir acceso a</p><input type="text" class="span7"><div class="row-fluid"><div class="span4"><div class="alert alert-info"><button class="close closeAllowed">&times;</button>Amigos</div></div></div></td></tr></tbody></table></div></div><div id="newness-container"></div><button class="btn span12" style="margin-left:10px" id="more-newness">More</button>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.newnessView.newnessList2 = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div class="hero-unit" style="padding: 20px 40px 40px">', (opt_data.isOwner == true) ? '<h3>Share something</h3>' : '<h3>Share something with ' + soy.$$escapeHtml(opt_data.name) + '</h3>', '<div class="span5" id="update"><div id="fakeContent"><input class="span7" type="text" /></div></div><div id="content" style="display:none"><button class="close" id="closeUpdate" style="margin-top: -20px; margin-right: -15px;">&times;</button><textarea class="span5" rows="10" cols="20"></textarea><table class="table table-bordered table-striped"><tbody><tr><td><div id="addLinkForm" style="display:none; float:left"><input type="text" placeholder="Write here your link"> <button class="btn btn-success" class="span4">Add</button></div><span style="float:right"><a class="updateAction" href="javascript:void(0)" id="addPhoto"><img src="img/glyphicons/png/glyphicons_011_camera.png"></a><a class="updateAction" href="javascript:void(0)" id="addVideo"><img src="img/glyphicons/png/glyphicons_008_film.png"></a><a class="updateAction" href="javascript:void(0)" id="addMusic"><img src="img/glyphicons/png/glyphicons_017_music.png"></a><a class="updateAction" href="javascript:void(0)" id="addLink"><img src="img/glyphicons/png/glyphicons_050_link.png"></a><a class="updateAction" href="javascript:void(0)" id="addEvent"><img src="img/glyphicons/png/glyphicons_045_calendar.png"></a></span></td></tr><tr><td><p>Permitir acceso a</p><input type="text" class="span7"><div class="row-fluid"><div class="span3"><div class="alert alert-info"><button class="close closeAllowed">&times;</button>Amigos</div></div></div></td></tr></tbody></table></div></div><div id="newness-container"></div><button class="btn span6" style="margin-left:10px" id="more-newness">More</button>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -539,7 +546,7 @@ template.preferencesView.aboutMe = function(opt_data, opt_sb) {
 
 template.preferencesView.security = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><h3>>Profile permissions></h3><p>Remember, the profile inherits the main album permissions. Here are only shown the explicit permissions of the profile</p><table class="table table-striped table-bordered table-condensed"><thead><tr><th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionsBody"><tr><td></td><td>New permission for<br><input placeholder="Group or person name" id="newPermissionEntity" type="text" class="span"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><h3>All permissions list</h3><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th></tr></thead><tbody id="permissionTable"></tbody></table></div>');
+  output.append('\t\t\t<div><h3>Security</h3></div><div><br><div><button class="btn" id="manageGroups-btn">Manage groups</button></button></div><br><h3>Profile permissions</h3><p>Remember, the profile inherits the main album permissions. Here are only shown the explicit permissions of the profile</p><table class="table table-striped table-bordered table-condensed"><thead><tr><th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th></tr></thead><tbody id="permissionsBody"><tr><td></td><td>New permission for<br><input placeholder="Group or person name" id="newPermissionEntity" type="text" class="span"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><h3>All permissions list</h3><table  align="center" class="table table-striped table-bordered table-condensed"><thead><tr><th>Identity type</th><th>Identity name</th><th>Protected object type</th><th>Protected object id</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th></tr></thead><tbody id="permissionTable"></tbody></table></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -560,7 +567,7 @@ template.preferencesView.editGroup = function(opt_data, opt_sb) {
 
 template.preferencesView.manageGroups = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('\t\t\t<div><h3>Manage groups</h3></div><table class="table table-bordered"><tr><td><h4>Group list</h4></td></tr><tr><td><ul id="groupList" class="nav nav-pills nav-stacked"></ul></td></tr></table><br><table><tr><td colspan="2"><h4>New group</h4></td></tr><tr><td colspan><div>Name</td><td><input type="text" class="span3" id="newGroupName"></div></td></tr><tr><td colspan="2"><div><button class="btn btn-primary" id="createGroup-btn">Create</button></div></td></tr></table>');
+  output.append('\t\t\t<div><h3>Manage groups</h3></div><table class="table table-bordered"><tr><td><h4>Group list</h4></td></tr><tr><td><ul id="groupList" class="nav nav-pills nav-stacked"></ul></td></tr></table><br><table><tr><td colspan="2"><h4>New group</h4></td></tr><tr><td colspan><div>Name</td><td><input type="text" class="span" id="newGroupName"></div></td></tr><tr><td colspan="2"><div><button class="btn btn-primary" id="createGroup-btn">Create</button></div></td></tr></table>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -603,11 +610,11 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
   output.append('<h5>Favourites</h5><ul>');
-  var favouriteList1149 = opt_data.favourites;
-  var favouriteListLen1149 = favouriteList1149.length;
-  for (var favouriteIndex1149 = 0; favouriteIndex1149 < favouriteListLen1149; favouriteIndex1149++) {
-    var favouriteData1149 = favouriteList1149[favouriteIndex1149];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1149.url), '">', soy.$$escapeHtml(favouriteData1149.title), '</li>');
+  var favouriteList1165 = opt_data.favourites;
+  var favouriteListLen1165 = favouriteList1165.length;
+  for (var favouriteIndex1165 = 0; favouriteIndex1165 < favouriteListLen1165; favouriteIndex1165++) {
+    var favouriteData1165 = favouriteList1165[favouriteIndex1165];
+    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1165.url), '">', soy.$$escapeHtml(favouriteData1165.title), '</li>');
   }
   output.append('</ul>');
   return opt_sb ? '' : output.toString();
@@ -616,11 +623,11 @@ template.profileView.favourites = function(opt_data, opt_sb) {
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1158 = opt_data.list;
-  var elementListLen1158 = elementList1158.length;
-  for (var elementIndex1158 = 0; elementIndex1158 < elementListLen1158; elementIndex1158++) {
-    var elementData1158 = elementList1158[elementIndex1158];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1158.title), '</h3></div><p>', soy.$$escapeHtml(elementData1158.body), '</p>');
+  var elementList1174 = opt_data.list;
+  var elementListLen1174 = elementList1174.length;
+  for (var elementIndex1174 = 0; elementIndex1174 < elementListLen1174; elementIndex1174++) {
+    var elementData1174 = elementList1174[elementIndex1174];
+    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1174.title), '</h3></div><p>', soy.$$escapeHtml(elementData1174.body), '</p>');
   }
   return opt_sb ? '' : output.toString();
 };
@@ -687,31 +694,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1283 = opt_data.favourites;
-    var favouriteListLen1283 = favouriteList1283.length;
-    for (var favouriteIndex1283 = 0; favouriteIndex1283 < favouriteListLen1283; favouriteIndex1283++) {
-      var favouriteData1283 = favouriteList1283[favouriteIndex1283];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1283.name), '</li>');
+    var favouriteList1299 = opt_data.favourites;
+    var favouriteListLen1299 = favouriteList1299.length;
+    for (var favouriteIndex1299 = 0; favouriteIndex1299 < favouriteListLen1299; favouriteIndex1299++) {
+      var favouriteData1299 = favouriteList1299[favouriteIndex1299];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1299.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1295 = opt_data.friends;
-    var friendListLen1295 = friendList1295.length;
-    for (var friendIndex1295 = 0; friendIndex1295 < friendListLen1295; friendIndex1295++) {
-      var friendData1295 = friendList1295[friendIndex1295];
-      output.append('<li>', soy.$$escapeHtml(friendData1295.name), '</li>');
+    var friendList1311 = opt_data.friends;
+    var friendListLen1311 = friendList1311.length;
+    for (var friendIndex1311 = 0; friendIndex1311 < friendListLen1311; friendIndex1311++) {
+      var friendData1311 = friendList1311[friendIndex1311];
+      output.append('<li>', soy.$$escapeHtml(friendData1311.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1304 = opt_data.highlights;
-    var resListLen1304 = resList1304.length;
-    for (var resIndex1304 = 0; resIndex1304 < resListLen1304; resIndex1304++) {
-      var resData1304 = resList1304[resIndex1304];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1304.title), '</strong><div>', soy.$$escapeHtml(resData1304.body), '</div></div>');
+    var resList1320 = opt_data.highlights;
+    var resListLen1320 = resList1320.length;
+    for (var resIndex1320 = 0; resIndex1320 < resListLen1320; resIndex1320++) {
+      var resData1320 = resList1320[resIndex1320];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1320.title), '</strong><div>', soy.$$escapeHtml(resData1320.body), '</div></div>');
     }
     output.append('</pre></div>');
   }

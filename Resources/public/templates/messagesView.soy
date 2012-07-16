@@ -132,7 +132,8 @@
        <tbody>
 	</table>
 
-	<div class="row show-grid">
+  	
+	<div class="row-fluid">
     	<div class="span2"><button class="btn" id="attachFile-btn">{msg desc="Attach file"}Attach file{/msg}</button></div>
     	<div class="span2"><button class="btn btn-primary {if $to == null}disabled{/if}" id="sendMessage-btn">{msg desc="Send message"}Send{/msg}</button></div>
   	</div>
@@ -156,9 +157,9 @@
        <tbody>
 	</table>
 	
-	<div class="row show-grid">
-    	<div class="span"><button class="btn" id="save-folder-btn">{msg desc="Save changes"}Save changes{/msg}</button></div>
-    	<div class="span"><button id="remove-folder-btn" class="btn btn-error">{msg desc="Remove folder"}Remove folder{/msg}</button></div>
+	<div class="row-fluid">
+    	<div class="span2"><button class="btn" id="save-folder-btn">{msg desc="Save changes"}Save changes{/msg}</button></div>
+    	<div class="span2"><button id="remove-folder-btn" class="btn btn-danger">{msg desc="Remove folder"}Remove folder{/msg}</button></div>
   	</div>
 	
 	
@@ -197,7 +198,7 @@
               {msg desc="Are you really sure you want to delete the folder?"}Are you really sure you want to delete the folder {$folder}?{/msg}
             </div>
             <div class="modal-footer">
-			  <button class="btn remove btn-secondary">{msg desc="Remove"}Remove{/msg}</button>
+			  <button class="btn remove btn-danger">{msg desc="Remove"}Remove{/msg}</button>
               <button class="btn cancel btn-primary">{msg desc="Cancelt"}Cancel{/msg}</button>
             </div>
 </div>
