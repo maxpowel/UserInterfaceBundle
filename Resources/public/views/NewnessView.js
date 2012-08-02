@@ -5,7 +5,9 @@ var NewnessView = Backbone.View.extend({
 		"click #like": "doLike",
 		"click #dlike": "doDlike",
 		"click #cancelLike" : "cancelLike",
-		"click #cancelDlike" : "cancelDlike" 
+		"click #cancelDlike" : "cancelDlike",
+		"click #updateOptions": "toogleOptions",
+		"click #updateRemove": "updateRemove",
 	},
     initialize: function() {
     	//this.model.bind('destroy', this.remove, this);
@@ -30,13 +32,19 @@ var NewnessView = Backbone.View.extend({
       },
       
       
-    /*remove: function() {
-        $(this.el).remove();
+    updateRemove: function() {
+    	var self = this;
+    	
+        $(this.el).fadeOut(function(){
+        	self.$el.find('#updateRemove').tooltip('hide')
+        	self.$el.remove()
+        });
+        this.model.destroy()
      },
      
-     destroyModel: function(){
-    	 this.model.destroy();
-     },*/
+     toogleOptions: function(){
+    	 
+     },
       
     render: function() {
     	$(this.el).html(template.newnessView.newness(this.model.toJSON()));
@@ -59,6 +67,23 @@ var NewnessView = Backbone.View.extend({
             cont.append(view.render().el);
     	});*/
     	
+    	/***** Hover ******/
+    	if(this.model.get('owner')){
+	    	var options = this.$el.find("#newnessOptions");
+	    	this.$el.hover(function(){
+	    		
+	    		options.show();
+	    	},
+	    	function(){
+	    		options.hide();
+	    	});
+	    	//Tooltips
+	    	this.$el.find('#updateOptions').tooltip()
+	    	this.$el.find('#updateRemove').tooltip()
+    	}
+    	
+    	
+    	
       return this;
     },
     
@@ -73,7 +98,7 @@ var NewnessView = Backbone.View.extend({
         if (!text || e.keyCode != 13) return;
 
         
-        var comment = new NewnessComment({updateId:this.model.get("id"), body: this.commentInput.val()});
+        var comment = new NewnessComment({updateId:this.model.get("id"), body: this.commentInput.val(), owner: true});
         var localThis = this;
         comment.save({},
         {success: function(){

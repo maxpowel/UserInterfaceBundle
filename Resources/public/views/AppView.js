@@ -95,6 +95,8 @@ var AppView = Backbone.View.extend({
 			  },
 			  
 			  loadAgenda: function(year, month) {
+				  alert("Not available")
+				  return;
 				  app.activeMenuSection("agenda");
 				  if(app.sections.agenda == null)
 					  app.sections.agenda = new AgendaSectionView();

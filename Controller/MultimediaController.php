@@ -44,8 +44,12 @@ class MultimediaController extends Controller
 		$collection = $fetcher->getCollection($itemContainer, $profile, "Wixet\WixetBundle\Entity\ItemContainer");
 		$items = $collection->get();
 		
+		//No load updates container
+		$updatesContainer = $owner->getUpdatesItemContainer();
+		
 		foreach ($items as $collection){
-			$data[] = array("id"=>$collection->getId(), "name"=> $collection->getName());
+			if($collection->getId() != $updatesContainer->getId())
+				$data[] = array("id"=>$collection->getId(), "name"=> $collection->getName());
 		}
 		 
 		 
@@ -156,7 +160,7 @@ class MultimediaController extends Controller
 		$album = $this->getDoctrine()->getRepository('Wixet\WixetBundle\Entity\ItemContainer')->find($_GET['folder']);
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
 		$collection = $fetcher->getCollection($album,$profile,"Wixet\WixetBundle\Entity\MediaItem");
-		 
+		//$collection = $fetcher->getCollection($album,$profile);
 		$data['total'] =$collection->getSize();
 		foreach($collection->getRaw($offset,$pageSize) as $item){
 			$models[] = array("id"=>$item['id']);

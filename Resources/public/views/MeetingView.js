@@ -8,6 +8,8 @@ var MeetingView = Backbone.View.extend({
     render: function() {
     	
     	$(this.el).html(template.meetingView.meeting( this.model.toJSON()));
+    	
+
 
       return this;
     }

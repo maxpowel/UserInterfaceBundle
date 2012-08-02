@@ -9,11 +9,10 @@ var NewnessListView = Backbone.View.extend({
     //	"keypress #new-share":  "createOnEnter",
     		"focus #fakeContent input": "toogleRealContent",
     		"click .closeAllowed": "removeAllowed",
-    		"click #addLink": "addLink",
+    		//"click #addLink": "addLink",
     		"click #closeUpdate": "toogleRealContent",
-    		
-    	
-    	"click #more-newness":  "loadMoreNewness"
+    		"click #shareUpdate": "shareUpdate",
+    		"click #more-newness":  "loadMoreNewness"
     },
     
     
@@ -31,23 +30,42 @@ var NewnessListView = Backbone.View.extend({
     	
     	this.loadMoreNewness();
     	this.input = $(this.el).find("#new-share");
+    	//REMOVE WHEN ADD EVENTS
+    	this.$el.find(".updateAction").css({ 'opacity' : 0.25 });
+
+    	
     	return this;
     },
     loadMoreNewness: function(){
-    	this.collection.fetch({ data:{page: this.page, id: this.profileId}});
-    	this.page = this.page + 1;
+    	var self = this;
+    	if(!this.$el.find("#more-newness").hasClass("disabled")){
+	    	this.collection.fetch({ data:{page: this.page, id: this.profileId}, success: function(){
+	    		if(self.collection.size() == 0){
+	    			self.$el.find("#more-newness").addClass("disabled");
+	    		}
+	    	}});
+	    	this.page = this.page + 1;
+    	}
     },
-    createOnEnter: function(e) {
-      var text = this.input.val();
-      if (!text || e.keyCode != 13) return;
-      var newness = new Newness();
-      var collection = this.collection;
-      newness.save({body: text},{success: function(){
-    	  collection.add(newness);
+    shareUpdate: function(e) {
+    	var allowedGroups = new Array()
+    	
+    	var text = $.trim(this.input.val());
+    	if(text.length > 0){
+    		this.permissions.each(function(permission){
+        		allowedGroups.push(permission.get("object_id"));
+            });
+    		
+	      var newness = new Newness();
+	      var collection = this.collection;
+	      newness.save({body: text, groups: allowedGroups},{success: function(){
+	    	  collection.add(newness);
+	      }
+	      });
+	
+	      this.input.val('');
+	      this.toogleRealContent();
       }
-      });
-
-      this.input.val('');
     },
     
     addAll: function() {
@@ -67,7 +85,44 @@ var NewnessListView = Backbone.View.extend({
 		$(event.target).parent().parent().remove();
 		
 	},
+	
+	/* Add default permissions */
+    addAllPermissions: function(){
+    	this.permissionContainer = this.$el.find("#allowedToUpdates");
+    	var self = this;
+    	this.permissions.each(function(permission){
+		  if(permission.get("type")=="group")
+			  self.addOnePermission(permission,self);
+        });
+    },
+    
+    addOnePermission: function(permission){
+    	if(permission.get("read_granted") == 1 && permission.get("read_denied") == 0)
+    		this.permissionContainer.append(new AlertPermissionView({model: permission}).render().el)
+    },
+    ////////////////////////
+    
 	toogleRealContent: function(){
+		if(this.permissions == null){
+	    	this.permissions = new PermissionList();
+	    	this.permissions.url = this.permissions.url+"ItemContainer/"+getViewer().get("updatesAlbumId");
+	    	//
+	    	this.permissions.bind('add',   this.addOnePermission, this);
+	        this.permissions.bind('reset', this.addAllPermissions, this);
+	        this.permissions.fetch();
+	        
+	        var self = this;
+	        //Autocomplete
+	    	this.$el.find("#allowedToInput").typeahead({
+				source: "/autocomplete/groups",
+				onSelect: function(item){
+					self.permissions.add(new Permission({object_id: item.id, name: item.value, read_granted: 1, read_denied: 0}))
+					
+				}
+
+	    	});
+		}
+		
 		var fakeContent = this.$el.find("#fakeContent");
 		
 		if(fakeContent.is(":visible")){

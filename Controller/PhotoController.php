@@ -229,10 +229,12 @@ class PhotoController extends Controller
      	//Profile photo is public
      	$em = $this->get('doctrine')->getEntityManager();
      	 $mediaItem = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($id)->getMainMediaItem();
+     	 $mim = $this->get('wixet.media_item_manager');
 	     if($mediaItem != null){
-     		$mim = $this->get('wixet.media_item_manager');
      		$mim->printProfileThumbnail($mediaItem);
-     	}     
+     	}else{
+     		$mim->printDefaultPublicProfileThumbnail();
+     	}
      
      	return new \Symfony\Component\HttpFoundation\Response();
      }
@@ -251,9 +253,11 @@ class PhotoController extends Controller
      	//Profile photo is public
      	$em = $this->get('doctrine')->getEntityManager();
      	$mediaItem = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($id)->getMainMediaItem();
+     	$mim = $this->get('wixet.media_item_manager');
      	if($mediaItem != null){
-     		$mim = $this->get('wixet.media_item_manager');
      		$mim->printPublicProfileThumbnail($mediaItem);
+     	}else{
+     		$mim->printDefaultProfileThumbnail();
      	}
      	 
      	return new \Symfony\Component\HttpFoundation\Response();

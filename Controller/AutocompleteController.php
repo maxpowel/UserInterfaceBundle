@@ -99,7 +99,24 @@ class AutocompleteController extends Controller
 	}
 	
 	
-    
+	/**
+	* @Route("/groups", name="_autocomplete_groups")
+	*/
+    public function getGroups(){
+    	$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$data = array();
+		$em = $this->get('doctrine')->getEntityManager();
+		
+    	$query = $em->createQuery("SELECT g.id, g.name FROM Wixet\WixetBundle\Entity\ProfileGroup g WHERE g.profile = ?1 AND g.name LIKE ?2 ");
+    	$query->setParameter(1, $profile);
+    	$query->setParameter(2, $_GET['q']."%");
+    	 
+    	foreach($query->getArrayResult() as $result){
+    		$data[] = array("id"=>$result['id'],"value"=>$result['name'], "data"=>"group");
+    	}
+    		
+    	return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+    }
 
 
 }

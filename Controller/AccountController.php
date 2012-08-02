@@ -47,6 +47,9 @@ class AccountController extends Controller
 	    		
 	    		$root = new \Wixet\WixetBundle\Entity\ItemContainer();
 	    		$root->setName("Root");
+	    		
+	    		$updates = new \Wixet\WixetBundle\Entity\ItemContainer();
+	    		$updates->setName("Actualizaciones");
 	    		//
 	    		$messageCollection = new \Wixet\WixetBundle\Entity\PrivateMessageCollection();
 	    		$messageCollection->setName("Recibidos"); 
@@ -65,6 +68,7 @@ class AccountController extends Controller
 	    		$group->setProfile($profile);
 	    		$profile->setMainItemContainer($album);
 	    		$profile->setRootItemContainer($root);
+	    		$profile->setUpdatesItemContainer($updates);
 	    		$profile->setMainGroup($group);
 	    		$profile->setMainPrivateMessageCollection($messageCollection);
 	    		
@@ -73,9 +77,11 @@ class AccountController extends Controller
 	    		$messageCollection->setProfile($profile);
 	    		
 	    		$root->setProfile($profile);
+	    		$updates->setProfile($profile);
 	    		
 
 	    		$em->persist($root);
+	    		$em->persist($updates);
 	    		$em->persist($profile);
 	    		$em->persist($album);
 	    		$em->persist($group);
@@ -87,11 +93,17 @@ class AccountController extends Controller
 	    		$ws = $this->get('wixet.permission_manager');
 	    		$ws->setItemContainer($album,$root);
 	    		$ws->setItemContainer($profile,$root);
+	    		$ws->setItemContainer($updates,$root);
 	    		
 	    		$ws->setPermission($profile,$root, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($profile,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($profile,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermission($profile,$updates, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		
+	    		$ws->setPermission($group,$profile, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
 	    		$ws->setPermission($group,$album, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		$ws->setPermission($group,$updates, array("readGranted"=>true, "readDenied"=>false, "writeGranted"=> true, "writeDenied"=> false));
+	    		
 	    		
 	    		
 	    		$data = array("error"=>false, "id"=>$profile->getId(), "name"=>$profile->getFirstName());

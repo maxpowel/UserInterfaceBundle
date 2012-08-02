@@ -39,7 +39,7 @@ var PreferencesSectionView = Backbone.View.extend({
     },
     
     loadFavourites: function(){
-    	alert("hola");
+    	alert("Not available");
     },
     
     loadSecurity: function(){
@@ -51,6 +51,6 @@ var PreferencesSectionView = Backbone.View.extend({
     },
     
     loadCustomize: function(){
-    	alert("hola");
+    	alert("Not available");
     }
 });

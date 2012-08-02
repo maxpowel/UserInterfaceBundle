@@ -18,7 +18,6 @@ var AlbumOptionsFormView = Backbone.View.extend({
     	this.permissions.each(function(permission){
       	  self.addOnePermission(permission,self);
         });
-    	//console.log(permission.get('id'))
     },
     
     addOnePermission: function(permission){

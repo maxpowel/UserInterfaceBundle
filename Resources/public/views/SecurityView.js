@@ -13,6 +13,13 @@ var SecurityView = Backbone.View.extend({
     	//
     	this.profilePermissions.bind('add',   this.addOneProfilePermission, this);
         this.profilePermissions.bind('reset', this.addAllProfilePermissions, this);
+        
+        //
+    	this.updatesPermissions = new PermissionList();
+    	this.updatesPermissions.url = this.updatesPermissions.url+"ItemContainer/"+getViewer().get("updatesAlbumId");
+    	//
+    	this.updatesPermissions.bind('add',   this.addOneUpdatesPermission, this);
+        this.updatesPermissions.bind('reset', this.addAllUpdatesPermissions, this);
     },
     
     loadGroups: function(){
@@ -40,7 +47,7 @@ var SecurityView = Backbone.View.extend({
     
     addAllProfilePermissions: function(){
     	
-    	this.profilePermissionContainer = this.$el.find("#permissionsBody");
+    	this.profilePermissionContainer = this.$el.find("#profilePermissionsBody");
     	var self = this;
     	this.profilePermissions.each(function(permission){
       	  self.addOneProfilePermission(permission,self);
@@ -52,17 +59,40 @@ var SecurityView = Backbone.View.extend({
     	this.profilePermissionContainer.append(new PermissionSimpleEntryView({model: permission}).render().el)
     },
     
+    addAllUpdatesPermissions: function(){
+    	this.updatesPermissionContainer = this.$el.find("#updatesPermissionsBody");
+    	var self = this;
+    	this.updatesPermissions.each(function(permission){
+      	  self.addOneUpdatesPermission(permission,self);
+        });
+    },
+    
+    addOneUpdatesPermission: function(permission){
+    	
+    	this.updatesPermissionContainer.append(new PermissionSimpleEntryView({model: permission}).render().el)
+    },
+    
     render: function() {
     	
     	$(this.el).html(template.preferencesView.security());
     	this.permissions.fetch();
     	
     	this.profilePermissions.fetch();
+    	this.updatesPermissions.fetch();
     	var self = this
-    	this.$el.find("#newPermissionEntity").typeahead({
+    	this.$el.find("#newProfilePermissionEntity").typeahead({
 			source: "/autocomplete/contactsGroups",
 			onSelect: function(item){
 				self.profilePermissions.add(new Permission({isNew: true, read_granted:1, read_denied:0, write_granted:1, write_denied:0, object_id: getViewer().get("id") ,type: item.data, object_type: "UserProfile", entity_id: item.id, name: item.value}));
+				
+			}
+
+    	});
+    	
+    	this.$el.find("#newUpdatesPermissionEntity").typeahead({
+			source: "/autocomplete/contactsGroups",
+			onSelect: function(item){
+				self.updatesPermissions.add(new Permission({isNew: true, read_granted:1, read_denied:0, write_granted:1, write_denied:0, object_id: getViewer().get("updatesAlbumId") ,type: item.data, object_type: "ItemContainer", entity_id: item.id, name: item.value}));
 				
 			}
 

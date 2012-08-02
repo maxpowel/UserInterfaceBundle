@@ -197,6 +197,7 @@ class MainController extends Controller
 			$data['id'] = $profile->getId();
 			$data['firstName'] = $profile->getFirstName();
 			$data['lastName'] = $profile->getLastName();
+			$data['updatesAlbumId'] = $profile->getUpdatesItemContainer()->getId();
 			$data['isOwner'] = true;
 			//$data['mainMediaItem'] = $profile->getMainMediaItem()->getId();
 		}else{
@@ -413,6 +414,29 @@ class MainController extends Controller
 
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
+	
+	/**
+	* @Route("/newness/comment/{id}", name="_newness_comment_delete")
+	* @Method({"DELETE"})
+	*/
+	public function deleteNewnessCommentAction($id)
+	{
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		$comment = $em->getRepository('Wixet\WixetBundle\Entity\ProfileUpdateComment')->find($id);
+		if($id == null || $comment->getAuthor()->getId() != $profile->getId()){
+			throw new \Exception("Access denied");
+		}else{
+			$em->remove($comment);
+			$em->flush();
+		}
+		
+		
+		$data = array();
+	
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
 
 	/**
 	 * @Route("/newness", name="_newness_get")
@@ -465,7 +489,7 @@ class MainController extends Controller
 				
 				$author = $update->getAuthor();
 				 
-				$element = array("id"=>$update->getId(), "authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody(), "likes"=>$likes['likes'] ,"dlikes"=> $likes['dlikes'], "likeit"=>$ilike['likes'] ,"dlikeit"=> $ilike['dlikes'], );
+				$element = array("id"=>$update->getId(), "authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody(), "likes"=>$likes['likes'] ,"dlikes"=> $likes['dlikes'], "likeit"=>$ilike['likes'] ,"dlikeit"=> $ilike['dlikes'], "owner"=> $author->getId() == $profile->getId());
 				 
 				//Comments
 				$comments = $update->getComments();
@@ -473,9 +497,9 @@ class MainController extends Controller
 				//$totalComments = $comments->count();
 				$comments = array();
 				foreach ($commentList as $comment){
-					$author = $comment->getAuthor();
+					$commentAuthor = $comment->getAuthor();
 		
-					$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorId"=> $author->getId(), "authorName" => $author->getFirstName()." ".$author->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'));
+					$comments[] = array("id"=>$comment->getId(), "body"=>$comment->getBody(), "authorId"=> $commentAuthor->getId(), "authorName" => $commentAuthor->getFirstName()." ".$commentAuthor->getLastName(), "date"=>$comment->getCreated()->format('Y-m-d H:i:s'), "owner"=> $commentAuthor->getId() == $profile->getId());
 				}
 				$element['comments'] = $comments;
 				$data[] = $element;
@@ -522,24 +546,84 @@ class MainController extends Controller
 			$em->persist($update);
 			$em->flush();
 			 
-			$rootContainer = $profile->getRootItemContainer();
-			$pm->setItemContainer($update,$rootContainer);
+			$updatesContainer = $profile->getUpdatesItemContainer();
+			$pm->setItemContainer($update,$updatesContainer);
 			$author = $update->getAuthor();
-			$data = array("id"=>$update->getId(),"authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody());
+			$outData = array("id"=>$update->getId(),"authorId"=> $author->getId(), "authorName"=> $author->getFirstName()." ".$author->getLastName(), "date"=>$update->getCreated()->format('Y-m-d H:i:s'), "body"=>$update->getBody(), "owner"=> true);
 
-			//Add permission to main group
-			$permission = array("readGranted"=>true, "readDenied"=> false, "writeGranted"=> true, "writeDenied"=> false);
-			$pm->setPermission($profile->getMainGroup(), $update, $permission);
-			//$pm->setPermission($profile, $update, $permission);
+			/* Get permissions */
+			/* Dont add permission if the group updatesItemContainer has this permission */
+			$ot = $em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>"Wixet\WixetBundle\Entity\ItemContainer"));
+			$queryGroup = $em->createQuery('SELECT p.id FROM Wixet\WixetBundle\Entity\GroupPermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+			$queryProfile = $em->createQuery('SELECT p.id FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+			$queryGroup->setParameter(1, $updatesContainer->getId());
+			$queryGroup->setParameter(2, $ot);
+			$allowedGroups = $queryGroup->getArrayResult();
+			$queryProfile->setParameter(1, $updatesContainer->getId());
+			$queryProfile->setParameter(2, $ot);
+			$allowedProfiles = $queryProfile->getArrayResult();
+			
+			//Add permission to groups
+			foreach($data['groups'] as $groupId){
+				//The group is not in the inherited list
+				if(!in_array($groupId, $allowedGroups)){
+					$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
+					/* check Group exists and the profile is the owner */
+					if($group != null && $group->getProfile()->getId() == $profile->getId()){
+						$permission = array("readGranted"=>true, "readDenied"=> false, "writeGranted"=> true, "writeDenied"=> false);
+						$pm->setPermission($group, $update, $permission);
+					}
+				}
+			}
+			
+			//Deny access to unselected groups
+			foreach($allowedGroups as $groupId){
+				//The group is not in the inherited list
+				if(!in_array($groupId, $data['groups'])){
+					$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
+					$permission = array("readGranted"=>false, "readDenied"=> true, "writeGranted"=> false, "writeDenied"=> true);
+					$pm->setPermission($group, $update, $permission);
+				}
+			}
+			//
 			
 
 		}
 		 
 		 
-		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $outData));
 	}
 
 
+	/**
+	* @Route("/newness/{id}", name="_newness_delete")
+	* @Method({"DELETE"})
+	*/
+	public function deleteNewnessAction($id)
+	{
+			
+			
+			
+			
+		$data = array("error"=>true);
+		$pm = $this->get('wixet.permission_manager');
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		$update = $em->getRepository("Wixet\WixetBundle\Entity\ProfileUpdate")->find($id);
+		
+		if($update != null && $update->getProfile()->getId() == $profile->getId()){
+			//Remove permissions
+			$pm->unprotect($update);
+			$em->remove($update);
+			$em->flush();
+			$data = array("error"=>false);
+			
+		}
+		
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	
 
 
 
@@ -552,7 +636,8 @@ class MainController extends Controller
 
 		 
 		 
-		$models = array(array("title"=>"Ey que pasa", "url"=>"prueba"));
+		//$models = array(array("title"=>"Ey que pasa", "url"=>"prueba"));
+		$models = array();
 		 
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $models));
 	}

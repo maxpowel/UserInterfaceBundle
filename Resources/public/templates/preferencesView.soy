@@ -31,7 +31,7 @@
 				</table>
         	</div>
         	<div>
-        		<button class="btn btn-primary" id="save-but">{msg desc="Save changes"}Save changes{/msg}</button>
+        		<button class="btn btn-success" id="save-but">{msg desc="Save changes"}Save changes{/msg}</button>
         	</div>
 {/template}
 
@@ -41,8 +41,8 @@
  * @param body
  */
 {template .aboutMeEditEntry}
-	<div align="center">
-		<table>
+	<div>
+		<table width="100%">
 			<tr>
 				<td><input type="text" id="title" class="span7" placeholder="{msg desc="Title"}Title (ej. hobbies, books...){/msg}" value="{$title}"></td>
 			</tr>
@@ -56,7 +56,7 @@
         			<p>{msg desc="Personal data successfully saved"}Your new information has been saved successfully{/msg}</p>
       			</div>
 					<div class="btn-toolbar">
-						<button class="btn btn-primary" id="save">{msg desc="Save"}Save{/msg}</button>
+						<button class="btn btn-success" id="save">{msg desc="Save"}Save{/msg}</button>
 						<button class="btn btn-danger" id="delete">{msg desc="Delete"}Delete{/msg}</button>
 					</div>
 				</td>
@@ -74,7 +74,7 @@
 			<p>{msg desc="About me note of public data"}Be care about what you write here, this information is public and accesible by everyone and used by the search engine{/msg}</p>
 			<div id="aboutMeList">
 			</div>
-        	<div class="row show-grid">
+        	<div class="row-fluid">
     			<div class="span2"><button class="btn" id="newAboutMe-but">{msg desc="Add new"}Add new{/msg}</button></div>
   			</div>
         		
@@ -90,27 +90,51 @@
     			<div><button class="btn" id="manageGroups-btn">{msg desc="Manage groups"}Manage groups{/msg}</button></button></div>
     			<br>
     			<h3>{msg desc="Profile permissions"}Profile permissions{/msg}</h3>
-    			<p>{msg desc="Profile inherits main album permissions"}Remember, the profile inherits the main album permissions. Here are only shown the explicit permissions of the profile{/msg}</p>		
+    			<p>{msg desc="Only shown explicit permissions"}Here are only shown the explicit permissions of the profile{/msg}</p>		
     			<table class="table table-striped table-bordered table-condensed">
-    		<thead>
-    			<tr>
-    				<th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th>
-    			</tr>
-    		</thead>
-    		<tbody id="permissionsBody">
-    		<tr>
-    				<td></td>
-    				<td>{msg desc="New permission for"}New permission for{/msg}<br><input placeholder="{msg desc="Group or person name"}Group or person name{/msg}" id="newPermissionEntity" type="text" class="span"></td>
-    				<td></td>
-    				<td></td>
-    				<td></td>
-    				<td></td>
-    				<td></td>
-    				<td></td>
-    		</tr>
+    				<thead>
+    					<tr>
+    						<th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th>
+    					</tr>
+    				</thead>
+    				<tbody id="profilePermissionsBody">
+    					<tr>
+	    					<td></td>
+	    					<td>{msg desc="New permission for"}New permission for{/msg}<br><input placeholder="{msg desc="Group or person name"}Group or person name{/msg}" id="newProfilePermissionEntity" type="text" class="span"></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+    					</tr>
     			
-    		</tbody>
-    	</table>
+    				</tbody>
+    			</table>
+    			
+    			<h3>{msg desc="Updates permissions"}Updates permissions{/msg}</h3>
+    			<p>{msg desc="This permissions will be inherited by your profile updates"}This permissions will be inherited by your profile updates{/msg}</p>		
+    			<table class="table table-striped table-bordered table-condensed">
+    				<thead>
+    					<tr>
+    						<th></th><th>Entity</th><th>Read Granted</th><th>Read Denied</th><th>Write Granted</th><th>Write Denied</th><th></th><th></th>
+    					</tr>
+    				</thead>
+    				<tbody id="updatesPermissionsBody">
+    					<tr>
+	    					<td></td>
+	    					<td>{msg desc="New permission for"}New permission for{/msg}<br><input placeholder="{msg desc="Group or person name"}Group or person name{/msg}" id="newUpdatesPermissionEntity" type="text" class="span"></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+		    				<td></td>
+    					</tr>
+    			
+    				</tbody>
+    			</table>
+    			
     	
     			<h3>All permissions list</h3>
     			    <table  align="center" class="table table-striped table-bordered table-condensed">

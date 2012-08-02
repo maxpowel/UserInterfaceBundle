@@ -17,10 +17,6 @@ var MeetingInvitedPeopleListView = Backbone.View.extend({
         
     },
     
-    callBackFunction: function(item){
-    	console.log("Bieeen");
-    	
-    },
     
     invite: function(){
     	var entryType = this.input.attr("entrytype");
@@ -69,22 +65,19 @@ var MeetingInvitedPeopleListView = Backbone.View.extend({
 
     	this.invitedList = $(this.el).find("#invited-people");
     	//
-		var callBackFunction = this.callBackFunction;
-		this.input = $(this.el).find("input");
-    	$(this.el).find("input").autocomplete("/contacts",
-    			{    minChars: 2,
-    				 mustMatch: true,
-	            	 formatItem: function(data, i, n) {
-	            		 
-	            		 //return "hola";
-	            		 
-	            		 
-	                     return "<div style='height:40px'><img style='float:left' src='" + data[2] + "'/> <a style='margin-left: 10px' href='javascript:void(0)'>" + data[0]+"</a></div>";
-	             }
 
-    			}).result(function(event, item) {
-    				callBackFunction(item);
-    			});
+
+		this.input = $(this.el).find("input");
+		
+    	this.$el.find("#invitedName-txt").typeahead({
+			source: "/autocomplete/contactsGroups",
+			onSelect: function(item){
+				//self.permissions.add(new Permission({object_id: item.id, name: item.value, read_granted: 1, read_denied: 0}))
+				console.log(item)
+			}
+
+    	});
+
     	
       return this;
     }

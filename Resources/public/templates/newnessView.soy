@@ -10,6 +10,7 @@
  * @param dlikes
  * @param likeit
  * @param dlikeit
+ * @param owner
  */
 {template .newness}
 <div style="min-height: 48px">
@@ -18,6 +19,13 @@
 						<img alt="" src="photo/profile/{$authorId}" class="thumbnail">
 				</a>
 			</div>
+			{if $owner }
+				<div id="newnessOptions" style="float:right; display:none">
+	    			<a href="javascript:void(0)" id="updateOptions" class="icon-list-alt" rel="tooltip" title="{msg desc="options"}Options{/msg}"></a>
+	    			&nbsp;
+	    			<a href="javascript:void(0)" id="updateRemove" class="icon-remove" rel="tooltip" title="{msg desc="remove"}Remove{/msg}"></a>
+				</div>
+			{/if}
 			<div style="margin-left:60px">
 				<div><a href="#">{$authorName}</a> - {$date}</div>
 				<div>{$body}</div>
@@ -60,9 +68,16 @@
  * @param authorName
  * @param date 
  * @param body
+ * @param owner
  */
 {template .newnessComment}
 <td>
+	{if $owner }
+		<div id="newnessCommentOptions" style="float:right; display:none">
+	    	<a href="javascript:void(0)" id="commentRemove" class="icon-remove" rel="tooltip" title="{msg desc="remove"}Remove{/msg}"></a>
+		</div>
+	{/if}
+			
 	<div><a href="#">{$authorName}</a> - {$date}</div>
 	<div>{$body}</div>
 </td>
@@ -91,7 +106,7 @@
 						<button class="close" id="closeUpdate" style="margin-top: -25px;">&times;</button>
 		
 					
-			<textarea class="span12" rows="10" cols="20"></textarea>
+			<textarea class="span12" rows="10" cols="20" id="new-share"></textarea>
 			<table class="table table-bordered table-striped">
     <tbody>
       <tr>
@@ -113,23 +128,17 @@
       </tr>
       <tr>
         <td>
-			<p>Permitir acceso a</p>
-			<input type="text" class="span7">
-			<div class="row-fluid">
+			<p>{msg desc="Can view this update"}Can view this update{/msg}</p>
+			<input type="text" class="span7" id="allowedToInput">
+			<div class="row-fluid" id="allowedToUpdates">
 				
-				
-				<div class="span4">
-					<div class="alert alert-info">
-					<button class="close closeAllowed">&times;</button>
-					Amigos
-					</div>
-      
-				</div>
+
 			</div>
 		</td>
       </tr>
     </tbody>
   </table>
+  <button class="btn btn-success" style="float:right" id="shareUpdate">{msg desc="Share update"}Share{/msg}</button>
 		</div>
 	</div>
 	
@@ -140,6 +149,8 @@
         	</div>
 			<button class="btn span12" style="margin-left:10px" id="more-newness">{msg desc="Start section more updates"}More{/msg}</button>
 {/template}
+
+
 /**
  * Newness list
  * @param isOwner

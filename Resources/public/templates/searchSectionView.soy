@@ -6,7 +6,7 @@
 {template .search}
 <div class="row-fluid">
 
-	<div class="span3">
+	<div class="span3" style="display:none">
         <div class="well">
         	<h3>{msg desc="Search options"}Search filter{/msg}</3>
         	<br><br>
@@ -44,11 +44,17 @@
       
     <div class="span9" id="search-result">
       	<form style="margin-top:10px" class="form-search" id="initSearchContainer">
-      		<input type="text" class="span7 search-query" id="search-query" placeholder="{msg desc="What are you looking for"}What are you looking for?{/msg}">
-      		{sp}
-      		<button class="btn btn-primary" id="but-search">Search <i class="icon-search icon-white"></i></button>
+      		<div class="row-fluid">
+      			<div class="span10">
+      				<input type="text" class="span search-query" id="search-query" placeholder="{msg desc="What are you looking for"}What are you looking for?{/msg}">
+      			</div>
+      			<div class="span1">
+      				<button class="btn btn-primary" id="but-search"><i class="icon-search icon-white"></i></button>
+      			</div>
+      		</div>
       	</form>
 		<div id="resultContainer" style="display:none">
+				<div>Results  for "<span id="resultsFor"></span>"</div>
 			    <ul class="nav nav-tabs">
     				<li class="active">
     					<a href="#">All</a>

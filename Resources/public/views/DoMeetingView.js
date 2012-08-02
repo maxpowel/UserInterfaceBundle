@@ -21,10 +21,11 @@ var DoMeetingView = Backbone.View.extend({
     },
    
     createMeeting: function(){
-    	console.log(this.fieldListView.getFields());
+    	/*console.log(this.fieldListView.getFields());
     	console.log($(this.el).find("#title").val());
     	console.log($(this.el).find("#date").val());
-    	console.log($(this.el).find("#description").text());
+    	console.log($(this.el).find("#description").text());*/
+    	alert("Not available")
     },
     render: function() {
     	

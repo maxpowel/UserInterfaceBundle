@@ -91,20 +91,23 @@ var SearchSectionView = Backbone.View.extend({
     	"click #but-search": "doSearch",
     },
 
-    initialize: function() {
-    	this.searchQuery = this.options.query;
-    },
+    /*initialize: function() {
+    	
+    },*/
     
     doSearch: function(){
     	
-    	this.query = new SearchQuery(null, {
-    				query: this.searchQuery.val()
-    	});
-    	this.query.bind('reset', this.addAll, this);
-    	this.query.fetch();
+    	var query = $.trim(this.searchQuery.val());
     	
-    	$(this.el).find("#resultContainer").show();
-    	
+    	if(query.length){
+	    	this.query = new SearchQuery(null, {
+	    				query: query 
+	    	});
+	    	this.query.bind('reset', this.addAll, this);
+	    	this.query.fetch();
+	    	
+	    	$(this.el).find("#resultContainer").show().find("#resultsFor").text(query);
+    	}
     	//Avoid redirection on click
     	return false;
     },
@@ -159,7 +162,8 @@ var SearchSectionView = Backbone.View.extend({
         this.nextButton = $(this.el).find("#nextPage-btn").parent();
         this.previousButton = $(this.el).find("#previousPage-btn").parent();
         
-        if(this.searchQuery != null){
+        if(this.options.query != null){
+        	this.searchQuery.val(this.options.query)
         	this.doSearch();
         }
 		return this;
