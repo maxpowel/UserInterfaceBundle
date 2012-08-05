@@ -559,6 +559,7 @@ class MainController extends Controller
 			$queryGroup->setParameter(1, $updatesContainer->getId());
 			$queryGroup->setParameter(2, $ot);
 			$allowedGroups = $queryGroup->getArrayResult();
+			$allowedGroups = $allowedGroups[0];
 			$queryProfile->setParameter(1, $updatesContainer->getId());
 			$queryProfile->setParameter(2, $ot);
 			$allowedProfiles = $queryProfile->getArrayResult();
