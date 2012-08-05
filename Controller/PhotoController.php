@@ -178,6 +178,8 @@ class PhotoController extends Controller
      		$mimeType = new \Wixet\WixetBundle\Entity\MimeType();
      		$mimeType->setName($_FILES['file']['type']);
      		$em->persist($mimeType);
+     		$extension = explode(".",$_FILES['file']['name']);
+     		$mimeType->setExtension($extension[count($extension)-1]);
      		$em->flush();
      	}
      	
