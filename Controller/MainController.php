@@ -554,15 +554,15 @@ class MainController extends Controller
 			/* Get permissions */
 			/* Dont add permission if the group updatesItemContainer has this permission */
 			$ot = $em->getRepository("Wixet\WixetBundle\Entity\ObjectType")->findOneBy(array("name"=>"Wixet\WixetBundle\Entity\ItemContainer"));
-			$queryGroup = $em->createQuery('SELECT p.id FROM Wixet\WixetBundle\Entity\GroupPermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
-			$queryProfile = $em->createQuery('SELECT p.id FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+			$queryGroup = $em->createQuery('SELECT g.id FROM Wixet\WixetBundle\Entity\GroupPermission p JOIN p.group g WHERE p.object_id = ?1 AND p.objectType = ?2');
+			//$queryProfile = $em->createQuery('SELECT p.id FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
 			$queryGroup->setParameter(1, $updatesContainer->getId());
 			$queryGroup->setParameter(2, $ot);
 			$allowedGroups = $queryGroup->getArrayResult();
 			$allowedGroups = $allowedGroups[0];
-			$queryProfile->setParameter(1, $updatesContainer->getId());
-			$queryProfile->setParameter(2, $ot);
-			$allowedProfiles = $queryProfile->getArrayResult();
+			//$queryProfile->setParameter(1, $updatesContainer->getId());
+			//$queryProfile->setParameter(2, $ot);
+			//$allowedProfiles = $queryProfile->getArrayResult();
 			
 			//Add permission to groups
 			foreach($data['groups'] as $groupId){
@@ -576,11 +576,11 @@ class MainController extends Controller
 					}
 				}
 			}
-			
 			//Deny access to unselected groups
 			foreach($allowedGroups as $groupId){
 				//The group is not in the inherited list
 				if(!in_array($groupId, $data['groups'])){
+					
 					$group = $em->getRepository('Wixet\WixetBundle\Entity\ProfileGroup')->find($groupId);
 					$permission = array("readGranted"=>false, "readDenied"=> true, "writeGranted"=> false, "writeDenied"=> true);
 					$pm->setPermission($group, $update, $permission);

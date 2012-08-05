@@ -53,7 +53,9 @@ var NewnessListView = Backbone.View.extend({
     	var text = $.trim(this.input.val());
     	if(text.length > 0){
     		this.permissions.each(function(permission){
-        		allowedGroups.push(permission.get("object_id"));
+    			if(permission.get("type") == "group"){
+    				allowedGroups.push(permission.get("entity_id"));
+    			}
             });
     		
 	      var newness = new Newness();
