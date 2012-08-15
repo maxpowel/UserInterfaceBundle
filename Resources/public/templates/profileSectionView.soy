@@ -34,11 +34,12 @@
 		</div>
 
         	<div align="center">
-            	<ul class="nav nav-pills" style="width: 400px; height:50px">
+            	<ul class="nav nav-pills" style="width: 430px; height:50px">
 			    	<li class="active"><a id="newness-pill" href="javascript:void(0)">{msg desc="Newness in profile"}Newness{/msg}</a></li>
 			    	<li><a id="aboutMe-pill" href="javascript:void(0)">{msg desc="About me in profile"}About me{/msg}</a></li>
 			    	<li><a id="sendMessage-pill" href="javascript:void(0)">{msg desc="Send message in profile"}Send message{/msg}</a></li>
 			    	<li><a id="albums-pill" href="#multimedia/{$id}">{msg desc="Albums in profile"}Albums{/msg}</a></li>
+			    	<li><a id="contacts-pill" href="javascript:void(0)">{msg desc="Contacts"}Contacts{/msg}</a></li>
 				</ul>
     		</div>
         
@@ -58,6 +59,14 @@
         		</div>
 			</div>
 		<!--about me end-->
+		
+		<!-- contacts -->
+        	<div id="contacts" style="display:none" class="subSection">
+        		<div id="contacts-container">
+        
+        		</div>
+			</div>
+		<!-- contacts -->
 
 		<!--send message-->
         	<div id="sendMessage" style="display:none" class="subSection">
@@ -83,12 +92,12 @@
     
 	<div class="span3">
         <div class="well">
-          <h5>{msg desc="Last photos"}Last photos{/msg}</h5>
+          <!-- <h5>{msg desc="Last photos"}Last photos{/msg}</h5> -->
           <div id="lastPhotos-cont">
           
           </div>
           
-          <h5>{msg desc="Friends"}Friends{/msg}</h5>
+          <!-- <h5>{msg desc="Friends"}Friends{/msg}</h5> -->
           <div id="friends-cont">
           
           </div>

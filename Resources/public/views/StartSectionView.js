@@ -20,9 +20,10 @@ var StartSectionView = Backbone.View.extend({
     	
     	var newnessList = new NewnessListView({ collection: this.newnessCollection, isOwner:true});
     	var meetingList = new MeetingListView({ collection: this.meetingCollection, el: $(this.el).find("#meetings")});
+    	var newFriendsList = new NewFriendsListView();
     	
     	//Preferred way
-    	var notificationList = new NotificationListView({ collection: this.notificationCollection});
+    	var notificationList = new NotificationListView({ collection: this.notificationCollection, newFriendsList: newFriendsList});
     	$(this.el).find("#notifications").html(notificationList.render().el);
     	
     	
@@ -30,7 +31,7 @@ var StartSectionView = Backbone.View.extend({
     	//var contactSuggestionList = new ContactSuggestionListView({ collection: this.contactSuggestionCollection});
     	
     	
-    	this.menu = new MultimenuView({original:newnessList, subsections:[meetingList], el: $(this.el).find("#multimenu")});
+    	this.menu = new MultimenuView({original:newnessList, subsections:[meetingList, newFriendsList], el: $(this.el).find("#multimenu")});
     	//this.menu = new MultimenuView({original:newnessList, subsections:['profile','search'], el: $(this.el).find("#meetings")});
     	this.menu.render();
 		//$(this.el).html(template.section.start( params ));

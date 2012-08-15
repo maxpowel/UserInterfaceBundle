@@ -287,6 +287,22 @@ class PermissionController extends Controller
     			//Rebuild index if is the main group
     			$index = $this->get('wixet.index_manager');
     			$index->rebuild("contacts");
+    			//Notify to the user
+    			$event = new \Wixet\WixetBundle\Entity\Event();
+    			//Virtual object type. It does not exist as object, just in our mind :P
+    			$objectType = $em->getRepository('Wixet\WixetBundle\Entity\ObjectType')->findOneBy(array('name' => 'VirtualUserMainGroup'));
+    			if($objectType == null){
+    				$objectType = new \Wixet\WixetBundle\Entity\ObjectType();
+    				$objectType->setName('VirtualUserMainGroup');
+    				$em->persist($objectType);
+    				$em->flush();
+    			}
+    			 
+    			$event->setProfile($profile);
+    			$event->setObjectId($owner->getId());
+    			$event->setObjectType($objectType);
+    			$em->persist($event);
+    			$em->flush();
     		}
     		
     		////
@@ -326,7 +342,7 @@ class PermissionController extends Controller
     				$ws->removeProfileFromGroup($profile, $group);
     			}
     			//Unbind user
-    			$ws->unbind($owner, $profile);
+    			$ws->unbindProfile($owner, $profile);
     			//Rebuild index if is the main group
     			$index = $this->get('wixet.index_manager');
     			$index->rebuild("contacts");

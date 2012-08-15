@@ -21,14 +21,24 @@ var MultimenuView = Backbone.View.extend({
     },
     
     backToMain: function(){
+    	
     	$(".submenu:visible").fadeOut();
 		$("#original").slideDown();
+		
 		if(this.lastView != null){
-    		this.lastView.unbind();
-			this.lastView.remove();
+			var remove = false;
+			if(this.lastView.persistent == null)
+				remove == true;
+			else remove = !this.lastView.persistent
+			
+			if(remove){
+				this.lastView.unbind();
+				this.lastView.remove();
+			}
     	}
     },
-    changeTo: function( subsectionId, view ){
+    changeTo: function( subsectionId, view){
+    	
     	var subsection = $("#" + subsectionId);
     	
     	var isVisible =  subsection.is(":visible");
@@ -43,9 +53,18 @@ var MultimenuView = Backbone.View.extend({
     		//New load of this section
     		subsection.find(".subSection-content").html(view.render().el);
     		subsection.fadeIn(function(){
+    			
     			if(this.lastView != null){
-    				this.lastView.unbind();
-    				this.lastView.remove();
+    				var remove = false;
+        			if(this.lastView.persistent == null)
+        				remove == true;
+        			else remove = !this.lastView.persistent
+        			
+        			if(remove){
+        				console.log(this.lastView)
+    					this.lastView.unbind();
+    					this.lastView.remove();
+    				}
     			}
     			this.lastView = view;
     		});

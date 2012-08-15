@@ -8,9 +8,17 @@
 {template .notification}
 	{switch $type}
 	  {case 'Wixet\\WixetBundle\\Entity\\PrivateMessage'}
-	     <a href="#messages">{$total} Private messages</a>
-	  
-	    
+	  	{if $total == 1}
+	    	<a href="#messages">1 Private message</a>
+	    {else}
+	    	<a href="#messages">{$total} Private messages</a>
+	    {/if}
+	  {case 'VirtualUserMainGroup'}
+	     {if $total == 1}
+	    	<a href="javascript:void(0)" id="newFriendsLink">1 New friend</a>
+	    {else}
+	    	<a href="javascript:void(0)" id="newFriendsLink">{$total} New firends</a>
+	    {/if}
 	  {default}
 	  	<a href="#">{$total} {$type}</a>	
 	{/switch}

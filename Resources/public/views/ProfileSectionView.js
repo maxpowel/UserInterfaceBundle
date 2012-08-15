@@ -3,6 +3,7 @@ var ProfileSectionView = Backbone.View.extend({
 	user: null,
     events: {
     	"click #newness-pill": "showNewness",
+    	"click #contacts-pill": "showContacts",
     	"click #aboutMe-pill": "showAboutMe",
     	"click #sendMessage-pill": "showSendMessage",
     	"click #albums-pill": "showAlbums"
@@ -51,13 +52,31 @@ var ProfileSectionView = Backbone.View.extend({
     
     renderProfile: function(user){
     	//Check if the user are allowed
-    	if(this.user.get("id") == 0){
-    		//Redirect to the user profile
-    		location.href = "#profile";
+    	if(this.user.get("read_granted") == false){
+  	      this.subSections = this.$(".subSection");
+	      this.aboutMe = this.$("#aboutMe");
+	      this.contacts = this.$("#contacts");
+	      this.sendMessage = this.$("#sendMessage");
+	      this.albums = this.$("#albums");
+	      this.activePill = this.$(".active");
+	    
+	      
+	      this.favourites = $(this.el).find("#favourites-cont");
+	      this.favouriteList.fetch({data:{id: this.user.get("id") }});
+	      
+	      this.$el.find("#aboutMe-pill").click();
+	      
+	      this.$el.find("#newness-pill").parent().remove();
+	      
+	      
+	      
+	      this.personalInfoCont = $(this.el).find("#personalInfo-cont");
+	      this.personalInfo.fetch({data:{id: this.user.get("id")}});
     	}else{
 	      this.subSections = this.$(".subSection");
 	      this.newnessList = this.$("#newness-list");
 	      this.aboutMe = this.$("#aboutMe");
+	      this.contacts = this.$("#contacts");
 	      this.sendMessage = this.$("#sendMessage");
 	      this.albums = this.$("#albums");
 	      this.activePill = this.$(".active");
@@ -147,6 +166,21 @@ var ProfileSectionView = Backbone.View.extend({
     			}
     		});
     		this.aboutMeView = "no null";
+    	}
+    },
+    showContacts: function(event){
+    	this.changeToSimple(this.contacts,event);
+    	if(this.contactsView == null){
+    		var contactCollection = new ContactList();
+    		var that = this;
+    		
+    		contactCollection.fetch({data:{profile: this.user.get("id")},success: function(){
+    				that.contactsView = new ContactListView({collection: contactCollection});
+    				that.contactsView.render();
+    				that.$el.find("#contacts-container").html(that.contactsView.el);
+    			}
+    		});
+    		this.contactsView = "no null";
     	}
     },
     showSendMessage: function(event){

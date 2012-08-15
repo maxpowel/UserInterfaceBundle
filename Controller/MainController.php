@@ -164,6 +164,7 @@ class MainController extends Controller
 	
 	/**
 	* @Route("/notification", name="_notification_list")
+	* @Method({"GET"})
 	*/
 	public function eventListAction()
 	{
@@ -177,6 +178,28 @@ class MainController extends Controller
 		
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
 	}
+	
+	/**
+	 * @Route("/notification/{id}/{type}", name="_notification_delete")
+	 * @Method({"DELETE"})
+	 */
+	public function eventDestroyAction($id, $type)
+	{
+		//TODO cache this event list
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		$ot = $em->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => $type));
+	
+		$query = $em->createQuery('DELETE FROM Wixet\WixetBundle\Entity\Event e WHERE e.profile = :profile AND e.objectId = :objectId AND e.objectType = :objectType');
+		$query->setParameter('profile', $profile);
+		$query->setParameter('objectId', $id);
+		$query->setParameter('objectType', $ot);
+		
+		$data = $query->execute();
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
 	
 	/**
 	 * @Route("/user", name="_user_get")
@@ -199,9 +222,15 @@ class MainController extends Controller
 			$data['lastName'] = $profile->getLastName();
 			$data['updatesAlbumId'] = $profile->getUpdatesItemContainer()->getId();
 			$data['isOwner'] = true;
+			$data['read_granted'] = true;
 			//$data['mainMediaItem'] = $profile->getMainMediaItem()->getId();
 		}else{
-			$data['id'] = 0;
+			$em = $this->get('doctrine')->getEntityManager();
+			$profile = $em->getRepository( 'Wixet\WixetBundle\Entity\UserProfile' )->find($_GET['id']);
+			$data['id'] = $profile->getId();
+			$data['firstName'] = $profile->getFirstName();
+			$data['lastName'] = $profile->getLastName();
+			$data['read_granted'] = false;
 		}
 		 
 
@@ -523,6 +552,7 @@ class MainController extends Controller
 		 
 		 
 		$data = array();
+		$outData = array();
 		$ws = $this->get('wixet.fetcher');
 		$pm = $this->get('wixet.permission_manager');
 		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
@@ -921,6 +951,81 @@ class MainController extends Controller
 			
 		//$data = array();
 		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	 * @Route("/profile/contacts", name="_profile_contact_list")
+	 */
+	public function contactListAction()
+	{
+		$data = array();
+	
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+			
+		$em = $this->get('doctrine')->getEntityManager();
+
+		
+		//In contacts
+		$q = $em->createQuery("SELECT p.id, p.first_name, p.last_name FROM Wixet\WixetBundle\Entity\ProfileGroup pg JOIN pg.profiles p WHERE pg.profile = :profile")
+		->setParameter('profile', $profile);
+		$list = $q->getArrayResult();
+			
+		$data["in"] = $list;
+		
+		//Out contacts
+		$q = $em->createQuery("SELECT p.id, p.first_name, p.last_name FROM Wixet\WixetBundle\Entity\UserProfile p JOIN p.main_group mg JOIN mg.profiles up WHERE up = :profile")
+		->setParameter('profile', $profile);
+		$list = $q->getArrayResult();
+			
+		$data["out"] = $list;
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $data));
+	}
+	
+	/**
+	 * @Route("/newContacts", name="_new_contacts_get")
+	 * @Method({"GET"})
+	 */
+	public function getNewContactsAction()
+	{
+		
+		/*$data = json_decode(file_get_contents('php://input'),true);
+		$pe = new UserProfileExtension();
+			
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$pe->setProfile($profile);
+		$pe->setBody($data['body']);
+		$pe->setTitle($data['title']);
+			
+			
+		$em = $this->get('doctrine')->getEntityManager();
+	
+		$em->persist($pe);
+	
+		$em->flush();
+	
+		$data['id'] = $pe->getId();
+	
+		//Update index
+		$index = $this->get('wixet.index_manager');
+		$index->rebuild("extensions");*/
+		
+		
+		$profile = $this->get('security.context')->getToken()->getUser()->getProfile();
+		$em = $this->get('doctrine')->getEntityManager();
+		
+		$query = $em->createQuery('SELECT e.objectId FROM Wixet\WixetBundle\Entity\Event e JOIN e.objectType ot WHERE e.profile = :profile AND ot.name = :ot');
+		$query->setParameter('profile', $profile);
+		$query->setParameter('ot', "VirtualUserMainGroup");
+		
+		$contactList = array();
+		foreach($query->getArrayResult() as $profileId){
+			$profile = $em->getRepository('Wixet\WixetBundle\Entity\UserProfile')->find($profileId);
+			$contactList[] = array("id"=>$profile->getId(), "first_name"=> $profile->getFirstName(), "last_name"=> $profile->getLastName());
+			
+		}
+	
+		return $this->render('UserInterfaceBundle:Main:data.json.twig', array('data' => $contactList));
 	}
 
 }

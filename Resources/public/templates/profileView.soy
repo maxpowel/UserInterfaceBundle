@@ -40,13 +40,14 @@
  * @param favourites
  */
 {template .favourites}
-            
+	{if $favourites.length > 0}   
 	      <h5>{msg desc="Favourites"}Favourites{/msg}</h5>
           <ul>
           {foreach $favourite in $favourites}
           	<li><a href="#{$favourite.url}">{$favourite.title}</li>
 		  {/foreach}
           </ul>
+	{/if}
 {/template}
 
 
@@ -58,5 +59,80 @@
             {foreach $element in $list}
   				<div class="well"><h3>{$element.title}</h3></div>
 	      		<p>{$element.body}</p>
+	      	{ifempty}
+	      		<div>{msg desc="I have nothing to say about me"}I have nothing to say about me{/msg}</div>
 			{/foreach}
+{/template}
+
+/**
+ * Contact list
+ * @param list
+ */
+{template .contactList}
+	
+	<h3>{msg desc="In my contact list"}In my contact list{/msg}</h3>
+	<div class="row-fluid">
+	{foreach $contact in $list.in}
+		{call .contact}
+			{param contactInfo: $contact /}
+		{/call}
+	{ifempty}
+		{msg desc="I don't have any contact"}I don't have any contact{/msg}
+	{/foreach}
+	</div>
+	<br><br><br>
+	<h3>{msg desc="I am contact of"}I am contact of{/msg}</h3>
+	<div class="row-fluid">
+	{foreach $contact in $list.out}
+		{call .contact}
+			{param contactInfo: $contact /}
+		{/call}
+	{ifempty}
+		{msg desc="I am not in any contact list"}I am not in any contact list{/msg}
+	{/foreach}
+	</div>
+	
+
+{/template}
+
+/**
+ * Contact list simple
+ * @param list
+ */
+{template .contactListSimple}
+	
+	<h3>{msg desc="Contacts"}Contacts{/msg}</h3>
+	<div class="row-fluid">
+	{foreach $contact in $list}
+		{call .contact}
+			{param contactInfo: $contact /}
+		{/call}
+	{ifempty}
+		{msg desc="Uhh, how did you enter here?"}Uhh, how did you enter here?{/msg}
+	{/foreach}
+	</div>
+	
+
+{/template}
+
+/**
+ * Contact 
+ * @param contactInfo
+ */
+{template .contact}
+
+	<div class="well span4" style="padding:10px">
+		<div style="min-height: 48px">
+			<div style="float:left; position:relative">
+				<a uid="{$contactInfo.id}" href="#profile/{$contactInfo.id}"><img class="thumbnail" src="photo/profile/{$contactInfo.id}" alt=""></a>
+			</div>
+			<div style="margin-left:65px">
+				<div>
+					<a uid="{$contactInfo.id}" href="#profile/{$contactInfo.id}">{$contactInfo.first_name} {$contactInfo.last_name}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
 {/template}

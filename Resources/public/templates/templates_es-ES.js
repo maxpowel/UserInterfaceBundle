@@ -458,7 +458,10 @@ template.notificationView.notification = function(opt_data, opt_sb) {
   output.append('\t');
   switch (opt_data.type) {
     case 'Wixet\\WixetBundle\\Entity\\PrivateMessage':
-      output.append('<a href="#messages">', soy.$$escapeHtml(opt_data.total), ' Private messages</a>');
+      output.append((opt_data.total == 1) ? '<a href="#messages">1 Private message</a>' : '<a href="#messages">' + soy.$$escapeHtml(opt_data.total) + ' Private messages</a>');
+      break;
+    case 'VirtualUserMainGroup':
+      output.append((opt_data.total == 1) ? '<a href="javascript:void(0)" id="newFriendsLink">1 New friend</a>' : '<a href="javascript:void(0)" id="newFriendsLink">' + soy.$$escapeHtml(opt_data.total) + ' New firends</a>');
       break;
     default:
       output.append('<a href="#">', soy.$$escapeHtml(opt_data.total), ' ', soy.$$escapeHtml(opt_data.type), '</a>');
@@ -595,7 +598,7 @@ if (typeof template.section == 'undefined') { template.section = {}; }
 
 template.section.profile = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="span6"><div class="content" id="newness"><div><h2 id="profileTitle"></h2></div><div align="center"><ul class="nav nav-pills" style="width: 400px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="#multimedia/', soy.$$escapeHtml(opt_data.id), '">Albums</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div><div class="span3"><div class="well"><h5>Last photos</h5><div id="lastPhotos-cont"></div><h5>Friends</h5><div id="friends-cont"></div></div></div></div>');
+  output.append('<div class="row-fluid"><div class="span3"><div class="well"><div align="center" class="media-grid"><a href="#"><img alt="" src="" class="thumbnail"></a></div><div id="personalInfo-cont"></div><div id="favourites-cont"></div></div></div><div class="span6"><div class="content" id="newness"><div><h2 id="profileTitle"></h2></div><div align="center"><ul class="nav nav-pills" style="width: 430px; height:50px"><li class="active"><a id="newness-pill" href="javascript:void(0)">Newness</a></li><li><a id="aboutMe-pill" href="javascript:void(0)">About me</a></li><li><a id="sendMessage-pill" href="javascript:void(0)">Send message</a></li><li><a id="albums-pill" href="#multimedia/', soy.$$escapeHtml(opt_data.id), '">Albums</a></li><li><a id="contacts-pill" href="javascript:void(0)">Contacts</a></li></ul></div><!--newness--><div id="newness-list" class="subSection"><div id="newness-container"></div></div><!--newness end--><!--about me--><div id="aboutMe" style="display:none" class="subSection"><div id="aboutMe-container"></div></div><!--about me end--><!-- contacts --><div id="contacts" style="display:none" class="subSection"><div id="contacts-container"></div></div><!-- contacts --><!--send message--><div id="sendMessage" style="display:none" class="subSection"><div id="sendMessage-container"></div></div><!--send message end--><!--albumlist--><div id="albumList" style="display:none" class="subSection"><div id="albumList-container"></div></div><!--about me end--></div></div><div class="span3"><div class="well"><!-- <h5>Last photos</h5> --><div id="lastPhotos-cont"></div><!-- <h5>Friends</h5> --><div id="friends-cont"></div></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -616,26 +619,87 @@ template.profileView.personalInformation = function(opt_data, opt_sb) {
 
 template.profileView.favourites = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<h5>Favourites</h5><ul>');
-  var favouriteList1204 = opt_data.favourites;
-  var favouriteListLen1204 = favouriteList1204.length;
-  for (var favouriteIndex1204 = 0; favouriteIndex1204 < favouriteListLen1204; favouriteIndex1204++) {
-    var favouriteData1204 = favouriteList1204[favouriteIndex1204];
-    output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1204.url), '">', soy.$$escapeHtml(favouriteData1204.title), '</li>');
+  output.append('\t');
+  if (opt_data.favourites.length > 0) {
+    output.append('<h5>Favourites</h5><ul>');
+    var favouriteList1222 = opt_data.favourites;
+    var favouriteListLen1222 = favouriteList1222.length;
+    for (var favouriteIndex1222 = 0; favouriteIndex1222 < favouriteListLen1222; favouriteIndex1222++) {
+      var favouriteData1222 = favouriteList1222[favouriteIndex1222];
+      output.append('<li><a href="#', soy.$$escapeHtml(favouriteData1222.url), '">', soy.$$escapeHtml(favouriteData1222.title), '</li>');
+    }
+    output.append('</ul>');
   }
-  output.append('</ul>');
   return opt_sb ? '' : output.toString();
 };
 
 
 template.profileView.aboutMe = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  var elementList1213 = opt_data.list;
-  var elementListLen1213 = elementList1213.length;
-  for (var elementIndex1213 = 0; elementIndex1213 < elementListLen1213; elementIndex1213++) {
-    var elementData1213 = elementList1213[elementIndex1213];
-    output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1213.title), '</h3></div><p>', soy.$$escapeHtml(elementData1213.body), '</p>');
+  var elementList1231 = opt_data.list;
+  var elementListLen1231 = elementList1231.length;
+  if (elementListLen1231 > 0) {
+    for (var elementIndex1231 = 0; elementIndex1231 < elementListLen1231; elementIndex1231++) {
+      var elementData1231 = elementList1231[elementIndex1231];
+      output.append('<div class="well"><h3>', soy.$$escapeHtml(elementData1231.title), '</h3></div><p>', soy.$$escapeHtml(elementData1231.body), '</p>');
+    }
+  } else {
+    output.append('<div>I have nothing to say about me</div>');
   }
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.profileView.contactList = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<h3>In my contact list</h3><div class="row-fluid">');
+  var contactList1248 = opt_data.list['in'];
+  var contactListLen1248 = contactList1248.length;
+  if (contactListLen1248 > 0) {
+    for (var contactIndex1248 = 0; contactIndex1248 < contactListLen1248; contactIndex1248++) {
+      var contactData1248 = contactList1248[contactIndex1248];
+      template.profileView.contact({contactInfo: contactData1248}, output);
+    }
+  } else {
+    output.append('I don\'t have any contact');
+  }
+  output.append('</div><br><br><br><h3>I am contact of</h3><div class="row-fluid">');
+  var contactList1259 = opt_data.list.out;
+  var contactListLen1259 = contactList1259.length;
+  if (contactListLen1259 > 0) {
+    for (var contactIndex1259 = 0; contactIndex1259 < contactListLen1259; contactIndex1259++) {
+      var contactData1259 = contactList1259[contactIndex1259];
+      template.profileView.contact({contactInfo: contactData1259}, output);
+    }
+  } else {
+    output.append('I am not in any contact list');
+  }
+  output.append('</div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.profileView.contactListSimple = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<h3>Contacts</h3><div class="row-fluid">');
+  var contactList1272 = opt_data.list;
+  var contactListLen1272 = contactList1272.length;
+  if (contactListLen1272 > 0) {
+    for (var contactIndex1272 = 0; contactIndex1272 < contactListLen1272; contactIndex1272++) {
+      var contactData1272 = contactList1272[contactIndex1272];
+      template.profileView.contact({contactInfo: contactData1272}, output);
+    }
+  } else {
+    output.append('Uhh, how did you enter here?');
+  }
+  output.append('</div>');
+  return opt_sb ? '' : output.toString();
+};
+
+
+template.profileView.contact = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div class="well span4" style="padding:10px"><div style="min-height: 48px"><div style="float:left; position:relative"><a uid="', soy.$$escapeHtml(opt_data.contactInfo.id), '" href="#profile/', soy.$$escapeHtml(opt_data.contactInfo.id), '"><img class="thumbnail" src="photo/profile/', soy.$$escapeHtml(opt_data.contactInfo.id), '" alt=""></a></div><div style="margin-left:65px"><div><a uid="', soy.$$escapeHtml(opt_data.contactInfo.id), '" href="#profile/', soy.$$escapeHtml(opt_data.contactInfo.id), '">', soy.$$escapeHtml(opt_data.contactInfo.first_name), ' ', soy.$$escapeHtml(opt_data.contactInfo.last_name), '</a></div></div></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -701,31 +765,31 @@ template.searchView.queryResult = function(opt_data, opt_sb) {
   output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1338 = opt_data.favourites;
-    var favouriteListLen1338 = favouriteList1338.length;
-    for (var favouriteIndex1338 = 0; favouriteIndex1338 < favouriteListLen1338; favouriteIndex1338++) {
-      var favouriteData1338 = favouriteList1338[favouriteIndex1338];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1338.name), '</li>');
+    var favouriteList1414 = opt_data.favourites;
+    var favouriteListLen1414 = favouriteList1414.length;
+    for (var favouriteIndex1414 = 0; favouriteIndex1414 < favouriteListLen1414; favouriteIndex1414++) {
+      var favouriteData1414 = favouriteList1414[favouriteIndex1414];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1414.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1350 = opt_data.friends;
-    var friendListLen1350 = friendList1350.length;
-    for (var friendIndex1350 = 0; friendIndex1350 < friendListLen1350; friendIndex1350++) {
-      var friendData1350 = friendList1350[friendIndex1350];
-      output.append('<li>', soy.$$escapeHtml(friendData1350.name), '</li>');
+    var friendList1426 = opt_data.friends;
+    var friendListLen1426 = friendList1426.length;
+    for (var friendIndex1426 = 0; friendIndex1426 < friendListLen1426; friendIndex1426++) {
+      var friendData1426 = friendList1426[friendIndex1426];
+      output.append('<li>', soy.$$escapeHtml(friendData1426.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1359 = opt_data.highlights;
-    var resListLen1359 = resList1359.length;
-    for (var resIndex1359 = 0; resIndex1359 < resListLen1359; resIndex1359++) {
-      var resData1359 = resList1359[resIndex1359];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1359.title), '</strong><div>', soy.$$escapeHtml(resData1359.body), '</div></div>');
+    var resList1435 = opt_data.highlights;
+    var resListLen1435 = resList1435.length;
+    for (var resIndex1435 = 0; resIndex1435 < resListLen1435; resIndex1435++) {
+      var resData1435 = resList1435[resIndex1435];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1435.title), '</strong><div>', soy.$$escapeHtml(resData1435.body), '</div></div>');
     }
     output.append('</pre></div>');
   }
