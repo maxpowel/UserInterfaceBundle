@@ -44,7 +44,7 @@
 {template .message}
 <td>
 			<div style="cursor:pointer;cursor:hand" id="message" class="row-fluid">
-				<span class="span"><input type="checkbox" class="ckbox"></span>
+				<span class="span1"><input type="checkbox" class="ckbox"></span>
 				<span class="span3">
 					{if $isRead}
 						{$author.firstName} {$author.lastName}
@@ -93,7 +93,7 @@
  */
 {template .conversationEntry}
 <td>
-	<div><a href="#">{$author.firstName} {$author.lastName}</a> - {$date}</div>
+	<div><a href="#profile/{$author.id}">{$author.firstName} {$author.lastName}</a> - {$date}</div>
 	<div>{$body}</div>
 </td>
 {/template}
@@ -109,7 +109,7 @@
 	{if $to == null}
 	<h3>{msg desc="New message title"}New message{/msg}</h3>
 	{/if}
-	<div class="block-message alert-success" id="sentSuccess" style="display:none">
+	<div class="alert alert-success" id="sentSuccess" style="display:none">
         <a href="javascript:void(0)" id="success-close" class="close">×</a>
         <p>{msg desc="Message sent"}Message succesfully sent{/msg}</p>
     </div>
