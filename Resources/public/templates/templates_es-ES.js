@@ -153,7 +153,7 @@ if (typeof template.loginApp == 'undefined') { template.loginApp = {}; }
 
 template.loginApp.login = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<table style="width:150px; padding: 5px;" class="well table table-bordered"><tbody><tr><td colspan="2"><div align="center"><b>Access to my account</b></div></td></tr><tr><td>Username</td><td><input type="text" id="usernameLogin"></td></tr><tr><td>Password</td><td><input type="password" id="passwordLogin"></td></tr><tr><td colspan="2"><div align="center" class="alert block-message alert-error error" style="display:none"><a href="javascript:void(0)" class="close">×</a>The data entered are incorrect</div><div align="center"><button class="btn btn-success" id="login-btn">Login</button></div></td></tr></tbody></table><a href="#newAccount" id="newAccount-btn"><span class="label label-warning">New account</span></a>&nbsp;&nbsp;<a href="#recoverPassword" id="recoverPassword-btn"><span class="label label-important">Recover password</span></a><br><br><div class="alert alert-info"><div><h3>Last changes</h3></div><div><strong>Wixet core</strong>: <span id="coreDesc"> </span> at <span id="coreDate"> </span></div><div><strong>User interface</strong>: <span id="uiDesc"> </span> at <span id="uiDate"> </span></div></div>');
+  output.append('<table style="width:150px; padding: 5px;" class="well table table-bordered"><tbody><tr><td colspan="2"><div align="center"><b>Access to my account</b></div></td></tr><tr><td>Email</td><td><input type="text" id="usernameLogin"></td></tr><tr><td>Password</td><td><input type="password" id="passwordLogin"></td></tr><tr><td colspan="2"><div align="center" class="alert block-message alert-error error" style="display:none"><a href="javascript:void(0)" class="close">×</a>The data entered are incorrect</div><div align="center"><button class="btn btn-success" id="login-btn">Login</button></div></td></tr></tbody></table><a href="#newAccount" id="newAccount-btn"><span class="label label-warning">New account</span></a>&nbsp;&nbsp;<a href="#recoverPassword" id="recoverPassword-btn"><span class="label label-important">Recover password</span></a><br><br><div class="alert alert-info"><div><h3>Last changes</h3></div><div><strong>Wixet core</strong>: <span id="coreDesc"> </span> at <span id="coreDate"> </span></div><div><strong>User interface</strong>: <span id="uiDesc"> </span> at <span id="uiDate"> </span></div></div>');
   return opt_sb ? '' : output.toString();
 };
 
@@ -762,34 +762,34 @@ template.searchView.addGroupDialog = function(opt_data, opt_sb) {
 
 template.searchView.queryResult = function(opt_data, opt_sb) {
   var output = opt_sb || new soy.StringBuilder();
-  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '">', soy.$$escapeHtml(opt_data.name), '</a>', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
+  output.append('<div style="min-height: 48px"><div style="float:left; position:relative"><a href="#', soy.$$escapeHtml(opt_data.type), '/', soy.$$escapeHtml(opt_data.id), '"><img alt="" src="', soy.$$escapeHtml(opt_data.thumbnail), '" class="thumbnail"></a></div><div style="margin-left:60px"><div>', (opt_data.type == 'UserProfile') ? '<a href="#profile/' + soy.$$escapeHtml(opt_data.id) + '">' + soy.$$escapeHtml(opt_data.name) + '</a>' : '', (opt_data.group == null) ? '<button style="float:right" class="btn btn-success btn-small" id="addGroup">Add to group</button><div id="groupName" style="float:right; display:none" class="alert alert-info"></div>' : '<div style="float:right" class="alert alert-info">' + soy.$$escapeHtml(opt_data.group.name) + '</div>', '</div>', (opt_data.city != null) ? '<div>City: ' + soy.$$escapeHtml(opt_data.city.name) + '</div>' : '<div>&nbsp; </div>');
   if (opt_data.favourites != null) {
     output.append('<div><strong>Interests</strong></div><ul>');
-    var favouriteList1414 = opt_data.favourites;
-    var favouriteListLen1414 = favouriteList1414.length;
-    for (var favouriteIndex1414 = 0; favouriteIndex1414 < favouriteListLen1414; favouriteIndex1414++) {
-      var favouriteData1414 = favouriteList1414[favouriteIndex1414];
-      output.append('<li>', soy.$$escapeHtml(favouriteData1414.name), '</li>');
+    var favouriteList1415 = opt_data.favourites;
+    var favouriteListLen1415 = favouriteList1415.length;
+    for (var favouriteIndex1415 = 0; favouriteIndex1415 < favouriteListLen1415; favouriteIndex1415++) {
+      var favouriteData1415 = favouriteList1415[favouriteIndex1415];
+      output.append('<li>', soy.$$escapeHtml(favouriteData1415.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.friends != null) {
     output.append('<div><strong>Friends in common</strong></div><ul>');
-    var friendList1426 = opt_data.friends;
-    var friendListLen1426 = friendList1426.length;
-    for (var friendIndex1426 = 0; friendIndex1426 < friendListLen1426; friendIndex1426++) {
-      var friendData1426 = friendList1426[friendIndex1426];
-      output.append('<li>', soy.$$escapeHtml(friendData1426.name), '</li>');
+    var friendList1427 = opt_data.friends;
+    var friendListLen1427 = friendList1427.length;
+    for (var friendIndex1427 = 0; friendIndex1427 < friendListLen1427; friendIndex1427++) {
+      var friendData1427 = friendList1427[friendIndex1427];
+      output.append('<li>', soy.$$escapeHtml(friendData1427.name), '</li>');
     }
     output.append('</ul>');
   }
   if (opt_data.highlights.length > 0) {
     output.append('<div><pre>');
-    var resList1435 = opt_data.highlights;
-    var resListLen1435 = resList1435.length;
-    for (var resIndex1435 = 0; resIndex1435 < resListLen1435; resIndex1435++) {
-      var resData1435 = resList1435[resIndex1435];
-      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1435.title), '</strong><div>', soy.$$escapeHtml(resData1435.body), '</div></div>');
+    var resList1436 = opt_data.highlights;
+    var resListLen1436 = resList1436.length;
+    for (var resIndex1436 = 0; resIndex1436 < resListLen1436; resIndex1436++) {
+      var resData1436 = resList1436[resIndex1436];
+      output.append('<div style="padding:10px"><strong>', soy.$$escapeHtml(resData1436.title), '</strong><div>', soy.$$escapeHtml(resData1436.body), '</div></div>');
     }
     output.append('</pre></div>');
   }

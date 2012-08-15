@@ -87,7 +87,9 @@
 			</div>
 			<div style="margin-left:60px">
 				<div>
-					<a href="#{$type}/{$id}">{$name}</a>
+					{if $type == 'UserProfile'}
+						<a href="#profile/{$id}">{$name}</a>
+					{/if}
 					{if $group == null}	  
 						<button style="float:right" class="btn btn-success btn-small" id="addGroup">{msg desc="Add to group"}Add to group{/msg}</button>
 						<div id="groupName" style="float:right; display:none" class="alert alert-info">
