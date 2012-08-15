@@ -107,21 +107,22 @@ var ProfileSectionView = Backbone.View.extend({
 		params.id = user.get("id");
 		*/
 
-    	$(this.el).html(template.section.profile({id: viewer.get('id')}));
     	
     	var isOwner = viewer.get("id") == this.userId;
 
     	if(isOwner){
+    		$(this.el).html(template.section.profile({id: viewer.get('id')}));
     		$(this.el).find(".thumbnail").attr({src: "photo/public/"+viewer.get("id")});
     		$(this.el).find("#profileTitle").text( viewer.get("firstName") +" "+ viewer.get("lastName") );
 			this.user = viewer;
 			this.renderProfile();
     	}else{
     		//Load user data
+    		$(this.el).html(template.section.profile({id: this.userId}));
     		var user = new User({id: this.userId});
     		var localThis = this;
     		user.fetch({success:function(){
-    			$(localThis.el).find(".thumbnail").attr({src: "photo/profile/"+viewer.get("id")});
+    			$(localThis.el).find(".thumbnail").attr({src: "photo/public/"+viewer.get("id")});
         		$(localThis.el).find("#profileTitle").text( user.get("firstName") +" "+ user.get("lastName") );
     			localThis.user = user;
     			localThis.renderProfile();
