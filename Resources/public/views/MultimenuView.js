@@ -61,7 +61,6 @@ var MultimenuView = Backbone.View.extend({
         			else remove = !this.lastView.persistent
         			
         			if(remove){
-        				console.log(this.lastView)
     					this.lastView.unbind();
     					this.lastView.remove();
     				}

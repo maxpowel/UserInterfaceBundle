@@ -73,7 +73,7 @@ var MeetingInvitedPeopleListView = Backbone.View.extend({
 			source: "/autocomplete/contactsGroups",
 			onSelect: function(item){
 				//self.permissions.add(new Permission({object_id: item.id, name: item.value, read_granted: 1, read_denied: 0}))
-				console.log(item)
+				//console.log(item)
 			}
 
     	});

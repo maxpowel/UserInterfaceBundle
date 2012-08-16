@@ -23,7 +23,6 @@ var ToolbarView = Backbone.View.extend({
 	
 	
 	cancelSubmit: function(){
-		console.log("asd")
 		return false;
 	},
 	

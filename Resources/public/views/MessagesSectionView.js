@@ -81,7 +81,6 @@ var MessagesSectionView = Backbone.View.extend({
     },
     
     showNewMessage: function(){
-    	console.log("hola");
     	if(this.messageFormView != null)
     		this.messageFormView.unbind();
     	this.messageFormView = new NewMessageFormView();
@@ -89,7 +88,6 @@ var MessagesSectionView = Backbone.View.extend({
     },
     
     showFolderOptions: function(folder){
-    	console.log(this.folderOptionsView);
     	if(this.folderOptionsView != null){
     		this.folderOptionsView.unbind();
     		this.folderOptionsView.remove();
